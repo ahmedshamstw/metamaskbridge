@@ -157,36 +157,27 @@
                         var replyAction = action + '-reply';
     
                         switch (action) {
-                            case 'crypto-unlockkkkk':
+                            case 'crypto-unlock':
                                 alert(" this is for testing");
                                 break;
-                            case 'ledger-sign-transaction':
+                            case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
                                 break;
-                            case 'ledger-sign-personal-message':
+                            case 'crypto-sign-personal-message':
                                 _this.signPersonalMessage(replyAction, params.hdPath, params.message, messageId);
                                 break;
-                            case 'ledger-close-bridge':
+                            case 'crypto-close-bridge':
                                 _this.cleanUp(replyAction, messageId);
                                 break;
-                            case 'ledger-update-transport':
+                            case 'crypto-update-transport':
                                 alert("test0")
-                                if (params.transportType === 'ledgerLive' || params.useLedgerLive) {
-                                    this.alert("test1")
-                                    _this.updateTransportTypePreference(replyAction, 'ledgerLive', messageId);
-                                } else if (params.transportType === 'webhid') {
-                                    alert("test2")
-                                    console.log("aaaaaaaa")
-                                    _this.updateTransportTypePreference(replyAction, 'webhid', messageId);
-                                } else {
-                                    alert("test3")
-                                    _this.updateTransportTypePreference(replyAction, 'u2f', messageId);
-                                }
+                                console.log("aaaaaaaa")
+                                _this.updateTransportTypePreference(replyAction, 'webhid', messageId);
                                 break;
-                            case 'ledger-make-app':
+                            case 'crypto-make-app':
                                 _this.attemptMakeApp(replyAction, messageId);
                                 break;
-                            case 'ledger-sign-typed-data':
+                            case 'crypto-sign-typed-data':
                                 _this.signTypedData(replyAction, params.hdPath, params.domainSeparatorHex, params.hashStructMessageHex, messageId);
                                 break;
                         }
