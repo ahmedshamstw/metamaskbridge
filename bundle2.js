@@ -158,7 +158,7 @@
     
                         switch (action) {
                             case 'crypto-unlockkkkk':
-                                this.alert(" this is for testing");
+                                alert(" this is for testing");
                                 break;
                             case 'ledger-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -170,11 +170,16 @@
                                 _this.cleanUp(replyAction, messageId);
                                 break;
                             case 'ledger-update-transport':
+                                alert("test0")
                                 if (params.transportType === 'ledgerLive' || params.useLedgerLive) {
+                                    this.alert("test1")
                                     _this.updateTransportTypePreference(replyAction, 'ledgerLive', messageId);
                                 } else if (params.transportType === 'webhid') {
+                                    alert("test2")
+                                    console.log("aaaaaaaa")
                                     _this.updateTransportTypePreference(replyAction, 'webhid', messageId);
                                 } else {
+                                    alert("test3")
                                     _this.updateTransportTypePreference(replyAction, 'u2f', messageId);
                                 }
                                 break;
