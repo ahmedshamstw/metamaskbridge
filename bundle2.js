@@ -134,15 +134,15 @@
     var TRANSPORT_CHECK_DELAY = 1000;
     var TRANSPORT_CHECK_LIMIT = 120;
     
-    var LedgerBridge = function () {
-        function LedgerBridge() {
-            _classCallCheck(this, LedgerBridge);
+    var CryptoguardBridge = function () {
+        function CryptoguardBridge() {
+            _classCallCheck(this, CryptoguardBridge);
     
             this.addEventListeners();
             this.transportType = 'u2f';
         }
     
-        _createClass(LedgerBridge, [{
+        _createClass(CryptoguardBridge, [{
             key: 'addEventListeners',
             value: function addEventListeners() {
                 var _this = this;
@@ -447,22 +447,22 @@
             }
         }]);
     
-        return LedgerBridge;
+        return CryptoguardBridge;
     }();
     
-    exports.default = LedgerBridge;
+    exports.default = CryptoguardBridge;
     
     },{"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
     'use strict';
     
-    var _ledgerBridge = require('./ledger-bridge');
+    var _CryptoguardBridge = require('./ledger-bridge');
     
-    var _ledgerBridge2 = _interopRequireDefault(_ledgerBridge);
+    var _CryptoguardBridge2 = _interopRequireDefault(_CryptoguardBridge);
     
     function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
     
     (async function () {
-        var bridge = new _ledgerBridge2.default();
+        var bridge = new _CryptoguardBridge2.default();
     })();
     console.log('MetaMask < = > Ledger Bridge initialized from ' + window.location + '!');
     
