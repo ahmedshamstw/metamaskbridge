@@ -173,10 +173,13 @@
                                         devices[0].addEventListener("inputreport", _this.handleInputReport);
                                         // devices[0].addEventListener("inputreport3", handleInputReport);
                                         inputReport[0]=64;
-                                        _this.sendBuffer(inputReport,devices[0]);
-                                        console.log("aaaaa")
-                                        let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                        _this.sendBuffer(inputReport1,devices[0]);
+                                        _this.sendBuffer(inputReport,devices[0]).then(()=>{
+                                            let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                            _this.sendBuffer(inputReport1,devices[0]).then(()=>{
+                                            // let inputReport2=new Uint8Array([0x08,0x00,0x80,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
+                                            // sendBuffer(inputReport2,devices[0]);
+                                            });
+                                        });
                                         // let inputReport2=new Uint8Array([0x08,0x00,0x10,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
                                         // _this.sendBuffer(inputReport2,devices[0]);
                                         // let inputReport3=new Uint8Array([128,...inputReport.slice(1,64)]);
@@ -368,7 +371,7 @@
                 try {
                     await this.makeApp();
 
-                    device.sendReport(outputReportId, inputBuffer).then(() => {
+                    await device.sendReport(outputReportId, inputBuffer).then(() => {
                         console.log("Sent input report " + inputBuffer);
                     });
                     // var res = await this.app.getAddress(hdPath, false, true);
