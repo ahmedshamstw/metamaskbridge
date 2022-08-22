@@ -371,14 +371,16 @@
                 try {
                     // await this.makeApp();
 
-                    await device.sendReport(outputReportId, inputBuffer).then(() => {
+                    var res = await device.sendReport(outputReportId, inputBuffer).then(() => {
                         console.log("Sent input report " + inputBuffer);
                     });
+                    console.log("hhhhhhhhh")
+                    console.log(res)
                     // var res = await this.app.getAddress(hdPath, false, true);
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
-                        payload: {test:"tested"},
+                        payload: res,
                         messageId: messageId
                     });
                 } catch (err) {
