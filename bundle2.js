@@ -173,9 +173,9 @@
                                         devices[0].addEventListener("inputreport", _this.handleInputReport);
                                         // devices[0].addEventListener("inputreport3", handleInputReport);
                                         inputReport[0]=64;
-                                        _this.sendBuffer(inputReport,devices[0]).then(()=>{
+                                        _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
                                             let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                            _this.sendBuffer(inputReport1,devices[0]).then(()=>{
+                                            _this.sendBuffer(inputReport1,devices[0],replyAction, messageId).then(()=>{
                                             // let inputReport2=new Uint8Array([0x08,0x00,0x80,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
                                             // sendBuffer(inputReport2,devices[0]);
                                             });
@@ -367,7 +367,7 @@
             }
         },{
             key: 'sendBuffer',
-            value: async function sendBuffer(inputBuffer,device,outputReportId=0){
+            value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
                     await this.makeApp();
 
@@ -375,12 +375,12 @@
                         console.log("Sent input report " + inputBuffer);
                     });
                     // var res = await this.app.getAddress(hdPath, false, true);
-                    // this.sendMessageToExtension({
-                    //     action: replyAction,
-                    //     success: true,
-                    //     payload: {test:"tested"},
-                    //     messageId: messageId
-                    // });
+                    this.sendMessageToExtension({
+                        action: replyAction,
+                        success: true,
+                        payload: {test:"tested"},
+                        messageId: messageId
+                    });
                 } catch (err) {
                     var e = this.ledgerErrToMessage(err);
                     // this.sendMessageToExtension({
