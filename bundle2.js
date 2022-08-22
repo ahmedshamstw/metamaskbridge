@@ -158,7 +158,34 @@
     
                         switch (action) {
                             case 'crypto-unlock':
-                                alert(" this is for testing");
+                                let selectedDevice=null;
+                                let outputReportId = 0;
+                                let inputReport = new Uint8Array(64).fill(0);
+                                navigator.hid.getDevices().then(devices => {
+                                    if (devices.length == 0) {
+                                        console.log(`No HID devices selected. Press the "request device" button.`);
+                                        return;
+                                    }
+                                    devices[0].open().then(() => {
+                                        console.log("Opened device: " + devices[0].productName);
+                                        // devices[0].addEventListener("inputreport", handleInputReport);
+                                        // devices[0].addEventListener("inputreport1", handleInputReport);
+                                        devices[0].addEventListener("inputreport", _this.handleInputReport);
+                                        // devices[0].addEventListener("inputreport3", handleInputReport);
+                                        inputReport[0]=64;
+                                        _this.sendBuffer(inputReport,devices[0]);
+                                        console.log("aaaaa")
+                                        // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                        // sendBuffer(inputReport1,devices[0]);
+                                        let inputReport2=new Uint8Array([0x08,0x00,0x10,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
+                                        _this.sendBuffer(inputReport2,devices[0]);
+                                        // let inputReport3=new Uint8Array([128,...inputReport.slice(1,64)]);
+                                        // sendBuffer(inputReport3,devices[0]);
+                                        
+                                    });
+                                });
+
+                                // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
                             case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -301,11 +328,11 @@
             value: async function unlock(replyAction, hdPath, messageId) {
                 try {
                     await this.makeApp();
-                    var res = await this.app.getAddress(hdPath, false, true);
+                    // var res = await this.app.getAddress(hdPath, false, true);
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
-                        payload: res,
+                        payload: {test:"tested"},
                         messageId: messageId
                     });
                 } catch (err) {
@@ -316,6 +343,49 @@
                         payload: { error: e },
                         messageId: messageId
                     });
+                } finally {
+                    if (this.transportType !== 'ledgerLive') {
+                        this.cleanUp();
+                    }
+                }
+            }
+        },{
+            key: 'handleInputReport',
+            value: async function handleInputReport(e) {
+                try {
+                    console.log(e.device.productName + ": got output report ");
+                    console.log(new Uint8Array(e.data.buffer));
+                } catch (err) {
+                } finally {
+                    if (this.transportType !== 'ledgerLive') {
+                        this.cleanUp();
+                    }
+                }
+            }
+        },{
+            key: 'sendBuffer',
+            value: async function sendBuffer(inputBuffer,device,outputReportId=0){
+                try {
+                    await this.makeApp();
+
+                    device.sendReport(outputReportId, inputBuffer).then(() => {
+                        console.log("Sent input report " + inputBuffer);
+                    });
+                    // var res = await this.app.getAddress(hdPath, false, true);
+                    // this.sendMessageToExtension({
+                    //     action: replyAction,
+                    //     success: true,
+                    //     payload: {test:"tested"},
+                    //     messageId: messageId
+                    // });
+                } catch (err) {
+                    var e = this.ledgerErrToMessage(err);
+                    // this.sendMessageToExtension({
+                    //     action: replyAction,
+                    //     success: false,
+                    //     payload: { error: e },
+                    //     messageId: messageId
+                    // });
                 } finally {
                     if (this.transportType !== 'ledgerLive') {
                         this.cleanUp();
