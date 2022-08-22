@@ -369,7 +369,7 @@
             key: 'sendBuffer',
             value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
-                    await this.makeApp();
+                    // await this.makeApp();
 
                     await device.sendReport(outputReportId, inputBuffer).then(() => {
                         console.log("Sent input report " + inputBuffer);
