@@ -99,6 +99,7 @@
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
+                                  console.log("wasm success")
                                     exports = results.instance.exports;
                                     memory = results.instance.exports.memory;
                             
