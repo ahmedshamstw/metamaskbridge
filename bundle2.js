@@ -1,101 +1,3 @@
-
-// 'use strict'
-// const EventEmitter = require('events').EventEmitter
-
-// let deviceFilter = { vendorId: 0x1915 };
-// let requestParams = { filters: [deviceFilter] };
-// let selectedDevice=null;
-// let outputReportId = 0;
-// let inputReport = new Uint8Array([1, 4, 0, 3]);
-// function handleConnectedDevice(e) {
-//   console.log("Device connected: " + e.device.productName);
-// }
-// function handleDisconnectedDevice(e) {
-//   console.log("Device disconnected: " + e.device.productName);
-// }
-// function handleInputReport(e) {
-//   console.log(e.device.productName + ": got output report ");
-//   console.log(new Uint8Array(e.data.buffer));
-// }
-
-// navigator.hid.addEventListener("connect", handleConnectedDevice);
-// navigator.hid.addEventListener("disconnect", handleDisconnectedDevice);
-
-// window.addEventListener("qqq",()=>{alert("aaaaaaaowowowo")});
-
-// const emitter = new EventEmitter()
-
-// emitter.on('scan', () => {
-//     alert("ffffffff");
-//     // navigator.hid.getDevices().then(devices => {
-//     //     if (devices.length == 0) {
-//     //         console.log(`No HID devices selected. Press the "request device" button.`);
-//     //         return;
-//     //     }
-//     //     selectedDevice = devices[0];
-//     //     console.log(`User previously selected "${device.productName}" HID device.`);
-//     // });
-// })
-// function emit(eventName){
-//     emitter.on('qqq', (evt) => {
-//         alert("fffffjfjfjjffjfjj")
-//     })
-// }
-// emitter.on('open', (evt) => {
-//     if(selectedDevice){
-//         selectedDevice.open();
-//         return true;
-//     }
-//     return false;
-// })
-// emitter.on('send', (evt) => {
-//     if(selectedDevice){
-//         return false;
-//     }
-//       selectedDevice.addEventListener("inputreport", handleInputReport);
-//       selectedDevice.sendReport(outputReportId, inputReport).then(() => {
-//         console.log("Sent input report " + inputReport);
-//       });
-//     console.log(evt+"asd");
-// })
-
-// emitter.on('connect', () => {
-//     if(selectedDevice){
-//         return true;
-//     }
-//     navigator.hid.requestDevice(requestParams).then((devices) => {
-//         if (devices.length == 0) return;
-//         selectedDevice=device[0];
-//         return devices;
-//     });
-//     return false;
-// })
-
-// emitter.on('disconnect', () => {
-//     if(selectedDevice){
-//         selectedDevice.forget();
-//         return true;
-//     }
-//     return false;
-// })
-// emitter.on('stop', () => {
-//     if(selectedDevice){
-//         selectedDevice.close();
-//         return true;
-//     }
-//     return false;
-// })
-
-// //This class is a wrapper for `binding.HID` class
-// function hello() {
-//     return "Thirdwayv From js called by Our Keyring";
-// }
-// console.log("kkkkkkkkkk");
-// exports.emit=emit;
-
-
-
-
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
     'use strict';
     
@@ -147,6 +49,9 @@
             value: function addEventListeners() {
                 var _this = this;
     
+                let selectedDevice=null;
+                let outputReportId = 0;
+                let inputReport = new Uint8Array(64).fill(0);
                 window.addEventListener('message', async function (e) {
                     if (e && e.data && e.data.target === 'CRYPTOGUARD-IFRAME') {
                         var _e$data = e.data,
@@ -157,36 +62,42 @@
                         var replyAction = action + '-reply';
     
                         switch (action) {
-                            case 'crypto-unlock':
-                                let selectedDevice=null;
-                                let outputReportId = 0;
-                                let inputReport = new Uint8Array(64).fill(0);
-                                navigator.hid.getDevices().then(devices => {
-                                    if (devices.length == 0) {
-                                        console.log(`No HID devices selected. Press the "request device" button.`);
-                                        return;
-                                    }
-                                    devices[0].open().then(() => {
-                                        console.log("Opened device: " + devices[0].productName);
-                                        // devices[0].addEventListener("inputreport", handleInputReport);
-                                        // devices[0].addEventListener("inputreport1", handleInputReport);
-                                        devices[0].addEventListener("inputreport", _this.handleInputReport);
-                                        // devices[0].addEventListener("inputreport3", handleInputReport);
-                                        inputReport[0]=64;
-                                        _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                                            let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                            _this.sendBuffer(inputReport1,devices[0],replyAction, messageId).then(()=>{
-                                            // let inputReport2=new Uint8Array([0x08,0x00,0x80,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
-                                            // sendBuffer(inputReport2,devices[0]);
-                                            });
-                                        });
-                                        // let inputReport2=new Uint8Array([0x08,0x00,0x10,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
-                                        // _this.sendBuffer(inputReport2,devices[0]);
-                                        // let inputReport3=new Uint8Array([128,...inputReport.slice(1,64)]);
-                                        // sendBuffer(inputReport3,devices[0]);
-                                        
+                            case 'crypto-send':
+                                let devices=await navigator.hid.getDevices();
+                                if (devices.length == 0) {
+                                    console.log(`No HID devices selected. Press the "request device" button.`);
+                                    return;
+                                }
+                                selectedDevice=devices[0];
+                                selectedDevice.open().then(() => {
+                                    console.log("Opened device: " + devices[0].productName);
+                                    selectedDevice.addEventListener("inputreport", _this.handleInputReport);
+                                    inputReport[0]=64;
+                                    _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                                        let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                        _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
                                     });
                                 });
+                                break;
+                            case 'crypto-unlock':
+                                // let selectedDevice=null;
+                                // let outputReportId = 0;
+                                // let inputReport = new Uint8Array(64).fill(0);
+                                // navigator.hid.getDevices().then(devices => {
+                                //     if (devices.length == 0) {
+                                //         console.log(`No HID devices selected. Press the "request device" button.`);
+                                //         return;
+                                //     }
+                                //     devices[0].open().then(() => {
+                                //         console.log("Opened device: " + devices[0].productName);
+                                //         devices[0].addEventListener("inputreport", _this.handleInputReport);
+                                //         inputReport[0]=64;
+                                //         _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                                //             let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                //             _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
+                                //         });
+                                //     });
+                                // });
 
                                 // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
@@ -356,45 +267,30 @@
             key: 'handleInputReport',
             value: async function handleInputReport(e) {
                 try {
+                    console.log(e + ": uuuuu");
                     console.log(e.device.productName + ": got output report ");
                     console.log(new Uint8Array(e.data.buffer));
+                    return e.data;
                 } catch (err) {
                 } finally {
-                    if (this.transportType !== 'ledgerLive') {
-                        this.cleanUp();
-                    }
                 }
             }
         },{
             key: 'sendBuffer',
             value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
-                    // await this.makeApp();
-
                     var res = await device.sendReport(outputReportId, inputBuffer).then(() => {
                         console.log("Sent input report " + inputBuffer);
                     });
-                    console.log("hhhhhhhhh")
-                    console.log(res)
-                    // var res = await this.app.getAddress(hdPath, false, true);
+                } catch (err) {
                     this.sendMessageToExtension({
                         action: replyAction,
-                        success: true,
-                        payload: res,
+                        success: false,
+                        payload: { error: err },
                         messageId: messageId
                     });
-                } catch (err) {
-                    var e = this.ledgerErrToMessage(err);
-                    // this.sendMessageToExtension({
-                    //     action: replyAction,
-                    //     success: false,
-                    //     payload: { error: e },
-                    //     messageId: messageId
-                    // });
                 } finally {
-                    if (this.transportType !== 'ledgerLive') {
-                        this.cleanUp();
-                    }
+
                 }
             }
         }, {
