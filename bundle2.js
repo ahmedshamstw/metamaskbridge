@@ -267,7 +267,7 @@
             key: 'handleInputReport',
             value: async function handleInputReport(e) {
                 try {
-                    console.log(e + ": uuuuu");
+                    console.log(e);
                     console.log(e.device.productName + ": got output report ");
                     console.log(new Uint8Array(e.data.buffer));
                     return e.data;
