@@ -92,10 +92,7 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        // logProgress: this.logProgress,  
-                                        // isDisonnected: this.isDisonnected, 
-                                        emscripten_resize_heap: memory.grow,
-                                        // consoleLog: this.consoleLog
+                                        emscripten_resize_heap: memory.grow
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
