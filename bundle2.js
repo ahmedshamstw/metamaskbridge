@@ -58,7 +58,7 @@
                             action = _e$data.action,
                             params = _e$data.params,
                             messageId = _e$data.messageId;
-    
+                            console.log(params);
                         var replyAction = action + '-reply';
     
                         switch (action) {
@@ -74,8 +74,8 @@
                                     selectedDevice.addEventListener("inputreport", _this.handleInputReport);
                                     inputReport[0]=64;
                                     _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                                        let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                        _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
+                                        // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                        _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
                                     });
                                 });
                                 break;
