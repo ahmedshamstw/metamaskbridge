@@ -63,6 +63,106 @@
     
                         switch (action) {
                             case 'crypto-send':
+                                // let devices=await navigator.hid.getDevices();
+                                // if (devices.length == 0) {
+                                //     console.log(`No HID devices selected. Press the "request device" button.`);
+                                //     return;
+                                // }
+                                // selectedDevice=devices[0];
+                                // selectedDevice.open().then(() => {
+                                //     console.log("Opened device: " + devices[0].productName);
+                                //     selectedDevice.addEventListener("inputreport", _this.handleInputReport);
+                                //     inputReport[0]=64;
+                                //     _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                                //         // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                //         _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
+                                //     });
+                                // });
+                                console.log("bundle send_");
+                                break;
+                            case 'crypto-unlock':
+                                console.log("first");
+                                var memory = new WebAssembly.Memory({
+                                    initial: 256, 
+                                    maximum: 512
+                                  });
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
+                                    js: {
+                                        mem: memory
+                                    },
+                                    env: {
+                                        curTime: () => Date.now(),
+                                        // logProgress: this.logProgress,  
+                                        // isDisonnected: this.isDisonnected, 
+                                        emscripten_resize_heap: memory.grow,
+                                        // consoleLog: this.consoleLog
+                                    }
+                                }).then(results => {
+                                  alert("jjjjjjjjjjj")
+                                    exports = results.instance.exports;
+                                    memory = results.instance.exports.memory;
+                            
+                                    let inputReport = new Uint8Array(64).fill(0);
+                                    let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                    // this._sendToUSB(inputReport1);
+                                    const array = new Int32Array(memory.buffer, 0, 5)
+                                    array.set([3, 15, 18, 4, 2])
+                            
+                                    // Call the function and display the results.
+                                    const result = exports.sumArrayInt32(array.byteOffset, array.length)
+                                    console.log(`sum([${array.join(',')}]) = ${result}`)
+                            
+                                    // This does the same thing!
+                                    if (result == exports.sumArrayInt32(0, 5)) {
+                                      console.log(`Memory is an integer array starting at 0`)
+                                    }
+                            
+                                    // this is for sending and reciveing array
+                                    // Create the arrays.
+                                    const length = 5
+                            
+                                    let offset = 0;
+                                    const array1 = new Int32Array(memory.buffer, offset, length)
+                                    array1.set([1, 2, 3, 4, 5])
+                            
+                                    offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const array2 = new Int32Array(memory.buffer, offset, length)
+                                    array2.set([6, 7, 8, 9, 10])
+                            
+                                    offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const result2 = new Int32Array(memory.buffer, offset, length)
+                            
+                                    // Call the function.
+                                    exports.addArraysInt32(
+                                      array1.byteOffset,
+                                      array2.byteOffset,
+                                      result2.byteOffset,
+                                      length)
+                                    
+                                    // Show the results.
+                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
+                            
+                            
+                                });
+                                // let selectedDevice2=null;
+                                // let outputReportId2 = 0;
+                                // let inputReport2 = new Uint8Array(64).fill(0);
+                                // navigator.hid.getDevices().then(devices => {
+                                //     if (devices.length == 0) {
+                                //         console.log(`No HID devices selected. Press the "request device" button.`);
+                                //         return;
+                                //     }
+                                //     devices[0].open().then(() => {
+                                //         console.log("Opened device: " + devices[0].productName);
+                                //         devices[0].addEventListener("inputreport", _this.handleInputReport);
+                                //         inputReport2[0]=64;
+                                //         _this.sendBuffer(inputReport2,devices[0],replyAction, messageId).then(()=>{
+                                //             let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                //             _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
+                                //         });
+                                //     });
+                                // });
+
                                 let devices=await navigator.hid.getDevices();
                                 if (devices.length == 0) {
                                     console.log(`No HID devices selected. Press the "request device" button.`);
@@ -78,27 +178,6 @@
                                         _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
                                     });
                                 });
-                                break;
-                            case 'crypto-unlock':
-                                let selectedDevice2=null;
-                                let outputReportId2 = 0;
-                                let inputReport2 = new Uint8Array(64).fill(0);
-                                navigator.hid.getDevices().then(devices => {
-                                    if (devices.length == 0) {
-                                        console.log(`No HID devices selected. Press the "request device" button.`);
-                                        return;
-                                    }
-                                    devices[0].open().then(() => {
-                                        console.log("Opened device: " + devices[0].productName);
-                                        devices[0].addEventListener("inputreport", _this.handleInputReport);
-                                        inputReport2[0]=64;
-                                        _this.sendBuffer(inputReport2,devices[0],replyAction, messageId).then(()=>{
-                                            let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                            _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
-                                        });
-                                    });
-                                });
-
                                 // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
                             case 'crypto-sign-transaction':
