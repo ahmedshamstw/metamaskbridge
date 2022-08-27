@@ -131,14 +131,18 @@
                                     const result2 = new Int32Array(memory.buffer, offset, length)
                             
                                     // Call the function.
-                                    exports.addArraysInt32(
-                                      array1.byteOffset,
-                                      array2.byteOffset,
-                                      result2.byteOffset,
-                                      length)
-                                    
+                                    // exports.addArraysInt32(
+                                    //   array1.byteOffset,
+                                    //   array2.byteOffset,
+                                    //   result2.byteOffset,
+                                    //   length)
+
+                                      const result3 = new Int32Array(
+                                        memory.buffer,
+                                        exports.addArrays(array1.byteOffset, array2.byteOffset,result2.byteOffset,length),
+                                        length)
                                     // Show the results.
-                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
+                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result3.join(", ")}]`)
                             
                             
                                 });
