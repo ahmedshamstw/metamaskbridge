@@ -207,7 +207,10 @@
             value: async function unlock(replyAction, hdPath, messageId) {
                 try {
                     await this.makeApp();
+                    console.log(hdPath);
                     var res = await this.app.getAddress(hdPath, false, true);
+                    console.log("ffffhfhhfhfhfhfhf")
+                    console.log(res);
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
