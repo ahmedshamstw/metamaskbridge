@@ -92,7 +92,6 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        sendMessage:_this.sendMessage(),
                                         emscripten_resize_heap: memory.grow
                                     }
                                 }).then(results => {
@@ -129,7 +128,7 @@
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     offset += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(memory.buffer, offset, 64)
+                                    const result2 = new Int32Array(memory.buffer, offset, length)
                             
                                     // Call the function.
                                     exports.addArraysInt32(
@@ -354,32 +353,6 @@
                 }
             }
         },{
-            key: 'sendMessage',
-            value: async function sendMessage(){
-                try {
-                    alert("fffff");
-                    // let devices=await navigator.hid.getDevices();
-                    // selectedDevice=await devices[0];
-                    // selectedDevice.open().then(() => {
-                    //     console.log("Opened device: " + devices[0].productName);
-                    //     selectedDevice.addEventListener("inputreport", this.handleInputReport);
-                    //     inputReport[0]=64;
-                    //     var res = selectedDevice.sendReport(outputReportId, inputReport).then(() => {
-                    //         console.log("Sent input report " + inputReport);
-                    //     });
-                    // });
-                } catch (err) {
-                    // this.sendMessageToExtension({
-                    //     action: replyAction,
-                    //     success: false,
-                    //     payload: { error: err },
-                    //     messageId: messageId
-                    // });
-                } finally {
-
-                }
-            }
-        }, ,{
             key: 'sendBuffer',
             value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
