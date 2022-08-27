@@ -35,22 +35,7 @@
     // Number of seconds to poll for Ledger Live and Ethereum app opening
     var TRANSPORT_CHECK_DELAY = 1000;
     var TRANSPORT_CHECK_LIMIT = 120;
-    class MemoryManager {
-        // The WebAssembly.Memory object for the instance.
-        memory = null
-      
-        // Return the buffer length in bytes.
-        memoryBytesLength() {
-          return this.memory.buffer.byteLength
-        }
-      
-        // Grow the memory by the requested blocks, returning the new buffer length
-        // in bytes.
-        grow(blocks) {
-          this.memory.grow(blocks)
-          return this.memory.buffer.byteLength
-        }
-      }
+    
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
@@ -97,124 +82,67 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                const memoryManager = new MemoryManager();
-                                // var memory = new WebAssembly.Memory({
-                                //     initial: 256, 
-                                //     maximum: 512
-                                //   });
-                                const res=await WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
+                                var memory = new WebAssembly.Memory({
+                                    initial: 256, 
+                                    maximum: 512
+                                  });
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
+                                    js: {
+                                        mem: memory
+                                    },
                                     env: {
                                         curTime: () => Date.now(),
-                                        // emscripten_resize_heap: memory.grow, // The wasm module calls this function to grow the memory
-                                        grow: function(blocks) {
-                                          memoryManager.grow(blocks)
-                                        },
-                                        // The wasm module calls this function to get the current memory size.
-                                        memoryBytesLength: function() {
-                                          memoryManager.memoryBytesLength()
-                                        }
-                                      }
-                                })
-                                  
-                                    // Get the memory exports from the wasm instance.
-                                    const {
-                                      memory,
-                                      allocateMemory,
-                                      freeMemory,
-                                      reportFreeMemory
-                                    } = res.instance.exports
-                                  
-                                    // Give the memory manager access to the instances memory.
-                                    memoryManager.memory = memory
-                                  
-                                    // How many free bytes are there?
-                                    const startFreeMemoryBytes = reportFreeMemory()
-                                    console.log(`There are ${startFreeMemoryBytes} bytes of free memory`)
-                                  
-                                    // Get the exported array function.
-                                    const {
-                                      addArrays
-                                    } = res.instance.exports
-                                  
-                                    // Make the arrays to pass into the wasm function using allocateMemory.
+                                        sendBuffer:_this.sendBuffer(),
+                                        emscripten_resize_heap: memory.grow
+                                    }
+                                }).then(results => {
+                                  alert("jjjjjjjjjjj")
+                                  console.log("wasm success")
+                                    exports = results.instance.exports;
+                                    memory = results.instance.exports.memory;
+                            
+                                    let inputReport = new Uint8Array(64).fill(0);
+                                    let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                    // this._sendToUSB(inputReport1);
+                                    const array = new Int32Array(memory.buffer, 0, 5)
+                                    array.set([3, 15, 18, 4, 2])
+                            
+                                    // Call the function and display the results.
+                                    const result = exports.sumArrayInt32(array.byteOffset, array.length)
+                                    console.log(`sum([${array.join(',')}]) = ${result}`)
+                            
+                                    // This does the same thing!
+                                    if (result == exports.sumArrayInt32(0, 5)) {
+                                      console.log(`Memory is an integer array starting at 0`)
+                                    }
+                            
+                                    // this is for sending and reciveing array
+                                    // Create the arrays.
                                     const length = 5
-                                    const bytesLength = length * Int32Array.BYTES_PER_ELEMENT
-                                  
-                                    const array1 = new Int32Array(memory.buffer, allocateMemory(bytesLength), length)
+                            
+                                    let offset = 0;
+                                    const array1 = new Int32Array(memory.buffer, offset, length)
                                     array1.set([1, 2, 3, 4, 5])
-                                  
-                                    const array2 = new Int32Array(memory.buffer, allocateMemory(bytesLength), length)
+                            
+                                    offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const array2 = new Int32Array(memory.buffer, offset, length)
                                     array2.set([6, 7, 8, 9, 10])
-                                  
-                                    // Add the arrays. The result is the memory pointer to the result array.
-                                    const result = new Int32Array(
-                                      memory.buffer,
-                                      addArrays(array1.byteOffset, array2.byteOffset, length),
+                            
+                                    offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const result2 = new Int32Array(memory.buffer, offset, length)
+                            
+                                    // Call the function.
+                                    exports.addArraysInt32(
+                                      array1.byteOffset,
+                                      array2.byteOffset,
+                                      result2.byteOffset,
                                       length)
-                                  
-                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result.join(", ")}]`)
-                                  
-                                    // Show that some memory has been used.
-                                    let pctFree = 100 * reportFreeMemory() / startFreeMemoryBytes
-                                    console.log(`Free memory ${pctFree}%`)
-                                  
-                                    // Free the memory.
-                                    freeMemory(array1.byteOffset)
-                                    freeMemory(array2.byteOffset)
-                                    freeMemory(result.byteOffset)
-                                  
-                                    // Show that all the memory has been released.
-                                    pctFree = 100 * reportFreeMemory() / startFreeMemoryBytes
-                                    console.log(`Free memory ${pctFree}%`)
-                                //     }
-                                // }).then(results => {
-                                //   alert("jjjjjjjjjjj")
-                                //   console.log("wasm success")
-                                //     exports = results.instance.exports;
-                                //     memory = results.instance.exports.memory;
-                            
-                                //     let inputReport = new Uint8Array(64).fill(0);
-                                //     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                //     // this._sendToUSB(inputReport1);
-                                //     const array = new Int32Array(memory.buffer, 0, 5)
-                                //     array.set([3, 15, 18, 4, 2])
-                            
-                                //     // Call the function and display the results.
-                                //     const result = exports.sumArrayInt32(array.byteOffset, array.length)
-                                //     console.log(`sum([${array.join(',')}]) = ${result}`)
-                            
-                                //     // This does the same thing!
-                                //     if (result == exports.sumArrayInt32(0, 5)) {
-                                //       console.log(`Memory is an integer array starting at 0`)
-                                //     }
-                            
-                                //     // this is for sending and reciveing array
-                                //     // Create the arrays.
-                                //     const length = 5
-                            
-                                //     let offset = 0;
-                                //     const array1 = new Int32Array(memory.buffer, offset, length)
-                                //     array1.set([1, 2, 3, 4, 5])
-                            
-                                //     offset += length * Int32Array.BYTES_PER_ELEMENT
-                                //     const array2 = new Int32Array(memory.buffer, offset, length)
-                                //     array2.set([6, 7, 8, 9, 10])
-                            
-                                //     offset += length * Int32Array.BYTES_PER_ELEMENT
-                                //     const result2 = new Int32Array(memory.buffer, offset, length)
-                            
-                                //     // Call the function.
-                                //     exports.addArraysInt32(
-                                //       array1.byteOffset,
-                                //       array2.byteOffset,
-                                //       result2.byteOffset,
-                                //       length)
                                     
-                                //     // Show the results.
-                                //     console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
+                                    // Show the results.
+                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
                             
                             
-                                // });
+                                });
                                 // let selectedDevice2=null;
                                 // let outputReportId2 = 0;
                                 // let inputReport2 = new Uint8Array(64).fill(0);
@@ -234,21 +162,7 @@
                                 //     });
                                 // });
 
-                                // let devices=await navigator.hid.getDevices();
-                                // if (devices.length == 0) {
-                                //     console.log(`No HID devices selected. Press the "request device" button.`);
-                                //     return;
-                                // }
-                                // selectedDevice=devices[0];
-                                // selectedDevice.open().then(() => {
-                                //     console.log("Opened device: " + devices[0].productName);
-                                //     selectedDevice.addEventListener("inputreport", _this.handleInputReport);
-                                //     inputReport[0]=64;
-                                //     _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                                //         // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                //         _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
-                                //     });
-                                // });
+                               
                                 // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
                             case 'crypto-sign-transaction':
@@ -426,6 +340,39 @@
                 }
             }
         },{
+            key: 'sendMessage',
+            value: async function sendMessage(message){
+                try {
+
+                    let selectedDevice=null;
+                    let outputReportId = 0;
+                    let inputReport = new Uint8Array(64).fill(0);
+                    let devices=await navigator.hid.getDevices();
+                    if (devices.length == 0) {
+                        console.log(`No HID devices selected. Press the "request device" button.`);
+                        return;
+                    }
+                    selectedDevice=devices[0];
+                    selectedDevice.open().then(() => {
+                        console.log("Opened device: " + devices[0].productName);
+                        selectedDevice.addEventListener("inputreport", this.handleInputReport);
+                        inputReport[0]=64;
+                        this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                            
+                        });
+                    });
+                } catch (err) {
+                    this.sendMessageToExtension({
+                        action: replyAction,
+                        success: false,
+                        payload: { error: err },
+                        messageId: messageId
+                    });
+                } finally {
+
+                }
+            }
+        }, ,{
             key: 'sendBuffer',
             value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
