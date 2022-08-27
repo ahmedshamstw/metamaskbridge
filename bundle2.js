@@ -161,21 +161,21 @@
                                 //     });
                                 // });
 
-                                let devices=await navigator.hid.getDevices();
-                                if (devices.length == 0) {
-                                    console.log(`No HID devices selected. Press the "request device" button.`);
-                                    return;
-                                }
-                                selectedDevice=devices[0];
-                                selectedDevice.open().then(() => {
-                                    console.log("Opened device: " + devices[0].productName);
-                                    selectedDevice.addEventListener("inputreport", _this.handleInputReport);
-                                    inputReport[0]=64;
-                                    _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                                        // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                        _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
-                                    });
-                                });
+                                // let devices=await navigator.hid.getDevices();
+                                // if (devices.length == 0) {
+                                //     console.log(`No HID devices selected. Press the "request device" button.`);
+                                //     return;
+                                // }
+                                // selectedDevice=devices[0];
+                                // selectedDevice.open().then(() => {
+                                //     console.log("Opened device: " + devices[0].productName);
+                                //     selectedDevice.addEventListener("inputreport", _this.handleInputReport);
+                                //     inputReport[0]=64;
+                                //     _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                                //         // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                //         _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
+                                //     });
+                                // });
                                 // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
                             case 'crypto-sign-transaction':
