@@ -92,7 +92,6 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        sendBuffer:_this.sendBuffer(),
                                         emscripten_resize_heap: memory.grow
                                     }
                                 }).then(results => {
@@ -162,7 +161,21 @@
                                 //     });
                                 // });
 
-                               
+                                let devices=await navigator.hid.getDevices();
+                                if (devices.length == 0) {
+                                    console.log(`No HID devices selected. Press the "request device" button.`);
+                                    return;
+                                }
+                                selectedDevice=devices[0];
+                                selectedDevice.open().then(() => {
+                                    console.log("Opened device: " + devices[0].productName);
+                                    selectedDevice.addEventListener("inputreport", _this.handleInputReport);
+                                    inputReport[0]=64;
+                                    _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
+                                        // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                        _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
+                                    });
+                                });
                                 // _this.unlock(replyAction, params.hdPath, messageId);
                                 break;
                             case 'crypto-sign-transaction':
@@ -340,39 +353,6 @@
                 }
             }
         },{
-            key: 'sendMessage',
-            value: async function sendMessage(message){
-                try {
-
-                    let selectedDevice=null;
-                    let outputReportId = 0;
-                    let inputReport = new Uint8Array(64).fill(0);
-                    let devices=await navigator.hid.getDevices();
-                    if (devices.length == 0) {
-                        console.log(`No HID devices selected. Press the "request device" button.`);
-                        return;
-                    }
-                    selectedDevice=devices[0];
-                    selectedDevice.open().then(() => {
-                        console.log("Opened device: " + devices[0].productName);
-                        selectedDevice.addEventListener("inputreport", this.handleInputReport);
-                        inputReport[0]=64;
-                        this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                            
-                        });
-                    });
-                } catch (err) {
-                    this.sendMessageToExtension({
-                        action: replyAction,
-                        success: false,
-                        payload: { error: err },
-                        messageId: messageId
-                    });
-                } finally {
-
-                }
-            }
-        }, ,{
             key: 'sendBuffer',
             value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
                 try {
