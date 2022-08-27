@@ -41,7 +41,6 @@
         let selectedDevice=null;
         let outputReportId = 0;
         let inputReport = null;
-        let devices=navigator.hid.getDevices();
         
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
@@ -94,7 +93,7 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        sendBuffer:_this.sendBuffer(),
+                                        sendMessage:_this.sendMessage(),
                                         emscripten_resize_heap: memory.grow
                                     }
                                 }).then(results => {
@@ -345,6 +344,7 @@
             key: 'sendMessage',
             value: async function sendMessage(){
                 try {
+                    let devices=await navigator.hid.getDevices();
                     selectedDevice=await devices[0];
                     selectedDevice.open().then(() => {
                         console.log("Opened device: " + devices[0].productName);
