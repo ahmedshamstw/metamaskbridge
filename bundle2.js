@@ -146,7 +146,8 @@
                                     _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
                                     console.log("result3");
                                     console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result3.join(", ")}]`)
-                            
+                                    console.log("secp256k1_uncompressPBK")
+                                    _this.secp256k1_uncompressPBK(6,8,8);
                             
                                 });
                                 // let selectedDevice2=null;
@@ -237,11 +238,19 @@
             key: 'secp256k1_uncompressPBK',
             value: async function secp256k1_uncompressPBK(input,input_len,hash){
                 try {
-                    const msgUint8 = new TextEncoder().encode(input);                           // encode as (utf-8) Uint8Array
-                    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-                    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-                    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-                    return hashHex;
+                    const {createECDH,ECDH} = await import('crypto');
+                    const ecdh = createECDH('secp256k1');
+                    ecdh.generateKeys();
+                    const compressedKey = ecdh.getPublicKey('hex', 'compressed');
+                    const uncompressedKey = ECDH.convertKey(compressedKey,'secp256k1','hex','hex','uncompressed');
+                    // The converted key and the uncompressed public key should be the same
+                    console.log(uncompressedKey === ecdh.getPublicKey('hex'));
+                    console.log("this is getPublicKey");
+                    console.log(ecdh.getPublicKey('hex'));
+                    console.log("this is compressedKey");
+                    console.log(compressedKey);
+                    console.log("this is uncompressedKey");
+                    console.log(uncompressedKey);
                 } catch (err) {
                 }
             }
