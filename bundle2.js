@@ -238,7 +238,7 @@
             key: 'secp256k1_uncompressPBK',
             value: async function secp256k1_uncompressPBK(input,input_len,hash){
                 try {
-                    const {createECDH,ECDH} = await import('crypto');
+                    const { createECDH, ECDH } = require('crypto');
                     const ecdh = createECDH('secp256k1');
                     ecdh.generateKeys();
                     const compressedKey = ecdh.getPublicKey('hex', 'compressed');
