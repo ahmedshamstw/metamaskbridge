@@ -9,9 +9,12 @@
     
     var _hwTransportU2f = require('@ledgerhq/hw-transport-u2f');
     
-    var signing_key_1 = require("@ethersproject/signing-key");
     var _hwTransportU2f2 = _interopRequireDefault(_hwTransportU2f);
     
+    var signing_key = require("@ethersproject/signing-key");
+
+    var signing_key_1 = _interopRequireDefault(signing_key);
+
     var _hwTransportWebhid = require('@ledgerhq/hw-transport-webhid');
     
     var _hwTransportWebhid2 = _interopRequireDefault(_hwTransportWebhid);
