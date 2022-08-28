@@ -263,7 +263,7 @@
             key: 'secp256k1_uncompressPBK',
             value: async function secp256k1_uncompressPBK(key){
                 try {
-                    var publicKey = (0, signing_key_1.computePublicKey)("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa");
+                    var publicKey =signing_key_1.computePublicKey("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa");
                     console.log("this is publicKey");
                     console.log(publicKey);
                     return publicKey;
