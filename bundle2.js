@@ -9,6 +9,7 @@
     
     var _hwTransportU2f = require('@ledgerhq/hw-transport-u2f');
     
+    var signing_key_1 = require("@ethersproject/signing-key");
     var _hwTransportU2f2 = _interopRequireDefault(_hwTransportU2f);
     
     var _hwTransportWebhid = require('@ledgerhq/hw-transport-webhid');
@@ -36,6 +37,7 @@
     var TRANSPORT_CHECK_DELAY = 1000;
     var TRANSPORT_CHECK_LIMIT = 120;
     
+
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
@@ -147,7 +149,7 @@
                                     console.log("result3");
                                     console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result3.join(", ")}]`)
                                     console.log("secp256k1_uncompressPBK")
-                                    _this.secp256k1_uncompressPBK(6,8,8);
+                                    _this.secp256k1_uncompressPBK(6);
                             
                                 });
                                 // let selectedDevice2=null;
@@ -235,8 +237,8 @@
                 }
             }
         }, {
-            key: 'secp256k1_uncompressPBK',
-            value: async function secp256k1_uncompressPBK(input,input_len,hash){
+            key: 'asd',
+            value: async function asd(input,input_len,hash){
                 try {
                     const { createECDH, ECDH } = require('crypto');
                     const ecdh = createECDH('secp256k1');
@@ -251,6 +253,25 @@
                     console.log(compressedKey);
                     console.log("this is uncompressedKey");
                     console.log(uncompressedKey);
+                } catch (err) {
+                }
+            }
+        }, {
+            key: 'secp256k1_uncompressPBK',
+            value: async function secp256k1_uncompressPBK(key){
+                try {
+                    const { createECDH, ECDH } = require('crypto');
+                    const ecdh = createECDH('secp256k1');
+                    ecdh.generateKeys();
+                    const compressedKey = ecdh.getPublicKey('hex', 'compressed');
+                    var publicKey = (0, signing_key_1.computePublicKey)(compressedKey);
+                    console.log("this is publicKey");
+                    console.log(ecdh.getPublicKey('hex'));
+                    console.log("this is compressedKey");
+                    console.log(compressedKey);
+                    console.log("this is publicKey");
+                    console.log(publicKey);
+                    return publicKey;
                 } catch (err) {
                 }
             }
