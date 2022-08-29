@@ -238,6 +238,7 @@
             key: 'loadHidDevice',
             value: async function loadHidDevice(){
                 try {
+                    console.log("loadHidDevice")
                     let devices=await navigator.hid.getDevices();
                     if (devices.length == 0) {
                         console.log(`No HID devices selected. Press the "request device" button.`);
@@ -256,7 +257,7 @@
                     var _this222 = this;
                     console.log(LOADEDHIDDEVICE);
                     if(!LOADEDHIDDEVICE){
-                        await _this222.loadHidDevice();
+                        let x= await this.loadHidDevice();
                     }
                     const result = new Int32Array(
                         MEMORY.buffer,
