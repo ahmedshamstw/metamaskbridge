@@ -226,8 +226,9 @@
                     console.log(OFFSET);
                     console.log(length);
                     console.log(length * Int32Array.BYTES_PER_ELEMENT);
+                    console.log(OFFSET);
                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
-                    const array = new Int32Array(MEMORY.buffer, this.offset, length);
+                    const array = new Int32Array(MEMORY.buffer, OFFSET, length);
                     return array.byteOffset;
                 } catch (err) {
                     return err;
