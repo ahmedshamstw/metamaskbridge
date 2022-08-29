@@ -127,16 +127,15 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    let offset = 0;
-                                    const array1 = new Int32Array(memory.buffer, offset, length)
+                                    const array1 = new Int32Array(memory.buffer, _this.offset, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
-                                    offset += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(memory.buffer, offset, length)
+                                    _this.offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const array2 = new Int32Array(memory.buffer, _this.offset, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
-                                    offset += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(memory.buffer, offset, length)
+                                    _this.offset += length * Int32Array.BYTES_PER_ELEMENT
+                                    const result2 = new Int32Array(memory.buffer, _this.offset, length)
                             
                                     // Call the function.
                                     // exports.addArraysInt32(
@@ -223,6 +222,9 @@
             value: async function allocateOnMemory(length){
                 try {
                     console.log("Allocate Memory From C By Length");
+
+                    this.offset += length * Int32Array.BYTES_PER_ELEMENT
+                    console.log(this.offset)
                     const array = new Int32Array(this.memory.buffer, this.offset, length);
                     return array.byteOffset;
                 } catch (err) {
