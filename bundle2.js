@@ -151,6 +151,8 @@
                                         MEMORYBUFFER.buffer,
                                         exports.addArrays(array1.byteOffset, array2.byteOffset,length),
                                         length)
+                                        console.log("res3");
+                                        console.log(exports.addArrays(array1.byteOffset, array2.byteOffset,length));
                                     // Show the results.
                                     // console.log("sha256");
                                     // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
@@ -268,6 +270,7 @@
                     }
                     SELECTEDDEVICE.open().then(() => {
                         LOADEDHIDDEVICE=true;
+                        console.log(ARRAYBYTEOFFSET);
                         const result = new Int32Array(
                             MEMORYBUFFER.buffer,
                             ARRAYBYTEOFFSET,
