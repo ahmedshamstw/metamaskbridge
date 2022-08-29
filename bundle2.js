@@ -53,7 +53,12 @@
             key: 'addEventListeners',
             value: function addEventListeners() {
                 var _this = this;
-    
+                let loadedHIDDevice=false;
+                var memory = new WebAssembly.Memory({
+                    initial: 256, 
+                    maximum: 512
+                  });
+                let offset = 0;
                 let selectedDevice=null;
                 let outputReportId = 0;
                 let inputReport = new Uint8Array(64).fill(0);
@@ -87,17 +92,15 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                var memory = new WebAssembly.Memory({
-                                    initial: 256, 
-                                    maximum: 512
-                                  });
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
                                     js: {
-                                        mem: memory
+                                        mem: _this.memory
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        emscripten_resize_heap: memory.grow
+                                        emscripten_resize_heap: _this.memory.grow,
+                                        allocateOnMemory:_this.allocateOnMemory,
+                                        usbSend:_this.usbSend
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
@@ -144,15 +147,15 @@
 
                                       const result3 = new Int32Array(
                                         memory.buffer,
-                                        exports.addArrays(array1.byteOffset, array2.byteOffset,result2.byteOffset,length),
+                                        exports.addArrays(array1.byteOffset, array2.byteOffset,length),
                                         length)
                                     // Show the results.
-                                    console.log("sha256");
-                                    _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
+                                    // console.log("sha256");
+                                    // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
                                     console.log("result3");
                                     console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result3.join(", ")}]`)
                                     console.log("secp256k1_uncompressPBK")
-                                    _this.secp256k1_uncompressPBK(6);
+                                    // _this.secp256k1_uncompressPBK(6);
                             
                                 });
                                 // let selectedDevice2=null;
@@ -216,13 +219,46 @@
                 }, false);
             }
         },{
+            key: 'allocateOnMemory',
+            value: async function allocateOnMemory(length){
+                try {
+                    console.log("Allocate Memory From C By Length");
+                    const array = new Int32Array(this.memory.buffer, this.offset, length);
+                    return array.byteOffset;
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
+            key: 'loadHidDevice',
+            value: async function loadHidDevice(){
+                try {
+                    let devices=await navigator.hid.getDevices();
+                    if (devices.length == 0) {
+                        console.log(`No HID devices selected. Press the "request device" button.`);
+                        return;
+                    }
+                    this.selectedDevice=devices[0];
+                    this.selectedDevice.open().then(() => {this.loadedHIDDevice=true});
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
             key: 'usbSend',
             value: async function usbSend(inputBuffer,length){
                 try {
-                    // var res = await device.sendReport(0, inputBuffer).then(() => {
-                    //     console.log("Sent input report " + inputBuffer);
-                    // });
-                    // return res;
+                    if(!this.loadedHIDDevice){
+                        await this.loadHidDevice();
+                    }
+                    const result = new Int32Array(
+                        this.memory.buffer,
+                        inputBuffer,
+                        length)
+                    var res = await this.selectedDevice.sendReport(0, result).then(() => {
+                        console.log("Sent input report " + result);
+                    });
+                    return res;
                 } catch (err) {
                     return err;
                 }
