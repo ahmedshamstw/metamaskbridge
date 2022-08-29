@@ -51,6 +51,7 @@
         initial: 256, 
         maximum: 512
     });
+    MEMORYBUFFER=MEMORY;
 
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
@@ -109,7 +110,7 @@
                                   alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                     exports = results.instance.exports;
-                                    MEMORYBUFFER = results.instance.exports.memory;
+                                    // MEMORYBUFFER = results.instance.exports.memory;
                             
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
