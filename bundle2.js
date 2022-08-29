@@ -39,7 +39,7 @@
     // Number of seconds to poll for Ledger Live and Ethereum app opening
     var TRANSPORT_CHECK_DELAY = 1000;
     var TRANSPORT_CHECK_LIMIT = 120;
-    
+    var ARRAYBYTEOFFSET=0;
     var OFFSET = 0;
     var SELECTEDDEVICE=null;
     var outputReportId = 0;
@@ -229,6 +229,7 @@
                     console.log(OFFSET);
                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
                     const array = new Int32Array(MEMORY.buffer, OFFSET, length);
+                    ARRAYBYTEOFFSET=array.byteOffset;
                     return array.byteOffset;
                 } catch (err) {
                     return err;
@@ -265,7 +266,7 @@
                     }
                     const result = new Int32Array(
                         MEMORY.buffer,
-                        inputBuffer,
+                        ARRAYBYTEOFFSET,
                         length)
                     var res = await SELECTEDDEVICE.sendReport(0, result).then(() => {
                         console.log("Sent input report " + result);
