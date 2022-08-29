@@ -102,7 +102,8 @@
                                         curTime: () => Date.now(),
                                         emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
-                                        usbSend:_this.usbSend
+                                        usbSend:_this.usbSend,
+                                        consoleLog:console.log
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
