@@ -41,6 +41,15 @@
     var TRANSPORT_CHECK_LIMIT = 120;
     
     var OFFSET = 0;
+    var SELECTEDDEVICE=null;
+    var outputReportId = 0;
+    var inputReport = new Uint8Array(64).fill(0);
+
+    var LOADEDHIDDEVICE=false;
+    var MEMORY = new WebAssembly.Memory({
+        initial: 256, 
+        maximum: 512
+    });
 
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
@@ -48,15 +57,6 @@
     
             this.addEventListeners();
             this.transportType = 'u2f';
-            this.selectedDevice=null;
-            this.outputReportId = 0;
-            this.inputReport = new Uint8Array(64).fill(0);
-
-            this.loadedHIDDevice=false;
-            this.memory = new WebAssembly.Memory({
-                initial: 256, 
-                maximum: 512
-              });
         }
     
         _createClass(CryptoguardBridge, [{
@@ -95,11 +95,11 @@
                                 console.log("first");
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
                                     js: {
-                                        mem: _this.memory
+                                        mem: MEMORY
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        emscripten_resize_heap:_this.memory.grow,
+                                        emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend
                                     }
@@ -128,15 +128,15 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    const array1 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    const array1 = new Int32Array(MEMORY.buffer, OFFSET, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    const array2 = new Int32Array(MEMORY.buffer, OFFSET, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    const result2 = new Int32Array(MEMORY.buffer, OFFSET, length)
                             
                                     // Call the function.
                                     // exports.addArraysInt32(
@@ -146,7 +146,7 @@
                                     //   length)
 
                                       const result3 = new Int32Array(
-                                        _this.memory.buffer,
+                                        MEMORY.buffer,
                                         exports.addArrays(array1.byteOffset, array2.byteOffset,length),
                                         length)
                                     // Show the results.
@@ -227,7 +227,7 @@
                     console.log(length);
                     console.log(length * Int32Array.BYTES_PER_ELEMENT);
                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
-                    const array = new Int32Array(this.memory.buffer, this.offset, length);
+                    const array = new Int32Array(MEMORY.buffer, this.offset, length);
                     return array.byteOffset;
                 } catch (err) {
                     return err;
@@ -242,8 +242,8 @@
                         console.log(`No HID devices selected. Press the "request device" button.`);
                         return;
                     }
-                    this.selectedDevice=devices[0];
-                    this.selectedDevice.open().then(() => {this.loadedHIDDevice=true});
+                    SELECTEDDEVICE=devices[0];
+                    SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                 } catch (err) {
                     return err;
                 }
@@ -252,14 +252,14 @@
             key: 'usbSend',
             value: async function usbSend(inputBuffer,length){
                 try {
-                    if(!this.loadedHIDDevice){
+                    if(!LOADEDHIDDEVICE){
                         await this.loadHidDevice();
                     }
                     const result = new Int32Array(
-                        this.memory.buffer,
+                        MEMORY.buffer,
                         inputBuffer,
                         length)
-                    var res = await this.selectedDevice.sendReport(0, result).then(() => {
+                    var res = await SELECTEDDEVICE.sendReport(0, result).then(() => {
                         console.log("Sent input report " + result);
                     });
                     return res;
