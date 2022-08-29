@@ -43,7 +43,7 @@
     var OFFSET = 0;
     var SELECTEDDEVICE=null;
     var outputReportId = 0;
-    var inputReport = new Uint8Array(64).fill(0);
+    var inputReport = new Uint8Array(64).fill(1);
 
     var LOADEDHIDDEVICE=false;
     var MEMORYBUFFER=null;
