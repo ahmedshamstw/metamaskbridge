@@ -98,7 +98,7 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        emscripten_resize_heap: _this.memory.grow,
+                                        emscripten_resize_heap:memory.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend
                                     }
