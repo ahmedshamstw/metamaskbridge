@@ -54,7 +54,7 @@
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
-    
+            this._THISCRYP=this;
             this.addEventListeners();
             this.transportType = 'u2f';
         }
@@ -254,10 +254,14 @@
             key: 'usbSend',
             value: async function usbSend(inputBuffer,length){
                 try {
-                    var _this222 = this;
-                    console.log(LOADEDHIDDEVICE);
                     if(!LOADEDHIDDEVICE){
-                        let x= await this.loadHidDevice();
+                            let devices=await navigator.hid.getDevices();
+                        if (devices.length == 0) {
+                            console.log(`No HID devices selected. Press the "request device" button.`);
+                            return;
+                        }
+                        SELECTEDDEVICE=devices[0];
+                        SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                     }
                     const result = new Int32Array(
                         MEMORY.buffer,
