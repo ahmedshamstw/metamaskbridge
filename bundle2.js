@@ -51,8 +51,7 @@
         initial: 256, 
         maximum: 512
     });
-    MEMORYBUFFER=MEMORY;
-
+    var result2=null;
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
@@ -115,7 +114,7 @@
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // this._sendToUSB(inputReport1);
-                                    const array = new Int32Array(MEMORYBUFFER.buffer, 0, 5)
+                                    const array = new Int32Array(MEMORY.buffer, 0, 5)
                                     array.set([3, 15, 18, 4, 2])
                             
                                     // Call the function and display the results.
@@ -131,34 +130,34 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    const array1 = new Int32Array(MEMORY.buffer, OFFSET, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    const array2 = new Int32Array(MEMORY.buffer, OFFSET, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    result2 = new Int32Array(MEMORY.buffer, OFFSET, length)
                             
                                     // Call the function.
-                                    // exports.addArraysInt32(
-                                    //   array1.byteOffset,
-                                    //   array2.byteOffset,
-                                    //   result2.byteOffset,
-                                    //   length)
+                                    exports.addArraysInt32(
+                                      array1.byteOffset,
+                                      array2.byteOffset,
+                                      result2.byteOffset,
+                                      length)
 
-                                      const result3 = new Int32Array(
-                                        MEMORYBUFFER.buffer,
-                                        exports.addArrays(array1.byteOffset, array2.byteOffset,length),
-                                        length)
-                                        console.log("res3");
-                                        console.log(exports.addArrays(array1.byteOffset, array2.byteOffset,length));
+                                    //   const result3 = new Int32Array(
+                                    //     MEMORYBUFFER.buffer,
+                                    //     exports.addArrays(array1.byteOffset, array2.byteOffset,length),
+                                    //     length)
+                                    //     console.log("res3");
+                                    //     console.log(exports.addArrays(array1.byteOffset, array2.byteOffset,length));
                                     // Show the results.
                                     // console.log("sha256");
                                     // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
                                     console.log("result3");
-                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result3.join(", ")}]`)
+                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
                                     console.log("secp256k1_uncompressPBK")
                                     // _this.secp256k1_uncompressPBK(6);
                             
@@ -233,7 +232,7 @@
                     console.log(length * Int32Array.BYTES_PER_ELEMENT);
                     console.log(OFFSET);
                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
-                    const array = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length);
+                    const array = new Int32Array(MEMORY.buffer, OFFSET, length);
                     ARRAYBYTEOFFSET=array.byteOffset;
                     return array.byteOffset;
                 } catch (err) {
@@ -258,7 +257,7 @@
             }
         },{
             key: 'usbSend',
-            value: async function usbSend(inputBuffer,length){
+            value: async function usbSend(){
                 try {
                     let res=0;
                     if(!LOADEDHIDDEVICE){
@@ -270,14 +269,14 @@
                         SELECTEDDEVICE=devices[0];
                     }
                     SELECTEDDEVICE.open().then(() => {
-                        LOADEDHIDDEVICE=true;
-                        console.log(ARRAYBYTEOFFSET);
-                        const result = new Int32Array(
-                            MEMORYBUFFER.buffer,
-                            ARRAYBYTEOFFSET,
-                            length);
-                        res = SELECTEDDEVICE.sendReport(0, result).then(() => {
-                            console.log("Sent input report " + result);
+                        // LOADEDHIDDEVICE=true;
+                        // console.log(ARRAYBYTEOFFSET);
+                        // const result = new Int32Array(
+                        //     MEMORY.buffer,
+                        //     ARRAYBYTEOFFSET,
+                        //     length);
+                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
+                            console.log("Sent input report " + result2);
                         });
                     });
                     return res;
