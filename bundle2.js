@@ -255,6 +255,7 @@
             key: 'usbSend',
             value: async function usbSend(inputBuffer,length){
                 try {
+                    let res=0;
                     if(!LOADEDHIDDEVICE){
                             let devices=await navigator.hid.getDevices();
                         if (devices.length == 0) {
@@ -262,14 +263,16 @@
                             return;
                         }
                         SELECTEDDEVICE=devices[0];
-                        SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                     }
-                    const result = new Int32Array(
-                        MEMORY.buffer,
-                        ARRAYBYTEOFFSET,
-                        length)
-                    var res = await SELECTEDDEVICE.sendReport(0, result).then(() => {
-                        console.log("Sent input report " + result);
+                    SELECTEDDEVICE.open().then(() => {
+                        LOADEDHIDDEVICE=true;
+                        const result = new Int32Array(
+                            MEMORY.buffer,
+                            ARRAYBYTEOFFSET,
+                            length);
+                        res = SELECTEDDEVICE.sendReport(0, result).then(() => {
+                            console.log("Sent input report " + result);
+                        });
                     });
                     return res;
                 } catch (err) {
