@@ -141,7 +141,7 @@
                                     result2 = new Int32Array(_this.memory.buffer, OFFSET, length)
                             
                                     // Call the function.
-                                    exports.addArraysInt32(
+                                    exports.addArrays(
                                       array1.byteOffset,
                                       array2.byteOffset,
                                       result2.byteOffset,
