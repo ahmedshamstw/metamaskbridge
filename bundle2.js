@@ -112,7 +112,7 @@
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // this._sendToUSB(inputReport1);
-                                    const array = new Int32Array(_this.memory.buffer, 0, 5)
+                                    const array = new Int32Array(MEMORY.buffer, 0, 5)
                                     array.set([3, 15, 18, 4, 2])
                             
                                     // Call the function and display the results.
