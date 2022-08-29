@@ -47,21 +47,22 @@
     
             this.addEventListeners();
             this.transportType = 'u2f';
+
+            this.loadedHIDDevice=false;
+            this.memory = new WebAssembly.Memory({
+                initial: 256, 
+                maximum: 512
+              });
+            this.offset = 0;
+            this.selectedDevice=null;
+            this.outputReportId = 0;
+            this.inputReport = new Uint8Array(64).fill(0);
         }
     
         _createClass(CryptoguardBridge, [{
             key: 'addEventListeners',
             value: function addEventListeners() {
                 var _this = this;
-                let loadedHIDDevice=false;
-                var memory = new WebAssembly.Memory({
-                    initial: 256, 
-                    maximum: 512
-                  });
-                let offset = 0;
-                let selectedDevice=null;
-                let outputReportId = 0;
-                let inputReport = new Uint8Array(64).fill(0);
                 window.addEventListener('message', async function (e) {
                     if (e && e.data && e.data.target === 'CRYPTOGUARD-IFRAME') {
                         var _e$data = e.data,
@@ -98,7 +99,7 @@
                                     },
                                     env: {
                                         curTime: () => Date.now(),
-                                        emscripten_resize_heap:memory.grow,
+                                        emscripten_resize_heap:_this.memory.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend
                                     }
@@ -111,7 +112,7 @@
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // this._sendToUSB(inputReport1);
-                                    const array = new Int32Array(memory.buffer, 0, 5)
+                                    const array = new Int32Array(_this.memory.buffer, 0, 5)
                                     array.set([3, 15, 18, 4, 2])
                             
                                     // Call the function and display the results.
@@ -127,15 +128,15 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    const array1 = new Int32Array(memory.buffer, _this.offset, length)
+                                    const array1 = new Int32Array(_this.memory.buffer, _this.offset, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
                                     _this.offset += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(memory.buffer, _this.offset, length)
+                                    const array2 = new Int32Array(_this.memory.buffer, _this.offset, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     _this.offset += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(memory.buffer, _this.offset, length)
+                                    const result2 = new Int32Array(_this.memory.buffer, _this.offset, length)
                             
                                     // Call the function.
                                     // exports.addArraysInt32(
@@ -145,7 +146,7 @@
                                     //   length)
 
                                       const result3 = new Int32Array(
-                                        memory.buffer,
+                                        _this.memory.buffer,
                                         exports.addArrays(array1.byteOffset, array2.byteOffset,length),
                                         length)
                                     // Show the results.
@@ -222,7 +223,9 @@
             value: async function allocateOnMemory(length){
                 try {
                     console.log("Allocate Memory From C By Length");
-
+                    console.log(this.offset);
+                    console.log(length);
+                    console.log(length * Int32Array.BYTES_PER_ELEMENT)
                     this.offset += length * Int32Array.BYTES_PER_ELEMENT
                     console.log(this.offset)
                     const array = new Int32Array(this.memory.buffer, this.offset, length);
