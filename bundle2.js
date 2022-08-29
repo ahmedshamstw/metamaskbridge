@@ -253,8 +253,10 @@
             key: 'usbSend',
             value: async function usbSend(inputBuffer,length){
                 try {
+                    var _this222 = this;
+                    console.log(LOADEDHIDDEVICE);
                     if(!LOADEDHIDDEVICE){
-                        await this.loadHidDevice();
+                        await _this222.loadHidDevice();
                     }
                     const result = new Int32Array(
                         MEMORY.buffer,
