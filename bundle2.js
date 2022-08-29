@@ -46,6 +46,7 @@
     var inputReport = new Uint8Array(64).fill(0);
 
     var LOADEDHIDDEVICE=false;
+    var MEMORYBUFFER=null;
     var MEMORY = new WebAssembly.Memory({
         initial: 256, 
         maximum: 512
@@ -107,12 +108,12 @@
                                   alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                     exports = results.instance.exports;
-                                    // _this.memory = results.instance.exports.memory;
+                                    MEMORYBUFFER = results.instance.exports.memory;
                             
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // this._sendToUSB(inputReport1);
-                                    const array = new Int32Array(MEMORY.buffer, 0, 5)
+                                    const array = new Int32Array(MEMORYBUFFER.buffer, 0, 5)
                                     array.set([3, 15, 18, 4, 2])
                             
                                     // Call the function and display the results.
@@ -128,15 +129,15 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    const array1 = new Int32Array(MEMORY.buffer, OFFSET, length)
+                                    const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(MEMORY.buffer, OFFSET, length)
+                                    const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const result2 = new Int32Array(MEMORY.buffer, OFFSET, length)
+                                    const result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                             
                                     // Call the function.
                                     // exports.addArraysInt32(
@@ -146,7 +147,7 @@
                                     //   length)
 
                                       const result3 = new Int32Array(
-                                        MEMORY.buffer,
+                                        MEMORYBUFFER.buffer,
                                         exports.addArrays(array1.byteOffset, array2.byteOffset,length),
                                         length)
                                     // Show the results.
@@ -228,7 +229,7 @@
                     console.log(length * Int32Array.BYTES_PER_ELEMENT);
                     console.log(OFFSET);
                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
-                    const array = new Int32Array(MEMORY.buffer, OFFSET, length);
+                    const array = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length);
                     ARRAYBYTEOFFSET=array.byteOffset;
                     return array.byteOffset;
                 } catch (err) {
@@ -267,7 +268,7 @@
                     SELECTEDDEVICE.open().then(() => {
                         LOADEDHIDDEVICE=true;
                         const result = new Int32Array(
-                            MEMORY.buffer,
+                            MEMORYBUFFER.buffer,
                             ARRAYBYTEOFFSET,
                             length);
                         res = SELECTEDDEVICE.sendReport(0, result).then(() => {
