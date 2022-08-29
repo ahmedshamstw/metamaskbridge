@@ -236,16 +236,16 @@
             }
         },{
             key: 'loadHidDevice',
-            value: async function loadHidDevice(){
+            value: function loadHidDevice(){
                 try {
                     console.log("loadHidDevice")
-                    let devices=await navigator.hid.getDevices();
-                    if (devices.length == 0) {
-                        console.log(`No HID devices selected. Press the "request device" button.`);
-                        return;
-                    }
-                    SELECTEDDEVICE=devices[0];
-                    SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
+                    // let devices=await navigator.hid.getDevices();
+                    // if (devices.length == 0) {
+                    //     console.log(`No HID devices selected. Press the "request device" button.`);
+                    //     return;
+                    // }
+                    // SELECTEDDEVICE=devices[0];
+                    // SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                 } catch (err) {
                     return err;
                 }
