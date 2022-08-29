@@ -109,12 +109,12 @@
                                   alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                     exports = results.instance.exports;
-                                    _this.memory = results.instance.exports.memory;
+                                    MEMORYBUFFER = results.instance.exports.memory;
                             
                                     let inputReport = new Uint8Array(64).fill(0);
                                     let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // this._sendToUSB(inputReport1);
-                                    const array = new Int32Array(_this.memory.buffer, 0, 5)
+                                    const array = new Int32Array(MEMORYBUFFER.buffer, 0, 5)
                                     array.set([3, 15, 18, 4, 2])
                             
                                     // Call the function and display the results.
@@ -130,15 +130,15 @@
                                     // Create the arrays.
                                     const length = 5
                             
-                                    const array1 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                                     array1.set([1, 2, 3, 4, 5])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                                     array2.set([6, 7, 8, 9, 10])
                             
                                     OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    result2 = new Int32Array(_this.memory.buffer, OFFSET, length)
+                                    result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                             
                                     // Call the function.
                                     exports.addArrays(
@@ -221,6 +221,17 @@
                         }
                     }
                 }, false);
+            }
+        },{
+            key: 'onGetXpubResult',
+            value: async function onGetXpubResult(offset,length){
+                try {
+                    const array = new Int32Array(MEMORY.buffer, offset, length);
+                    console.log(array);
+                    return array.byteOffset;
+                } catch (err) {
+                    return err;
+                }
             }
         },{
             key: 'allocateOnMemory',
