@@ -7,6 +7,11 @@
     
     var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
     
+    var properties = require("@ethersproject/properties");
+    var properties_1 = _interopRequireDefault(properties);
+    var keccak256 = require("@ethersproject/keccak256");
+    var keccak256_1 = _interopRequireDefault(keccak256);
+
     var _hwTransportU2f = require('@ledgerhq/hw-transport-u2f');
     
     var _hwTransportU2f2 = _interopRequireDefault(_hwTransportU2f);
@@ -159,7 +164,7 @@
                                     console.log("result3");
                                     console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
                                     console.log("secp256k1_uncompressPBK")
-                                    // _this.secp256k1_uncompressPBK(6);
+                                    _this.secp256k1_uncompressPBK(6);
                             
                                 });
                                 // let selectedDevice2=null;
