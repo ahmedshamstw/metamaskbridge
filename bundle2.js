@@ -1,9 +1,45 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-    'use strict';
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.version = void 0;
+    exports.version = "transactions/5.5.0";
     
-    Object.defineProperty(exports, "__esModule", {
-        value: true
+    },{}],103:[function(require,module,exports){
+    "use strict";
+    var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    }) : (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        o[k2] = m[k];
+    }));
+    var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+    }) : function(o, v) {
+        o["default"] = v;
     });
+    var __importStar = (this && this.__importStar) || function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.parse = exports.serialize = exports.accessListify = exports.recoverAddress = exports.computeAddress = exports.TransactionTypes = void 0;
+    var address_1 = require("@ethersproject/address");
+    var bignumber_1 = require("@ethersproject/bignumber");
+    var bytes_1 = require("@ethersproject/bytes");
+    var constants_1 = require("@ethersproject/constants");
+    var keccak256_1 = require("@ethersproject/keccak256");
+    var properties_1 = require("@ethersproject/properties");
+    var RLP = __importStar(require("@ethersproject/rlp"));
+    var signing_key_1 = require("@ethersproject/signing-key");
+    var logger_1 = require("@ethersproject/logger");
+    var _version_1 = require("./_version");
+    var logger = new logger_1.Logger(_version_1.version);
+    var TransactionTypes;
+    
     
     var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
     
@@ -636,7 +672,7 @@
     
     exports.default = CryptoguardBridge;
     
-    },{"@ethersproject/signing-key":94,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
+    },{"./_version":102,"@ethersproject/address":24,"@ethersproject/bignumber":31,"@ethersproject/bytes":33,"@ethersproject/constants":37,"@ethersproject/keccak256":55,"@ethersproject/logger":57,"@ethersproject/properties":63,"@ethersproject/rlp":87,"@ethersproject/signing-key":94,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
     'use strict';
     
     var _CryptoguardBridge = require('./ledger-bridge');
