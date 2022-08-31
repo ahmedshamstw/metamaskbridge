@@ -111,7 +111,7 @@
                                         usbSend:_this.usbSend,
                                         consoleLog:console.log,
                                         onGetXpubResult:_this.onGetXpubResult,
-                                        // __assert_fail:console.log,
+                                        // __assert_fail:console.log,//testing
                                         // _embind_register_void:console.log, 
                                         // _embind_register_bool:console.log, 
                                         // _embind_register_std_string:console.log, 
