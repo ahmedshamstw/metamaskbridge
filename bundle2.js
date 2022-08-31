@@ -109,7 +109,8 @@
                                         emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend,
-                                        consoleLog:console.log
+                                        consoleLog:console.log,
+                                        onGetXpubResult:_this.onGetXpubResult,
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
