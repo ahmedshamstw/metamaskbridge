@@ -114,6 +114,12 @@
                                         __assert_fail:console.log,
                                         _embind_register_void:console.log, 
                                         _embind_register_bool:console.log, 
+                                        _embind_register_std_string:console.log, 
+                                        _embind_register_std_wstring:console.log, 
+                                        _embind_register_emval:console.log, 
+                                        _embind_register_integer:console.log, 
+                                        _embind_register_float:console.log, 
+                                        _embind_register_memory_view:console.log, 
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
