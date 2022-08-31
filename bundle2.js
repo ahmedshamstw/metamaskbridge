@@ -100,7 +100,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
                                         mem: MEMORY
                                     },
