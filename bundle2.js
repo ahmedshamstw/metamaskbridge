@@ -120,6 +120,9 @@
                                         _embind_register_integer:console.log, 
                                         _embind_register_float:console.log, 
                                         _embind_register_memory_view:console.log, 
+                                        _embind_register_bigint:console.log, 
+                                        __indirect_function_table:console.log, 
+                                        emscripten_memcpy_big:console.log,
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
