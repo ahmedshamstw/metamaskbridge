@@ -10,6 +10,9 @@
     var keccak256 = require("@ethersproject/keccak256");
     var keccak256_1 = _interopRequireDefault(keccak256);
 
+    var bytes = require("@ethersproject/bytes");
+    var bytes_1 = _interopRequireDefault(bytes);
+
     var _hwTransportU2f = require('@ledgerhq/hw-transport-u2f');
     
     var _hwTransportU2f2 = _interopRequireDefault(_hwTransportU2f);
@@ -335,7 +338,7 @@
             value: async function secp256k1_uncompressPBK(key){
                 try {
                     console.log("this is publicKey");
-                    var publicKey =signing_key_1.computePublicKey("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa",true);
+                    var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa"),true);
                     console.log("this is publicKey");
                     console.log(publicKey);
                     return publicKey;
@@ -641,7 +644,7 @@
     
     exports.default = CryptoguardBridge;
     
-    },{"@ethersproject/signing-key":94,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
+    },{"@ethersproject/signing-key":94,"@ethersproject/bytes":33,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
     'use strict';
     
     var _CryptoguardBridge = require('./ledger-bridge');
