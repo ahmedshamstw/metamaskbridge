@@ -340,6 +340,7 @@
                     console.log(publicKey);
                     return publicKey;
                 } catch (err) {
+                    console.log(err)
                 }
             }
         },  {
