@@ -112,7 +112,7 @@
                                         consoleLog:console.log,
                                         onGetXpubResult:_this.onGetXpubResult,
                                         __assert_fail:console.log,
-                                        _embind_register_void:console.log,
+                                        _embind_register_void:console.log, 
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
