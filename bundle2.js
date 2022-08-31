@@ -111,6 +111,7 @@
                                         usbSend:_this.usbSend,
                                         consoleLog:console.log,
                                         onGetXpubResult:_this.onGetXpubResult,
+                                        __assert_fail:console.log,
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
