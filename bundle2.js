@@ -136,13 +136,32 @@
                                 
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
-                                  
+                                //   _this.loadHidDevice();
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
+
+                                    let selectedDevice2=null;
+                                    let outputReportId2 = 0;
+                                    let inputReport2 = new Uint8Array(64).fill(0);
+                                    navigator.hid.getDevices().then(devices => {
+                                        if (devices.length == 0) {
+                                            console.log(`No HID devices selected. Press the "request device" button.`);
+                                            return;
+                                        }
+                                        devices[0].open().then(() => {
+                                            console.log("Opened device: " + devices[0].productName);
+                                            devices[0].addEventListener("inputreport", _this.handleInputReport);
+                                            inputReport2[0]=64;
+                                            _this.sendBuffer(inputReport2,devices[0],replyAction, messageId).then(()=>{
+                                                let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                                _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
+                                            });
+                                        });
+                                    });
 
                                     // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
@@ -286,16 +305,16 @@
             }
         },{
             key: 'loadHidDevice',
-            value: function loadHidDevice(){
+            value: async function loadHidDevice(){
                 try {
                     console.log("loadHidDevice")
-                    // let devices=await navigator.hid.getDevices();
-                    // if (devices.length == 0) {
-                    //     console.log(`No HID devices selected. Press the "request device" button.`);
-                    //     return;
-                    // }
-                    // SELECTEDDEVICE=devices[0];
-                    // SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
+                    let devices=await navigator.hid.getDevices();
+                    if (devices.length == 0) {
+                        console.log(`No HID devices selected. Press the "request device" button.`);
+                        return;
+                    }
+                    SELECTEDDEVICE=devices[0];
+                    SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                 } catch (err) {
                     return err;
                 }
@@ -306,7 +325,7 @@
                 try {
                     let res=0;
                     if(!LOADEDHIDDEVICE){
-                        let devices=await window.navigator.hid.getDevices();
+                        let devices=await navigator.hid.getDevices();
                         if (devices.length == 0) {
                             console.log(`No HID devices selected. Press the "request device" button.`);
                             return;
@@ -326,6 +345,7 @@
                     });
                     return res;
                 } catch (err) {
+                    console.log(err)
                     return err;
                 }
             }
