@@ -107,15 +107,15 @@
                                 break;
                             case 'crypto-unlock':
 
-                                navigator.hid.getDevices().then(devices => {
-                                    if (devices.length == 0) {
-                                        console.log(`No HID devices selected. Press the "request device" button.`);
-                                        return;
-                                    }
-                                    SELECTEDDEVICE = devices[0];
-                                    console.log(`User previously selected "${SELECTEDDEVICE.productName}" HID device.`);
-                                    console.log(`Now press "open device" button to be able to send reports.`);
-                                });
+                                // navigator.hid.getDevices().then(devices => {
+                                //     if (devices.length == 0) {
+                                //         console.log(`No HID devices selected. Press the "request device" button.`);
+                                //         return;
+                                //     }
+                                //     SELECTEDDEVICE = devices[0];
+                                //     console.log(`User previously selected "${SELECTEDDEVICE.productName}" HID device.`);
+                                //     console.log(`Now press "open device" button to be able to send reports.`);
+                                // });
                                 console.log("first");
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
@@ -298,14 +298,14 @@
             key: 'loadHidDevice',
             value: async function loadHidDevice(){
                 try {
-                    console.log("loadHidDevice")
-                    let devices=await navigator.hid.getDevices();
-                    if (devices.length == 0) {
-                        console.log(`No HID devices selected. Press the "request device" button.`);
-                        return;
-                    }
-                    SELECTEDDEVICE=devices[0];
-                    SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
+                    // console.log("loadHidDevice")
+                    // let devices=await navigator.hid.getDevices();
+                    // if (devices.length == 0) {
+                    //     console.log(`No HID devices selected. Press the "request device" button.`);
+                    //     return;
+                    // }
+                    // SELECTEDDEVICE=devices[0];
+                    // SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
                 } catch (err) {
                     return err;
                 }
@@ -315,6 +315,32 @@
             value: async function usbSend(){
                 try {
                     let res=0;
+                    let deviceFilter = { vendorId: 0x1915 };
+                    let requestParams = { filters: [deviceFilter] };
+                    navigator.hid.requestDevice(requestParams).then((devices) => {
+                      if (devices.length == 0) return;
+                      console.log(devices[0].productName);
+                      // devices[0].forget()
+                      devices[0].open().then(() => {
+                        console.log("Opened device: " + devices[0].productName);
+                        // devices[0].addEventListener("inputreport", handleInputReport);
+                        // devices[0].addEventListener("inputreport1", handleInputReport);
+                        devices[0].addEventListener("inputreport", this.handleInputReport);
+                        // devices[0].addEventListener("inputreport3", handleInputReport);
+                        inputReport[0]=88;
+                        this.sendBuffer(inputReport,devices[0]).then(()=>{
+                          let inputReport1=new Uint8Array([0x089,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                          this.sendBuffer(inputReport1,devices[0]).then(()=>{
+                            // let inputReport2=new Uint8Array([0x08,0x00,0x80,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
+                            // sendBuffer(inputReport2,devices[0]);
+                            devices[0].forget();
+                          });
+                        });
+                        // let inputReport3=new Uint8Array([128,...inputReport.slice(1,64)]);
+                        // sendBuffer(inputReport3,devices[0]);
+                        
+                      });
+                    });
                     // if(!LOADEDHIDDEVICE){
                     //     let devices=await navigator.hid.getDevices();
                     //     if (devices.length == 0) {
@@ -323,19 +349,19 @@
                     //     }
                     //     SELECTEDDEVICE=devices[0];
                     // }
-                    console.log(SELECTEDDEVICE)
+                    // console.log(SELECTEDDEVICE)
                     // SELECTEDDEVICE.open().then(() => {
-                        // LOADEDHIDDEVICE=true;
-                        // console.log(ARRAYBYTEOFFSET);
-                        // const result = new Int32Array(
-                        //     MEMORY.buffer,
-                        //     ARRAYBYTEOFFSET,
-                        //     length);
-                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
-                            console.log("Sent input report " + result2);
-                        });
+                    //     // LOADEDHIDDEVICE=true;
+                    //     // console.log(ARRAYBYTEOFFSET);
+                    //     // const result = new Int32Array(
+                    //     //     MEMORY.buffer,
+                    //     //     ARRAYBYTEOFFSET,
+                    //     //     length);
+                    //     res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
+                    //         console.log("Sent input report " + result2);
+                    //     });
                     // }).catch(err => console.log(err));
-                    return res;
+                    // return res;
                 } catch (err) {
                     console.log(err)
                     return err;
