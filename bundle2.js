@@ -323,7 +323,8 @@
                     //     }
                     //     SELECTEDDEVICE=devices[0];
                     // }
-                    SELECTEDDEVICE.open().then(() => {
+                    console.log(SELECTEDDEVICE)
+                    // SELECTEDDEVICE.open().then(() => {
                         // LOADEDHIDDEVICE=true;
                         // console.log(ARRAYBYTEOFFSET);
                         // const result = new Int32Array(
@@ -333,7 +334,7 @@
                         res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
                             console.log("Sent input report " + result2);
                         });
-                    }).catch(err => console.log(err));
+                    // }).catch(err => console.log(err));
                     return res;
                 } catch (err) {
                     console.log(err)
