@@ -57,13 +57,6 @@
         initial: 256, 
         maximum: 512
     });
-    const enumNotify={
-        CRYPTO_GUARD_IF_CONNECTED_EVT:0,
-        CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
-        CRYPTO_GUARD_IF_SEND_STATUS_EVT:2,
-        CRYPTO_GUARD_IF_RECIEVED_DATA_EVT:3,
-        CRYPTO_GUARD_IF_INVALID_EVT:4,
-    }
     var result2=null;
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
@@ -106,18 +99,8 @@
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
-
-                                // navigator.hid.getDevices().then(devices => {
-                                //     if (devices.length == 0) {
-                                //         console.log(`No HID devices selected. Press the "request device" button.`);
-                                //         return;
-                                //     }
-                                //     SELECTEDDEVICE = devices[0];
-                                //     console.log(`User previously selected "${SELECTEDDEVICE.productName}" HID device.`);
-                                //     console.log(`Now press "open device" button to be able to send reports.`);
-                                // });
                                 console.log("first");
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
                                     js: {
                                         mem: MEMORY
                                     },
@@ -126,72 +109,51 @@
                                         emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend,
-                                        consoleLog:console.log,
-                                        onGetXpubResult:_this.onGetXpubResult,
-                                        __assert_fail:console.log,//testing
-                                        _embind_register_void:console.log, 
-                                        _embind_register_bool:console.log, 
-                                        _embind_register_std_string:console.log, 
-                                        _embind_register_std_wstring:console.log, 
-                                        _embind_register_emval:console.log, 
-                                        _embind_register_integer:console.log, 
-                                        _embind_register_float:console.log, 
-                                        _embind_register_memory_view:console.log, 
-                                        _embind_register_bigint:console.log, 
-                                        __indirect_function_table:console.log, 
-                                        emscripten_memcpy_big:console.log,
+                                        consoleLog:console.log
                                     }
                                 }).then(results => {
-                                //   alert("jjjjjjjjjjj")
-                                
+                                  alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
-                                //   _this.loadHidDevice();
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-
-                                    // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
-                                    // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
-                                    // let inputReport = new Uint8Array(64).fill(0);
-                                    // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                    // // this._sendToUSB(inputReport1);
-                                    // const array = new Int32Array(MEMORYBUFFER.buffer, 0, 5)
-                                    // array.set([3, 15, 18, 4, 2])
                             
-                                    // // Call the function and display the results.
-                                    // const result = exports.sumArrayInt32(array.byteOffset, array.length)
-                                    // console.log(`sum([${array.join(',')}]) = ${result}`)
+                                    let inputReport = new Uint8Array(64).fill(0);
+                                    let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
+                                    // this._sendToUSB(inputReport1);
+                                    const array = new Int32Array(MEMORYBUFFER.buffer, 0, 5)
+                                    array.set([3, 15, 18, 4, 2])
                             
-                                    // // This does the same thing!
-                                    // if (result == exports.sumArrayInt32(0, 5)) {
-                                    //   console.log(`Memory is an integer array starting at 0`)
-                                    // }
+                                    // Call the function and display the results.
+                                    const result = exports.sumArrayInt32(array.byteOffset, array.length)
+                                    console.log(`sum([${array.join(',')}]) = ${result}`)
                             
-                                    // // this is for sending and reciveing array
-                                    // // Create the arrays.
-                                    // const length = 5
+                                    // This does the same thing!
+                                    if (result == exports.sumArrayInt32(0, 5)) {
+                                      console.log(`Memory is an integer array starting at 0`)
+                                    }
                             
-                                    // const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    // array1.set([1, 2, 3, 4, 5])
+                                    // this is for sending and reciveing array
+                                    // Create the arrays.
+                                    const length = 5
                             
-                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    // array2.set([6, 7, 8, 9, 10])
+                                    const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    array1.set([1, 2, 3, 4, 5])
                             
-                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    // result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                    const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    array2.set([6, 7, 8, 9, 10])
                             
-                                    // // Call the function.
-                                    // exports.addArrays(
-                                    //   array1.byteOffset,
-                                    //   array2.byteOffset,
-                                    //   result2.byteOffset,
-                                    //   length)
+                                    OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                    result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                            
+                                    // Call the function.
+                                    exports.addArrays(
+                                      array1.byteOffset,
+                                      array2.byteOffset,
+                                      result2.byteOffset,
+                                      length)
 
                                     //   const result3 = new Int32Array(
                                     //     MEMORYBUFFER.buffer,
@@ -202,8 +164,8 @@
                                     // Show the results.
                                     // console.log("sha256");
                                     // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
-                                    console.log("result");
-                                    console.log(result2);
+                                    console.log("result3");
+                                    console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
                             
                                 });
                                 // let selectedDevice2=null;
@@ -296,9 +258,9 @@
             }
         },{
             key: 'loadHidDevice',
-            value: async function loadHidDevice(){
+            value: function loadHidDevice(){
                 try {
-                    // console.log("loadHidDevice")
+                    console.log("loadHidDevice")
                     // let devices=await navigator.hid.getDevices();
                     // if (devices.length == 0) {
                     //     console.log(`No HID devices selected. Press the "request device" button.`);
@@ -315,55 +277,27 @@
             value: async function usbSend(){
                 try {
                     let res=0;
-                    let deviceFilter = { vendorId: 0x1915 };
-                    let requestParams = { filters: [deviceFilter] };
-                    navigator.hid.getDevices().then((devices) => {
-                      if (devices.length == 0) return;
-                      console.log(devices[0].productName);
-                      // devices[0].forget()
-                      devices[0].open().then(() => {
-                        console.log("Opened device: " + devices[0].productName);
-                        // devices[0].addEventListener("inputreport", handleInputReport);
-                        // devices[0].addEventListener("inputreport1", handleInputReport);
-                        devices[0].addEventListener("inputreport", this.handleInputReport);
-                        // devices[0].addEventListener("inputreport3", handleInputReport);
-                        inputReport[0]=88;
-                        this.sendBuffer(inputReport,devices[0]).then(()=>{
-                          let inputReport1=new Uint8Array([0x089,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                          this.sendBuffer(inputReport1,devices[0]).then(()=>{
-                            // let inputReport2=new Uint8Array([0x08,0x00,0x80,0x01,0x02,0x03,0x04,0x05,0x06,...inputReport.slice(10,64)]);
-                            // sendBuffer(inputReport2,devices[0]);
-                            devices[0].forget();
-                          });
+                    if(!LOADEDHIDDEVICE){
+                            let devices=await navigator.hid.getDevices();
+                        if (devices.length == 0) {
+                            console.log(`No HID devices selected. Press the "request device" button.`);
+                            return;
+                        }
+                        SELECTEDDEVICE=devices[0];
+                    }
+                    SELECTEDDEVICE.open().then(() => {
+                        // LOADEDHIDDEVICE=true;
+                        // console.log(ARRAYBYTEOFFSET);
+                        // const result = new Int32Array(
+                        //     MEMORY.buffer,
+                        //     ARRAYBYTEOFFSET,
+                        //     length);
+                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
+                            console.log("Sent input report " + result2);
                         });
-                        // let inputReport3=new Uint8Array([128,...inputReport.slice(1,64)]);
-                        // sendBuffer(inputReport3,devices[0]);
-                        
-                      });
                     });
-                    // if(!LOADEDHIDDEVICE){
-                    //     let devices=await navigator.hid.getDevices();
-                    //     if (devices.length == 0) {
-                    //         console.log(`No HID devices selected. Press the "request device" button.`);
-                    //         return;
-                    //     }
-                    //     SELECTEDDEVICE=devices[0];
-                    // }
-                    // console.log(SELECTEDDEVICE)
-                    // SELECTEDDEVICE.open().then(() => {
-                    //     // LOADEDHIDDEVICE=true;
-                    //     // console.log(ARRAYBYTEOFFSET);
-                    //     // const result = new Int32Array(
-                    //     //     MEMORY.buffer,
-                    //     //     ARRAYBYTEOFFSET,
-                    //     //     length);
-                    //     res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
-                    //         console.log("Sent input report " + result2);
-                    //     });
-                    // }).catch(err => console.log(err));
-                    // return res;
+                    return res;
                 } catch (err) {
-                    console.log(err)
                     return err;
                 }
             }
