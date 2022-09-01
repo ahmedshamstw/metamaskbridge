@@ -333,7 +333,7 @@
                         res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
                             console.log("Sent input report " + result2);
                         });
-                    });
+                    }).catch(err => console.log(err));
                     return res;
                 } catch (err) {
                     console.log(err)
