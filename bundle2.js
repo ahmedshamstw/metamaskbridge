@@ -140,13 +140,13 @@
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    const result = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,result.byteOffset,64);
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
 
-                                    OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
-                                    const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_get_xpub(HD_path,4,pv)
+                                    // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
+                                    // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                                     // let inputReport = new Uint8Array(64).fill(0);
                                     // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
                                     // // this._sendToUSB(inputReport1);
@@ -192,8 +192,8 @@
                                     // Show the results.
                                     // console.log("sha256");
                                     // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
-                                    // console.log("result3");
-                                    // console.log(`[${array1.join(", ")}] + [${array2.join(", ")}] = [${result2.join(", ")}]`)
+                                    console.log("result");
+                                    console.log(result2);
                             
                                 });
                                 // let selectedDevice2=null;
