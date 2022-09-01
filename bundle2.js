@@ -134,7 +134,7 @@
                                 }).then(results => {
                                 //   alert("jjjjjjjjjjj")
                                 
-                                    let devices=await navigator.hid.getDevices();
+                                    let devices=navigator.hid.getDevices();
                                     if (devices.length == 0) {
                                         console.log(`No HID devices selected. Press the "request device" button.`);
                                         return;
