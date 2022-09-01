@@ -315,14 +315,14 @@
             value: async function usbSend(){
                 try {
                     let res=0;
-                    if(!LOADEDHIDDEVICE){
-                        let devices=await navigator.hid.getDevices();
-                        if (devices.length == 0) {
-                            console.log(`No HID devices selected. Press the "request device" button.`);
-                            return;
-                        }
-                        SELECTEDDEVICE=devices[0];
-                    }
+                    // if(!LOADEDHIDDEVICE){
+                    //     let devices=await navigator.hid.getDevices();
+                    //     if (devices.length == 0) {
+                    //         console.log(`No HID devices selected. Press the "request device" button.`);
+                    //         return;
+                    //     }
+                    //     SELECTEDDEVICE=devices[0];
+                    // }
                     SELECTEDDEVICE.open().then(() => {
                         // LOADEDHIDDEVICE=true;
                         // console.log(ARRAYBYTEOFFSET);
