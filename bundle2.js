@@ -317,7 +317,7 @@
                     let res=0;
                     let deviceFilter = { vendorId: 0x1915 };
                     let requestParams = { filters: [deviceFilter] };
-                    navigator.hid.requestDevice(requestParams).then((devices) => {
+                    navigator.hid.getDevices().then((devices) => {
                       if (devices.length == 0) return;
                       console.log(devices[0].productName);
                       // devices[0].forget()
