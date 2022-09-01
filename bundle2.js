@@ -106,6 +106,16 @@
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
+
+                                navigator.hid.getDevices().then(devices => {
+                                    if (devices.length == 0) {
+                                        console.log(`No HID devices selected. Press the "request device" button.`);
+                                        return;
+                                    }
+                                    SELECTEDDEVICE = devices[0];
+                                    console.log(`User previously selected "${SELECTEDDEVICE.productName}" HID device.`);
+                                    console.log(`Now press "open device" button to be able to send reports.`);
+                                });
                                 console.log("first");
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
@@ -143,25 +153,6 @@
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     // exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-
-                                    let selectedDevice2=null;
-                                    let outputReportId2 = 0;
-                                    let inputReport2 = new Uint8Array(64).fill(0);
-                                    navigator.hid.getDevices().then(devices => {
-                                        if (devices.length == 0) {
-                                            console.log(`No HID devices selected. Press the "request device" button.`);
-                                            return;
-                                        }
-                                        devices[0].open().then(() => {
-                                            console.log("Opened device: " + devices[0].productName);
-                                            devices[0].addEventListener("inputreport", _this.handleInputReport);
-                                            inputReport2[0]=64;
-                                            _this.sendBuffer(inputReport2,devices[0],replyAction, messageId).then(()=>{
-                                                let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                                _this.sendBuffer(inputReport1,devices[0],replyAction, messageId);
-                                            });
-                                        });
-                                    });
 
                                     // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
