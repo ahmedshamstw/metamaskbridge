@@ -40,7 +40,7 @@ file(GLOB SOURCES 	"./crypto_guard_if.c"
 
 
 add_executable(crypto_guard_if ${SOURCES})
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.wasm -s WASM=1 -s STANDALONE_WASM --bind --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=0")
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.js -s WASM=1 --bind --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=0 --no-entry")
 
 #TARGET_LINK_LIBRARIES(crypto_guard_if
 #	Setupapi

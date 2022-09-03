@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #ifdef __cplusplus
+#error
 extern "C" {
 #include <string.h>	
 #include <emscripten/bind.h>
@@ -72,11 +73,12 @@ static void usb_send_cb(void* const pv_device, twi_u8* const pu8_data, twi_u32 u
 {
   //allocate or copy to the JS bufefr
   FUN_IN;
-  printf("Send Buffer::");
+  TWI_LOGGER("Send Buffer::");
   for(int i =0; i<u32_data_sz; i++)
   {
-    printf(""+pu8_data[i]);
+    TWI_LOGGER("%d",pu8_data[i]);
   }
+  TWI_LOGGER("\r\n");
 
   memcpy(pv_device, pu8_data, u32_data_sz);
   usbSend();
