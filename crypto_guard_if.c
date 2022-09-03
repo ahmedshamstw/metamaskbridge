@@ -34,6 +34,7 @@ static tstr_usb_if_context* gp_curr_ctx = NULL;
 extern char* consoleLog(char* data);
 extern twi_u8* allocateOnMemory(int data_len);
 extern void usbSend(void);
+extern void onConnectionDone(void);
 extern void onGetXpubResult(int comp_pub_key_off, int comp_pub_key_len, int chain_code_off, int chain_code_len, int error_code); //in this function the bridge should notify the kyring with the operation result
 /////////////////////////////////////////////////////////////////////////
 
@@ -154,6 +155,8 @@ static void usb_load_cb(void* const pv_device, twi_u16 id, twi_u8* pu8_data, twi
 static void usb_onConnectionDone_cb(void* const pv_device)
 {
   FUN_IN;
+  //notify the upper layer
+  onConnectionDone();
 }
 
 static tstr_usb_if_context* cyrpto_guard_if_init(void)

@@ -57,6 +57,7 @@
         initial: 256, 
         maximum: 512
     });
+    var exports=null;
     const enumNotify={
         CRYPTO_GUARD_IF_CONNECTED_EVT:0,
         CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
@@ -146,12 +147,6 @@
                                     // _this.usbSend();
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-                                    // alert("ffffffggg");
-                                    // console.log("secp256k1_uncompressPBK")
-                                    // // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
-                                    // // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                                     // console.log("secp256k1_uncompressPBK")
                                     // // Call the function and display the results.
                                     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
@@ -268,11 +263,21 @@
                 }
             }
         },{
+            key: 'onConnectionDone',
+            value: async function onConnectionDone(offset,length){
+                try {
+                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
+                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
                 const interval = setInterval(function() {
-                    console.log("dispatched")
-                  }, 5);
+                    exports.crypto_guard_if_dispatch();
+                  }, 50);
                  
                 clearInterval(interval); 
             }
@@ -338,11 +343,12 @@
                         //     MEMORY.buffer,
                         //     ARRAYBYTEOFFSET,
                         //     length);
-                            // OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
-                            // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
-                            // array2.set([6, 7, 8, 9, 10])
-                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
-                            console.log("Sent input report " + result2);
+                            OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
+                            const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
+                            array2.set([6, 7, 8, 9, 10])
+                        res = SELECTEDDEVICE.sendReport(0, array2).then(() => {
+                            console.log("Sent input report " + array2);
+                            console.log(result2);
                         });
                     });
                     return res;
