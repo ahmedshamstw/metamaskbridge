@@ -136,6 +136,7 @@
                                         _embind_register_bigint:_this.testing, 
                                         __indirect_function_table:_this.testing, 
                                         emscripten_memcpy_big:_this.testing,
+                                        onConnectionDone:_this.onConnectionDone,
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjdjjj")
