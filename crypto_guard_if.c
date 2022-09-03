@@ -1,6 +1,6 @@
 #include <emscripten.h>
 #include <stdio.h>
-#include <assert.h>
+//#include <assert.h>
 
 #ifdef __cplusplus
 #error
@@ -160,7 +160,7 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 {
   tstr_usb_if_context* presult = NULL;
   presult = twi_usb_if_new();
-  assert(NULL != presult);
+  //assert(NULL != presult);
 
   twi_usb_if_set_callbacks( presult, 
                             usb_scan_and_connect_cb            ,
@@ -238,8 +238,17 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     default:
     {
       //Invalid event
-      assert(false);
+      //assert(false);
     }
+  }
+}
+
+EMSCRIPTEN_KEEPALIVE
+void crypto_guard_if_dispatch(void)
+{
+  if(NULL != gp_curr_ctx)
+  {
+    twi_usb_if_dispatch(gp_curr_ctx);
   }
 }
 /////////////////////////////////////////////////////////////////////////

@@ -40,11 +40,12 @@ file(GLOB SOURCES 	"./crypto_guard_if.c"
 
 
 add_executable(crypto_guard_if ${SOURCES})
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.js --bind -lpthread -s USE_PTHREADS=1 -s ALLOW_MEMORY_GROWTH=1 --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=1 --no-entry -s EXPORTED_RUNTIME_METHODS=['_onGetXpubResult','__usbSend'] -s WASM=1 -s LLD_REPORT_UNDEFINED -s ERROR_ON_UNDEFINED_SYMBOLS=1") 
+#TODO: -lpthread -s USE_PTHREADS=1 -s ALLOW_MEMORY_GROWTH=1 
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Os -o crypto_guard_if.js --bind -DNDEBUG --no-entry -s WASM=1 -s EXPORTED_FUNCTIONS=['onGetXpubResult','usbSend']") 
 # TARGET_LINK_LIBRARIES(crypto_guard_if
 # 	Setupapi
 # )
 
 #building flags
 target_compile_definitions(crypto_guard_if PRIVATE CMAKE_NO_SYSTEM_FROM_IMPORTED=1 NRF_SD_BLE_API=3 NRF_SD_BLE_API_VERSION=3
-STDLIB=1 DEBUGGING_ENABLE=1 _DEBUG _CONSOLE _LIB _CRT_SECURE_NO_WARNINGS COMM_LOG_ENABLE TWI_USB_HOST TWI_USE_USB_AS_HID TWI_USB_STACK_ENABLED)
+STDLIB=1 DEBUGGING_ENABLEx=1 _DEBUG _CONSOLE _LIB _CRT_SECURE_NO_WARNINGS COMM_LOG_ENABLE TWI_USB_HOST TWI_USE_USB_AS_HID TWI_USB_STACK_ENABLED)
