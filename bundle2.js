@@ -107,7 +107,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
                                         mem: MEMORY
                                     },
@@ -118,18 +118,18 @@
                                         usbSend:_this.usbSend,
                                         consoleLog:console.log,
                                         onGetXpubResult:_this.onGetXpubResult,
-                                        __assert_fail:console.log,//testing
-                                        _embind_register_void:console.log, 
-                                        _embind_register_bool:console.log, 
-                                        _embind_register_std_string:console.log, 
-                                        _embind_register_std_wstring:console.log, 
-                                        _embind_register_emval:console.log, 
-                                        _embind_register_integer:console.log, 
-                                        _embind_register_float:console.log, 
-                                        _embind_register_memory_view:console.log, 
-                                        _embind_register_bigint:console.log, 
-                                        __indirect_function_table:console.log, 
-                                        emscripten_memcpy_big:console.log,
+                                        __assert_fail:_this.testing,//testing
+                                        _embind_register_void:_this.testing, 
+                                        _embind_register_bool:_this.testing, 
+                                        _embind_register_std_string:_this.testing, 
+                                        _embind_register_std_wstring:_this.testing, 
+                                        _embind_register_emval:_this.testing, 
+                                        _embind_register_integer:_this.testing, 
+                                        _embind_register_float:_this.testing, 
+                                        _embind_register_memory_view:_this.testing, 
+                                        _embind_register_bigint:_this.testing, 
+                                        __indirect_function_table:_this.testing, 
+                                        emscripten_memcpy_big:_this.testing,
                                     }
                                 }).then(results => {
                                   alert("jjjjjjjjjjj")
@@ -138,14 +138,14 @@
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    // result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    // exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    // let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-                                    // alert("ffffffggg");
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
+                                    alert("ffffffggg");
                                     // console.log("secp256k1_uncompressPBK")
                                     // // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    // exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                                     // console.log("secp256k1_uncompressPBK")
                                     // // Call the function and display the results.
                                     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
@@ -158,24 +158,24 @@
                             
                                     // // this is for sending and reciveing array
                                     // // Create the arrays.
-                                    const length = 5
+                                    // const length = 5
                             
-                                    const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    array1.set([1, 2, 3, 4, 5])
+                                    // const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    // array1.set([1, 2, 3, 4, 5])
                             
-                                    OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    array2.set([6, 7, 8, 9, 10])
+                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                    // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    // array2.set([6, 7, 8, 9, 10])
                             
-                                    OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                    // result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                             
-                                    // Call the function.
-                                    exports.addArrays(
-                                      array1.byteOffset,
-                                      array2.byteOffset,
-                                      result2.byteOffset,
-                                      length)
+                                    // // Call the function.
+                                    // exports.addArrays(
+                                    //   array1.byteOffset,
+                                    //   array2.byteOffset,
+                                    //   result2.byteOffset,
+                                    //   length)
 
                                     //   const result3 = new Int32Array(
                                     //     MEMORYBUFFER.buffer,
@@ -257,6 +257,15 @@
                     const array = new Int32Array(MEMORY.buffer, offset, length);
                     console.log(array);
                     return array.byteOffset;
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
+            key: 'testing',
+            value: async function testing(){
+                try {
+                    console.log("this is error because of function of the env file")
                 } catch (err) {
                     return err;
                 }
