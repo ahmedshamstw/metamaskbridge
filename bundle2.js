@@ -139,9 +139,9 @@
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
 
-                                    _this.usbSend();
-                                    // result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    // exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                    // _this.usbSend();
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     // let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
                                     // alert("ffffffggg");
                                     // console.log("secp256k1_uncompressPBK")
