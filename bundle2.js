@@ -107,6 +107,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
+                                _this.usbSend();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
                                         mem: MEMORY
@@ -132,7 +133,6 @@
                                         emscripten_memcpy_big:_this.testing,
                                     }
                                 }).then(results => {
-                                    _this.usbSend();
                                   alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
