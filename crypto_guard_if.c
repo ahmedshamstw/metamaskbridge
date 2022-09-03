@@ -1,6 +1,6 @@
 #include <emscripten.h>
 #include <stdio.h>
-#include <assert.h>
+//#include <assert.h>
 #include "twi_usb_wallet_if.h"
 #include "twi_debug.h"
 
@@ -146,11 +146,11 @@ static void usb_onConnectionDone_cb(void* const pv_device)
   FUN_IN;
 }
 
-static int* cyrpto_guard_if_init(void)
+static tstr_usb_if_context* cyrpto_guard_if_init(void)
 {
-  int* presult = NULL;
+  tstr_usb_if_context* presult = NULL;
   presult = twi_usb_if_new();
-  assert(NULL != presult);
+  //assert(NULL != presult);
 
   twi_usb_if_set_callbacks( presult, 
                             usb_scan_and_connect_cb            ,
@@ -230,7 +230,8 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     default:
     {
       //Invalid event
-      assert(false);
+      //assert(false);
+      while(1);
     }
   }
 }

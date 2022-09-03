@@ -134,7 +134,7 @@
                                         // emscripten_memcpy_big:_this.testing,
                                     }
                                 }).then(results => {
-                                  alert("jjjjjjjjjjj")
+                                  alert("jjjjjjjjdjjj")
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
                                   _this.secp256k1_uncompressPBK(6);
