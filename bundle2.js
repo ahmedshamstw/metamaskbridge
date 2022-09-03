@@ -146,12 +146,12 @@
                                     // _this.usbSend();
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    // let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
+                                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
                                     // alert("ffffffggg");
                                     // console.log("secp256k1_uncompressPBK")
                                     // // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    // exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                                     // console.log("secp256k1_uncompressPBK")
                                     // // Call the function and display the results.
                                     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
@@ -338,11 +338,11 @@
                         //     MEMORY.buffer,
                         //     ARRAYBYTEOFFSET,
                         //     length);
-                            OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
-                            const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
-                            array2.set([6, 7, 8, 9, 10])
-                        res = SELECTEDDEVICE.sendReport(0, array2).then(() => {
-                            console.log("Sent input report " + array2);
+                            // OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
+                            // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
+                            // array2.set([6, 7, 8, 9, 10])
+                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
+                            console.log("Sent input report " + result2);
                         });
                     });
                     return res;
