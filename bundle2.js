@@ -107,7 +107,6 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                _this.usbSend();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     js: {
                                         mem: MEMORY
@@ -139,10 +138,12 @@
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-                                    alert("ffffffggg");
+
+                                    _this.usbSend();
+                                    // result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    // exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                    // let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
+                                    // alert("ffffffggg");
                                     // console.log("secp256k1_uncompressPBK")
                                     // // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
