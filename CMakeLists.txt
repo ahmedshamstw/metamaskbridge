@@ -40,11 +40,10 @@ file(GLOB SOURCES 	"./crypto_guard_if.c"
 
 
 add_executable(crypto_guard_if ${SOURCES})
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.js -s WASM=1 --bind --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=0 --no-entry")
-
-#TARGET_LINK_LIBRARIES(crypto_guard_if
-#	Setupapi
-#)
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.js --bind -lpthread -s USE_PTHREADS=1 -s ALLOW_MEMORY_GROWTH=1 --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=1 --no-entry -s EXPORTED_RUNTIME_METHODS=['_onGetXpubResult','__usbSend'] -s WASM=1 -s LLD_REPORT_UNDEFINED -s ERROR_ON_UNDEFINED_SYMBOLS=1") 
+# TARGET_LINK_LIBRARIES(crypto_guard_if
+# 	Setupapi
+# )
 
 #building flags
 target_compile_definitions(crypto_guard_if PRIVATE CMAKE_NO_SYSTEM_FROM_IMPORTED=1 NRF_SD_BLE_API=3 NRF_SD_BLE_API_VERSION=3
