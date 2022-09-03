@@ -118,7 +118,7 @@
                                         usbSend:_this.usbSend,
                                         consoleLog:console.log,
                                         onGetXpubResult:_this.onGetXpubResult,
-                                        __assert_fail:_this.testing,//testing
+                                        // __assert_fail:_this.testing,//testing
                                         wasi_snapshot_preview1:_this.testing, 
                                         setTempRet0:_this.testing, 
                                         _embind_register_void:_this.testing, 
