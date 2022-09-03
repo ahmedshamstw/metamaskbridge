@@ -107,7 +107,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                WebAssembly.instantiateStreaming(fetch("/Users/shams/Documents/GitHub/TWI_MetaMask_Integeration/WebAssembly/crypto_guard_if.wasm"), {
                                     js: {
                                         mem: MEMORY
                                     },
