@@ -1,8 +1,17 @@
 #include <emscripten.h>
 #include <stdio.h>
-//#include <assert.h>
+#include <assert.h>
+
+#ifdef __cplusplus
+extern "C" {
+#include <string.h>	
+#include <emscripten/bind.h>
+#endif	
 #include "twi_usb_wallet_if.h"
 #include "twi_debug.h"
+#ifdef __cplusplus
+}
+#endif
 
 #define CHAIN_CODE_IDX        (13)
 #define CHAIN_CODE_SZ         (32)
@@ -69,7 +78,7 @@ static void usb_send_cb(void* const pv_device, twi_u8* const pu8_data, twi_u32 u
     printf(""+pu8_data[i]);
   }
 
-  memcpy((const twi_u8*) pv_device, pu8_data, u32_data_sz);
+  memcpy(pv_device, pu8_data, u32_data_sz);
   usbSend();
 }
 
@@ -103,14 +112,13 @@ static void usb_onGetExtendedPubKeyResult_cb(void* const pv_device, twi_u8* cons
 {
   //map the buffers
   FUN_IN;
-  printf("public_key = "+u32_pub_key_sz);
-  printf("error = "+s32_err);
+  TWI_LOGGER("public_key = %d, error = %d \r\n", u32_pub_key_sz, s32_err);
   for(int i =0; i<u32_pub_key_sz; i++)
   {
-    printf(""+pu8_pub_key[i]);
+    TWI_LOGGER("%d", pu8_pub_key[i]);
   }
-  memcpy((const twi_u8*)(pv_device),  &pu8_pub_key[CHAIN_CODE_IDX], CHAIN_CODE_SZ);
-  memcpy((const twi_u8*)(pv_device + CHAIN_CODE_SZ),  &pu8_pub_key[CHAIN_CODE_IDX + CHAIN_CODE_SZ], COMPRESSED_PUB_KEY_SZ);
+  memcpy(pv_device,  &pu8_pub_key[CHAIN_CODE_IDX], CHAIN_CODE_SZ);
+  memcpy(&((twi_u8*)pv_device)[CHAIN_CODE_SZ],  &pu8_pub_key[CHAIN_CODE_IDX + CHAIN_CODE_SZ], COMPRESSED_PUB_KEY_SZ);
 
   onGetXpubResult(CHAIN_CODE_SZ, COMPRESSED_PUB_KEY_SZ,0, CHAIN_CODE_SZ, s32_err);
 }
@@ -150,7 +158,7 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 {
   tstr_usb_if_context* presult = NULL;
   presult = twi_usb_if_new();
-  //assert(NULL != presult);
+  assert(NULL != presult);
 
   twi_usb_if_set_callbacks( presult, 
                             usb_scan_and_connect_cb            ,
@@ -178,8 +186,6 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////////APIS///////////////////////////////////////
-int main(){return 0;}
-
 EMSCRIPTEN_KEEPALIVE
 void crypto_guard_if_get_xpub(twi_u8 *xpub_path, int num_of_step, void* pv)
 {
@@ -230,8 +236,7 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     default:
     {
       //Invalid event
-      //assert(false);
-      while(1);
+      assert(false);
     }
   }
 }
