@@ -196,7 +196,7 @@ EMSCRIPTEN_KEEPALIVE
 void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data, int len, int error)
 {
   FUN_IN;
-  printf("enum_event = %d, error = %d\r\n", enum_event, error);
+  TWI_LOGGER("enum_event = %d, error = %d\r\n", enum_event, error);
   switch(enum_event)
   {
     case CRYPTO_GUARD_IF_CONNECTED_EVT:
