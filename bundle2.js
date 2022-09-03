@@ -344,11 +344,11 @@
                         //     MEMORY.buffer,
                         //     ARRAYBYTEOFFSET,
                         //     length);
-                            OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
-                            const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
-                            array2.set([6, 7, 8, 9, 10])
-                        res = SELECTEDDEVICE.sendReport(0, array2).then(() => {
-                            console.log("Sent input report " + array2);
+                            // OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
+                            // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
+                            // array2.set([6, 7, 8, 9, 10])
+                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
+                            console.log("Sent input report " + result2);
                             console.log(result2);
                         });
                     });
