@@ -107,6 +107,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
+                                _this.dispatchFromJS();
                                 // const wasi = new WASI();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     // wasi_snapshot_preview1: wasi.exports,
@@ -142,7 +143,6 @@
                                   _this.secp256k1_uncompressPBK(6);
                                     exports = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    _this.dispatchFromJS();
                                     // _this.usbSend();
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
