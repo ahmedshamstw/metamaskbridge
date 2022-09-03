@@ -57,7 +57,7 @@
         initial: 256, 
         maximum: 512
     });
-    var exports=null;
+    var exportWASM=null;
     const enumNotify={
         CRYPTO_GUARD_IF_CONNECTED_EVT:0,
         CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
@@ -142,11 +142,11 @@
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
                                   _this.secp256k1_uncompressPBK(6);
-                                    exports = results.instance.exports;
+                                  exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
                                     // _this.usbSend();
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     // console.log("secp256k1_uncompressPBK")
                                     // // Call the function and display the results.
                                     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
@@ -267,7 +267,7 @@
             value: async function onConnectionDone(offset,length){
                 try {
                     let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                    exportWASM.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                 } catch (err) {
                     return err;
                 }
@@ -276,7 +276,7 @@
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
                 const interval = setInterval(function() {
-                    exports.crypto_guard_if_dispatch();
+                    exportWASM.crypto_guard_if_dispatch();
                   }, 50);
                  
                 clearInterval(interval); 
