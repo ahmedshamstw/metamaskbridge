@@ -107,7 +107,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                const wasi = new WASI();
+                                // const wasi = new WASI();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     // wasi_snapshot_preview1: wasi.exports,
                                     js: {
