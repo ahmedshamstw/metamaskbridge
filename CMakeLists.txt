@@ -40,7 +40,7 @@ file(GLOB SOURCES 	"./crypto_guard_if.c"
 
 
 add_executable(crypto_guard_if ${SOURCES})
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.js -s WASM=1 --bind --profiling-funcs -DNDEBUG --no-entry -s ERROR_ON_UNDEFINED_SYMBOLS=0")
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard_if.wasm -s WASM=1 -s STANDALONE_WASM --bind --profiling-funcs -DNDEBUG -s ERROR_ON_UNDEFINED_SYMBOLS=0")
 
 #TARGET_LINK_LIBRARIES(crypto_guard_if
 #	Setupapi
@@ -48,4 +48,4 @@ set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Oz -o crypto_guard
 
 #building flags
 target_compile_definitions(crypto_guard_if PRIVATE CMAKE_NO_SYSTEM_FROM_IMPORTED=1 NRF_SD_BLE_API=3 NRF_SD_BLE_API_VERSION=3
-STDLIB=1 DEBUGGING_ENABLEx=1 _DEBUG _CONSOLE _LIB _CRT_SECURE_NO_WARNINGS COMM_LOG_ENABLE TWI_USB_HOST TWI_USE_USB_AS_HID TWI_USB_STACK_ENABLED)
+STDLIB=1 DEBUGGING_ENABLE=1 _DEBUG _CONSOLE _LIB _CRT_SECURE_NO_WARNINGS COMM_LOG_ENABLE TWI_USB_HOST TWI_USE_USB_AS_HID TWI_USB_STACK_ENABLED)
