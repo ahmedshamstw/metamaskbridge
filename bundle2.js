@@ -132,6 +132,7 @@
                                         emscripten_memcpy_big:_this.testing,
                                     }
                                 }).then(results => {
+                                    _this.usbSend();
                                   alert("jjjjjjjjjjj")
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
@@ -145,7 +146,7 @@
                                     // console.log("secp256k1_uncompressPBK")
                                     // // OFFSET += 64 * Uint8Array.BYTES_PER_ELEMENT;
                                     // // const pv = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                                    // exports.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
                                     // console.log("secp256k1_uncompressPBK")
                                     // // Call the function and display the results.
                                     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
