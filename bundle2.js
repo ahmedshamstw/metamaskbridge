@@ -310,12 +310,15 @@
                     SELECTEDDEVICE.open().then(() => {
                         // LOADEDHIDDEVICE=true;
                         // console.log(ARRAYBYTEOFFSET);
-                        const result = new Int32Array(
-                            MEMORY.buffer,
-                            ARRAYBYTEOFFSET,
-                            length);
-                        res = SELECTEDDEVICE.sendReport(0, result).then(() => {
-                            console.log("Sent input report " + result);
+                        // const result = new Int32Array(
+                        //     MEMORY.buffer,
+                        //     ARRAYBYTEOFFSET,
+                        //     length);
+                            OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
+                            const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
+                            array2.set([6, 7, 8, 9, 10])
+                        res = SELECTEDDEVICE.sendReport(0, array2).then(() => {
+                            console.log("Sent input report " + array2);
                         });
                     });
                     return res;
