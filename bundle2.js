@@ -107,8 +107,6 @@
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
-                                console.log("first");
-                                _this.unlock(replyAction, params.hdPath, messageId);
 
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     // wasi_snapshot_preview1: wasi.exports,
@@ -141,7 +139,11 @@
                                 }).then(results => {
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                            
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+
+                                    console.log("first");
+                                    _this.unlock(replyAction, params.hdPath, messageId);
                                 });
                                 break;
                             case 'crypto-sign-transaction':
@@ -439,8 +441,6 @@
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
 
-                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                     let res=await this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
 
                     console.log(res)
