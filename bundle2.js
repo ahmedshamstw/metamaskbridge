@@ -393,7 +393,7 @@
                     var PKWithoutFirstByte =(bytes_1.arrayify(res.publicKey)).slice(1,65);
                     res.address=keccak256_1.keccak256(PKWithoutFirstByte);
                     res.chainCode="7eb60a1fe0058e5e804267b8b44a74bfe7b33023b32ed328b49681861730dd06";
-                    res.publicKey=res.publicKey.slice(2,65);
+                    res.publicKey=res.publicKey.slice(2,133);
                     return res;
                 } catch (err) {
                     console.log(err)
