@@ -108,8 +108,7 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                let res=_this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
-                                _this.unlock(replyAction, params.hdPath, messageId,res);
+                                _this.unlock(replyAction, params.hdPath, messageId);
 
                                 // WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                 //     // wasi_snapshot_preview1: wasi.exports,
@@ -517,6 +516,8 @@
                 try {
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
+                    let res=await this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
+
                     console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
