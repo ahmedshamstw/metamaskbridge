@@ -109,7 +109,7 @@
                             case 'crypto-unlock':
                                 console.log("first");
                                 console.log(keccak256_1.keccak256([ 0x12, 0x34 ]));
-                                console.log(bytes_1.arrayify([ 0x12, 0x34 ]));
+                                console.log(_this.secp256k1_uncompressPBK([ 0x12, 0x34 ]));
                                 // _this.dispatchFromJS();
                                 // const wasi = new WASI();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
@@ -144,7 +144,7 @@
                                   alert("jjjjjjjjdjjj")
                                   console.log("wasm success")
                                   console.log("secp256k1_uncompressPBK")
-                                  _this.secp256k1_uncompressPBK(6);
+                                //   _this.secp256k1_uncompressPBK(6);
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
                                     // _this.usbSend();
@@ -396,7 +396,7 @@
             value: async function secp256k1_uncompressPBK(key){
                 try {
                     console.log("this is publicKey");
-                    var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa"),true);
+                    var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify(key),true);
                     console.log("this is publicKey");
                     console.log(publicKey);
                     return publicKey;
