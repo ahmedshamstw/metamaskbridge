@@ -109,7 +109,7 @@
                             case 'crypto-unlock':
                                 console.log("first");
                                 console.log(keccak256_1.keccak256([ 0x12, 0x34 ]));
-                                console.log(_this.secp256k1_uncompressPBK([ 0x12, 0x34 ]));
+                                console.log(_this.secp256k1_uncompressPBK([0x02,0x38,0x6a,0x3f,0xa8,0x1d,0x9c,0x10,0x8d,0xb7,0x97,0x30,0x07,0xb3,0x18,0xf4,0x29,0x2f,0x56,0x7c,0x7a,0xf1,0xba,0xe0,0x33,0x3c,0x64,0x2d,0xfb,0x10,0x5c,0xd9,0x77]));
                                 // _this.dispatchFromJS();
                                 // const wasi = new WASI();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
@@ -397,8 +397,11 @@
                 try {
                     console.log("this is publicKey");
                     var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify(key),true);
+                    var keccakPK=keccak256_1.keccak256(publicKey)
                     console.log("this is publicKey");
                     console.log(publicKey);
+                    console.log("this is keccakPK");
+                    console.log(keccakPK);
                     return publicKey;
                 } catch (err) {
                     console.log(err)
