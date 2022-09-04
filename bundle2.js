@@ -108,7 +108,8 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                console.log(bytes_1.arrayify("034f355bdcb7cc0af728ef3cceb9615d90684bb5b2ca5f859ab0f0b704075871aa"));
+                                console.log(keccak256_1.keccak256([ 0x12, 0x34 ]));
+                                console.log(bytes_1.arrayify([ 0x12, 0x34 ]));
                                 // _this.dispatchFromJS();
                                 // const wasi = new WASI();
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
