@@ -108,10 +108,9 @@
                                 break;
                             case 'crypto-unlock':
                                 console.log("first");
-                                // console.log(keccak256_1.keccak256([0x04,0x38,0x6a,0x3f,0xa8,0x1d,0x9c,0x10,0x8d,0xb7,0x97,0x30,0x07,0xb3,0x18,0xf4,0x29,0x2f,0x56,0x7c,0x7a,0xf1,0xba,0xe0,0x33,0x3c,0x64,0x2d,0xfb,0x10,0x5c,0xd9,0x77,0xf2,0x4d,0x20,0xfb,0x1c,0xba,0x5d,0x69,0x66,0x72,0xff,0x87,0xd4,0x0e,0x22,0xdd,0x01,0xe6,0x98,0xce,0x88,0x0f,0x14,0xd8,0xbe,0x01,0x9f,0xd0,0x0a,0x4f,0x08,0x10]));
-                                console.log(_this.secp256k1_uncompressPBK([0x02,0x38,0x6a,0x3f,0xa8,0x1d,0x9c,0x10,0x8d,0xb7,0x97,0x30,0x07,0xb3,0x18,0xf4,0x29,0x2f,0x56,0x7c,0x7a,0xf1,0xba,0xe0,0x33,0x3c,0x64,0x2d,0xfb,0x10,0x5c,0xd9,0x77]));
-                                // _this.dispatchFromJS();
-                                // const wasi = new WASI();
+                                let res=_this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
+                                _this.unlock(replyAction, params.hdPath, messageId,res);
+
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                                     // wasi_snapshot_preview1: wasi.exports,
                                     js: {
@@ -141,13 +140,8 @@
                                         onConnectionDone:_this.onConnectionDone,
                                     }
                                 }).then(results => {
-                                  alert("jjjjjjjjdjjj")
-                                  console.log("wasm success")
-                                  console.log("secp256k1_uncompressPBK")
-                                //   _this.secp256k1_uncompressPBK(6);
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    // _this.usbSend();
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                                     // console.log("secp256k1_uncompressPBK")
@@ -392,18 +386,15 @@
                 }
             }
         }, {
-            key: 'secp256k1_uncompressPBK',
-            value: async function secp256k1_uncompressPBK(key){
+            key: 'unlockComputePayload',
+            value: async function unlockComputePayload(key){
                 try {
-                    console.log("this is publicKey");
-                    var publicKey =signing_key_1.computePublicKey(key,false);
-                    var publicKey3 =(bytes_1.arrayify(publicKey)).slice(1,65);
-                    var keccakPK=keccak256_1.keccak256(publicKey3);
-                    console.log("this is publicKey");
-                    console.log(publicKey3);
-                    console.log("this is keccakPK");
-                    console.log(keccakPK);
-                    return publicKey;
+                    let res={};
+                    res.publicKey =signing_key_1.computePublicKey(key,false);
+                    var PKWithoutFirstByte =(bytes_1.arrayify(res.publicKey)).slice(1,65);
+                    res.address=keccak256_1.keccak256(PKWithoutFirstByte);
+                    res.chainCode="7eb60a1fe0058e5e804267b8b44a74bfe7b33023b32ed328b49681861730dd06";
+                    return res;
                 } catch (err) {
                     console.log(err)
                 }
@@ -522,14 +513,14 @@
             }
         }, {
             key: 'unlock',
-            value: async function unlock(replyAction, hdPath, messageId) {
+            value: async function unlock(replyAction, hdPath, messageId,res) {
                 try {
-                    await this.makeApp();
+                    // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
-                        payload: {test:"tested"},
+                        payload: res,
                         messageId: messageId
                     });
                 } catch (err) {
@@ -542,7 +533,7 @@
                     });
                 } finally {
                     if (this.transportType !== 'ledgerLive') {
-                        this.cleanUp();
+                        // this.cleanUp();
                     }
                 }
             }
