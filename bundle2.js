@@ -71,7 +71,7 @@
             _classCallCheck(this, CryptoguardBridge);
             this._THISCRYP=this;
             this.addEventListeners();
-            this.transportType = 'u2f';
+            this.transportType = 'webhid';
         }
     
         _createClass(CryptoguardBridge, [{
@@ -111,83 +111,83 @@
                                 let res=_this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
                                 _this.unlock(replyAction, params.hdPath, messageId,res);
 
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
-                                    // wasi_snapshot_preview1: wasi.exports,
-                                    js: {
-                                        mem: MEMORY
-                                    },
-                                    env: {
-                                        curTime: () => Date.now(),
-                                        emscripten_resize_heap:MEMORY.grow,
-                                        allocateOnMemory:_this.allocateOnMemory,
-                                        usbSend:_this.usbSend,
-                                        consoleLog:console.log,
-                                        onGetXpubResult:_this.onGetXpubResult,
-                                        __assert_fail:_this.testing,//testing
-                                        wasi_snapshot_preview1:_this.testing, 
-                                        setTempRet0:_this.testing, 
-                                        _embind_register_void:_this.testing, 
-                                        _embind_register_bool:_this.testing, 
-                                        _embind_register_std_string:_this.testing, 
-                                        _embind_register_std_wstring:_this.testing, 
-                                        _embind_register_emval:_this.testing, 
-                                        _embind_register_integer:_this.testing, 
-                                        _embind_register_float:_this.testing, 
-                                        _embind_register_memory_view:_this.testing, 
-                                        _embind_register_bigint:_this.testing, 
-                                        __indirect_function_table:_this.testing, 
-                                        emscripten_memcpy_big:_this.testing,
-                                        onConnectionDone:_this.onConnectionDone,
-                                    }
-                                }).then(results => {
-                                  exportWASM = results.instance.exports;
-                                    MEMORYBUFFER = results.instance.exports.memory;
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-                                    // console.log("secp256k1_uncompressPBK")
-                                    // // Call the function and display the results.
-                                    // const result = exports.sumArrayInt32(array.byteOffset, array.length)
-                                    // console.log(`sum([${array.join(',')}]) = ${result}`)
+                                // WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                //     // wasi_snapshot_preview1: wasi.exports,
+                                //     js: {
+                                //         mem: MEMORY
+                                //     },
+                                //     env: {
+                                //         curTime: () => Date.now(),
+                                //         emscripten_resize_heap:MEMORY.grow,
+                                //         allocateOnMemory:_this.allocateOnMemory,
+                                //         usbSend:_this.usbSend,
+                                //         consoleLog:console.log,
+                                //         onGetXpubResult:_this.onGetXpubResult,
+                                //         __assert_fail:_this.testing,//testing
+                                //         wasi_snapshot_preview1:_this.testing, 
+                                //         setTempRet0:_this.testing, 
+                                //         _embind_register_void:_this.testing, 
+                                //         _embind_register_bool:_this.testing, 
+                                //         _embind_register_std_string:_this.testing, 
+                                //         _embind_register_std_wstring:_this.testing, 
+                                //         _embind_register_emval:_this.testing, 
+                                //         _embind_register_integer:_this.testing, 
+                                //         _embind_register_float:_this.testing, 
+                                //         _embind_register_memory_view:_this.testing, 
+                                //         _embind_register_bigint:_this.testing, 
+                                //         __indirect_function_table:_this.testing, 
+                                //         emscripten_memcpy_big:_this.testing,
+                                //         onConnectionDone:_this.onConnectionDone,
+                                //     }
+                                // }).then(results => {
+                                //   exportWASM = results.instance.exports;
+                                //     MEMORYBUFFER = results.instance.exports.memory;
+                                //     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                //     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                //     // console.log("secp256k1_uncompressPBK")
+                                //     // // Call the function and display the results.
+                                //     // const result = exports.sumArrayInt32(array.byteOffset, array.length)
+                                //     // console.log(`sum([${array.join(',')}]) = ${result}`)
                             
-                                    // // This does the same thing!
-                                    // if (result == exports.sumArrayInt32(0, 5)) {
-                                    //   console.log(`Memory is an integer array starting at 0`)
-                                    // }
+                                //     // // This does the same thing!
+                                //     // if (result == exports.sumArrayInt32(0, 5)) {
+                                //     //   console.log(`Memory is an integer array starting at 0`)
+                                //     // }
                             
-                                    // // this is for sending and reciveing array
-                                    // // Create the arrays.
-                                    // const length = 5
+                                //     // // this is for sending and reciveing array
+                                //     // // Create the arrays.
+                                //     // const length = 5
                             
-                                    // const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    // array1.set([1, 2, 3, 4, 5])
+                                //     // const array1 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                //     // array1.set([1, 2, 3, 4, 5])
                             
-                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
-                                    // array2.set([6, 7, 8, 9, 10])
+                                //     // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                //     // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                //     // array2.set([6, 7, 8, 9, 10])
                             
-                                    // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
-                                    // result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
+                                //     // OFFSET += length * Int32Array.BYTES_PER_ELEMENT
+                                //     // result2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, length)
                             
-                                    // // Call the function.
-                                    // exports.addArrays(
-                                    //   array1.byteOffset,
-                                    //   array2.byteOffset,
-                                    //   result2.byteOffset,
-                                    //   length)
+                                //     // // Call the function.
+                                //     // exports.addArrays(
+                                //     //   array1.byteOffset,
+                                //     //   array2.byteOffset,
+                                //     //   result2.byteOffset,
+                                //     //   length)
 
-                                    //   const result3 = new Int32Array(
-                                    //     MEMORYBUFFER.buffer,
-                                    //     exports.addArrays(array1.byteOffset, array2.byteOffset,length),
-                                    //     length)
-                                    //     console.log("res3");
-                                    //     console.log(exports.addArrays(array1.byteOffset, array2.byteOffset,length));
-                                    // Show the results.
-                                    // console.log("sha256");
-                                    // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
-                                    console.log("result");
-                                    console.log(result2);
+                                //     //   const result3 = new Int32Array(
+                                //     //     MEMORYBUFFER.buffer,
+                                //     //     exports.addArrays(array1.byteOffset, array2.byteOffset,length),
+                                //     //     length)
+                                //     //     console.log("res3");
+                                //     //     console.log(exports.addArrays(array1.byteOffset, array2.byteOffset,length));
+                                //     // Show the results.
+                                //     // console.log("sha256");
+                                //     // _this.sha256(result3,5,9).then((digestBuffer) => console.log(digestBuffer));
+                                //     console.log("result");
+                                //     console.log(result2);
                             
-                                });
+                                // });
                                 // let selectedDevice2=null;
                                 // let outputReportId2 = 0;
                                 // let inputReport2 = new Uint8Array(64).fill(0);
@@ -517,6 +517,7 @@
                 try {
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
+                    console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
