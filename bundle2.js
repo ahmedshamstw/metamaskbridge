@@ -66,7 +66,6 @@
         CRYPTO_GUARD_IF_INVALID_EVT:4,
     }
     var result2=null;
-
     var CryptoguardBridge = function () {
         function CryptoguardBridge() {
             _classCallCheck(this, CryptoguardBridge);
@@ -81,38 +80,6 @@
                 var _this = this;
                 window.addEventListener('message', async function (e) {
                     if (e && e.data && e.data.target === 'CRYPTOGUARD-IFRAME') {
-                        WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
-                            js: {
-                                mem: MEMORY
-                            },
-                            env: {
-                                curTime: () => Date.now(),
-                                emscripten_resize_heap:MEMORY.grow,
-                                allocateOnMemory:_this.allocateOnMemory,
-                                usbSend:_this.usbSend,
-                                consoleLog:console.log,
-                                onGetXpubResult:_this.onGetXpubResult,
-                                __assert_fail:_this.testing,//testing
-                                wasi_snapshot_preview1:_this.testing, 
-                                setTempRet0:_this.testing, 
-                                _embind_register_void:_this.testing, 
-                                _embind_register_bool:_this.testing, 
-                                _embind_register_std_string:_this.testing, 
-                                _embind_register_std_wstring:_this.testing, 
-                                _embind_register_emval:_this.testing, 
-                                _embind_register_integer:_this.testing, 
-                                _embind_register_float:_this.testing, 
-                                _embind_register_memory_view:_this.testing, 
-                                _embind_register_bigint:_this.testing, 
-                                __indirect_function_table:_this.testing, 
-                                emscripten_memcpy_big:_this.testing,
-                                onConnectionDone:_this.onConnectionDone,
-                            }
-                        }).then(results => {
-                        exportWASM = results.instance.exports;
-                            MEMORYBUFFER = results.instance.exports.memory;
-
-                        });
                         var _e$data = e.data,
                             action = _e$data.action,
                             params = _e$data.params,
@@ -140,7 +107,44 @@
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
+                                console.log("first");
                                 _this.unlock(replyAction, params.hdPath, messageId);
+
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                    // wasi_snapshot_preview1: wasi.exports,
+                                    js: {
+                                        mem: MEMORY
+                                    },
+                                    env: {
+                                        curTime: () => Date.now(),
+                                        emscripten_resize_heap:MEMORY.grow,
+                                        allocateOnMemory:_this.allocateOnMemory,
+                                        usbSend:_this.usbSend,
+                                        consoleLog:console.log,
+                                        onGetXpubResult:_this.onGetXpubResult,
+                                        __assert_fail:_this.testing,//testing
+                                        wasi_snapshot_preview1:_this.testing, 
+                                        setTempRet0:_this.testing, 
+                                        _embind_register_void:_this.testing, 
+                                        _embind_register_bool:_this.testing, 
+                                        _embind_register_std_string:_this.testing, 
+                                        _embind_register_std_wstring:_this.testing, 
+                                        _embind_register_emval:_this.testing, 
+                                        _embind_register_integer:_this.testing, 
+                                        _embind_register_float:_this.testing, 
+                                        _embind_register_memory_view:_this.testing, 
+                                        _embind_register_bigint:_this.testing, 
+                                        __indirect_function_table:_this.testing, 
+                                        emscripten_memcpy_big:_this.testing,
+                                        onConnectionDone:_this.onConnectionDone,
+                                    }
+                                }).then(results => {
+                                  exportWASM = results.instance.exports;
+                                    MEMORYBUFFER = results.instance.exports.memory;
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                            
+                                });
                                 break;
                             case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -269,6 +273,38 @@
                     return res;
                 } catch (err) {
                     return err;
+                }
+            }
+        },{
+            key: 'sha256',
+            value: async function sha256(input,input_len,hash){
+                try {
+                    const msgUint8 = new TextEncoder().encode(input);                           // encode as (utf-8) Uint8Array
+                    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+                    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+                    return hashHex;
+                } catch (err) {
+                }
+            }
+        }, {
+            key: 'asd',
+            value: async function asd(input,input_len,hash){
+                try {
+                    const { createECDH, ECDH } = require('crypto');
+                    const ecdh = createECDH('secp256k1');
+                    ecdh.generateKeys();
+                    const compressedKey = ecdh.getPublicKey('hex', 'compressed');
+                    const uncompressedKey = ECDH.convertKey(compressedKey,'secp256k1','hex','hex','uncompressed');
+                    // The converted key and the uncompressed public key should be the same
+                    console.log(uncompressedKey === ecdh.getPublicKey('hex'));
+                    console.log("this is getPublicKey");
+                    console.log(ecdh.getPublicKey('hex'));
+                    console.log("this is compressedKey");
+                    console.log(compressedKey);
+                    console.log("this is uncompressedKey");
+                    console.log(uncompressedKey);
+                } catch (err) {
                 }
             }
         }, {
@@ -404,9 +440,6 @@
                 try {
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
-
-                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
                     let res=await this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
 
                     console.log(res)
