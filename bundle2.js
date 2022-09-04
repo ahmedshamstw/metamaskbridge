@@ -397,11 +397,25 @@
                 try {
                     console.log("this is publicKey");
                     var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify(key),false);
+                    var publicKey2 =signing_key_1.computePublicKey(key,false);
+                    var publicKey3 =bytes_1.arrayify(publicKey);
+                    var publicKey4 =bytes_1.arrayify(publicKey2);
+                    
                     var keccakPK=keccak256_1.keccak256(publicKey)
+                    var keccakPK2=keccak256_1.keccak256(publicKey3)
+                    var keccakPK3=keccak256_1.keccak256(publicKey4)
                     console.log("this is publicKey");
                     console.log(publicKey);
                     console.log("this is keccakPK");
                     console.log(keccakPK);
+                    console.log("this is publicKey2");
+                    console.log(publicKey2);
+                    console.log("this is keccakPK2");
+                    console.log(keccakPK2);
+                    console.log("this is publicKey3");
+                    console.log(publicKey3);
+                    console.log("this is keccakPK3");
+                    console.log(keccakPK3);
                     return publicKey;
                 } catch (err) {
                     console.log(err)
