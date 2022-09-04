@@ -396,7 +396,7 @@
             value: async function secp256k1_uncompressPBK(key){
                 try {
                     console.log("this is publicKey");
-                    var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify(key),true);
+                    var publicKey =signing_key_1.computePublicKey(bytes_1.arrayify(key),false);
                     var keccakPK=keccak256_1.keccak256(publicKey)
                     console.log("this is publicKey");
                     console.log(publicKey);
