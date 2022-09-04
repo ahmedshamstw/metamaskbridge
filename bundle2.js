@@ -397,7 +397,7 @@
                 try {
                     console.log("this is publicKey");
                     var publicKey =signing_key_1.computePublicKey(key,false);
-                    var publicKey3 =(bytes_1.arrayify(publicKey)).slice(1,64);
+                    var publicKey3 =(bytes_1.arrayify(publicKey)).slice(1,65);
                     var keccakPK=keccak256_1.keccak256(publicKey3);
                     console.log("this is publicKey");
                     console.log(publicKey3);
