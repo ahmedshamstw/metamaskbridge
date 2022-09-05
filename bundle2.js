@@ -319,7 +319,7 @@
                     let res={};
                     res.publicKey =signing_key_1.computePublicKey(key,false);
                     var PKWithoutFirstByte =(bytes_1.arrayify(res.publicKey)).slice(1,65);
-                    res.address=(keccak256_1.keccak256(PKWithoutFirstByte)).slice(24,64);
+                    res.address=(keccak256_1.keccak256(PKWithoutFirstByte)).slice(26,66);
                     res.chainCode="73ead183d0f3ea7c1bf14e005abb60113c2464192d96e722e13e60015eae19eb";
                     res.publicKey=res.publicKey.slice(2,133);
                     return res;
