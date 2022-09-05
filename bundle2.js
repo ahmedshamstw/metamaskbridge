@@ -140,7 +140,7 @@
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);
+                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
                                     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
 
                                     console.log("first");

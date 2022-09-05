@@ -41,7 +41,7 @@ file(GLOB SOURCES 	"./crypto_guard_if.c"
 
 add_executable(crypto_guard_if ${SOURCES})
 #TODO: -lpthread -s USE_PTHREADS=1 -s ALLOW_MEMORY_GROWTH=1 
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Os -o crypto_guard_if.js --bind -DNDEBUG --no-entry -s WASM=1 -s EXPORTED_FUNCTIONS=['onGetXpubResult','usbSend']") 
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Os -o crypto_guard_if.js --bind -DNDEBUG --no-entry -s WASM=1 -g -fdebug-compilation-dir='.'") 
 # TARGET_LINK_LIBRARIES(crypto_guard_if
 # 	Setupapi
 # )
