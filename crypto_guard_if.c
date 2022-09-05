@@ -32,10 +32,10 @@ static tstr_usb_if_context* gp_curr_ctx = NULL;
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////////JS Helpers///////////////////////////////////
 extern char* consoleLog(char* data);
-extern twi_u8* allocateOnMemory(int data_len);
-extern void usbSend(void);
+extern twi_u8* allocateOnMemory(twi_u32 data_len);
+extern void usbSend(twi_u32 data_len);
 extern void onConnectionDone(void);
-extern void onGetXpubResult(int comp_pub_key_off, int comp_pub_key_len, int chain_code_off, int chain_code_len, int error_code); //in this function the bridge should notify the kyring with the operation result
+extern void onGetXpubResult(twi_u32 comp_pub_key_off, twi_u32 comp_pub_key_len, twi_u32 chain_code_off, twi_u32 chain_code_len, twi_s32 error_code); //in this function the bridge should notify the kyring with the operation result
 /////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ static void usb_send_cb(void* const pv_device, twi_u8* const pu8_data, twi_u32 u
   TWI_LOGGER("\r\n");
 
   memcpy(pv_device, pu8_data, u32_data_sz);
-  usbSend();
+  usbSend(u32_data_sz);
 }
 
 static void usb_Start_Timer_cb(void* const pv_device, twi_u32 u32_idx, twi_u32 u32_dur_msec)
@@ -192,14 +192,19 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////////APIS///////////////////////////////////////
 EMSCRIPTEN_KEEPALIVE
-void crypto_guard_if_get_xpub(twi_u8 *xpub_path, int num_of_step, void* pv)
+void crypto_guard_if_init_shared_mem(twi_u8* pu8_shared_mem)
+{
+    twi_usb_if_set_device_info(gp_curr_ctx, pu8_shared_mem);
+}
+
+EMSCRIPTEN_KEEPALIVE
+void crypto_guard_if_get_xpub(twi_u8 *xpub_path, int num_of_step)
 {
   FUN_IN;
   //communicate with the keyfon_cb(handshake and openning the nano-app) then getting the xpub
   tstr_usb_crypto_path str_usb_crypto_path = {0};
   str_usb_crypto_path.u8_steps_num = num_of_step;
   memcpy(str_usb_crypto_path.au32_path_steps, xpub_path, num_of_step*4);
-  twi_usb_if_set_device_info(gp_curr_ctx, pv);
   twi_usb_if_get_ext_pub_key(gp_curr_ctx, USB_WALLET_COIN_ETHEREUM, &str_usb_crypto_path,NULL, 0,TWI_FALSE);
 }
 

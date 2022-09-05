@@ -109,7 +109,7 @@
                             case 'crypto-unlock':
 
                                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
-                                    // wasi_snapshot_preview1: wasi.exports,
+                                    // wasi_snapshot_preview1: wasi.exports,//teeeeeee
                                     js: {
                                         mem: MEMORY
                                     },
