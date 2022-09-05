@@ -192,8 +192,9 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 /////////////////////////////////////////////////////////////////////////
 //////////////////////////////APIS///////////////////////////////////////
 EMSCRIPTEN_KEEPALIVE
-void crypto_guard_if_init_shared_mem(twi_u8* pu8_shared_mem)
+void crypto_guard_if_mem_init(twi_u8* pu8_shared_mem)
 {
+    gp_curr_ctx = cyrpto_guard_if_init();
     twi_usb_if_set_device_info(gp_curr_ctx, pu8_shared_mem);
 }
 
@@ -217,7 +218,6 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
   {
     case CRYPTO_GUARD_IF_CONNECTED_EVT:
     {
-      gp_curr_ctx = cyrpto_guard_if_init();
       twi_usb_if_notify_connected(gp_curr_ctx, error);
       break;
     }
@@ -239,7 +239,6 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     case CRYPTO_GUARD_IF_RECIEVED_DATA_EVT:
     {
       twi_usb_if_notify_data_received(gp_curr_ctx, data, len, error);
-
       break;
     }
 
