@@ -108,46 +108,48 @@
                                 break;
                             case 'crypto-unlock':
 
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if_last.wasm"), {
-                                    // wasi_snapshot_preview1: wasi.exports,//teeeeeee
-                                    js: {
-                                        mem: MEMORY
-                                    },
-                                    env: {
-                                        curTime: () => Date.now(),
-                                        emscripten_resize_heap:MEMORY.grow,
-                                        allocateOnMemory:_this.allocateOnMemory,
-                                        usbSend:_this.usbSend,
-                                        consoleLog:console.log,
-                                        onGetXpubResult:_this.onGetXpubResult,
-                                        __assert_fail:_this.testing,//testing
-                                        wasi_snapshot_preview1:_this.testing, 
-                                        setTempRet0:_this.testing, 
-                                        _embind_register_void:_this.testing, 
-                                        _embind_register_bool:_this.testing, 
-                                        _embind_register_std_string:_this.testing, 
-                                        _embind_register_std_wstring:_this.testing, 
-                                        _embind_register_emval:_this.testing, 
-                                        _embind_register_integer:_this.testing, 
-                                        _embind_register_float:_this.testing, 
-                                        _embind_register_memory_view:_this.testing, 
-                                        _embind_register_bigint:_this.testing, 
-                                        __indirect_function_table:_this.testing, 
-                                        emscripten_memcpy_big:_this.testing,
-                                        onConnectionDone:_this.onConnectionDone,
-                                    }
-                                }).then(results => {
-                                  exportWASM = results.instance.exports;
-                                    MEMORYBUFFER = results.instance.exports.memory;
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                    result2.fill(0);
-                                    console.log(result2)
-                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
-                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                // WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if_last.wasm"), {
+                                //     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
+                                //     js: {
+                                //         mem: MEMORY
+                                //     },
+                                //     env: {
+                                //         curTime: () => Date.now(),
+                                //         emscripten_resize_heap:MEMORY.grow,
+                                //         allocateOnMemory:_this.allocateOnMemory,
+                                //         usbSend:_this.usbSend,
+                                //         consoleLog:console.log,
+                                //         onGetXpubResult:_this.onGetXpubResult,
+                                //         __assert_fail:_this.testing,//testing
+                                //         wasi_snapshot_preview1:_this.testing, 
+                                //         setTempRet0:_this.testing, 
+                                //         _embind_register_void:_this.testing, 
+                                //         _embind_register_bool:_this.testing, 
+                                //         _embind_register_std_string:_this.testing, 
+                                //         _embind_register_std_wstring:_this.testing, 
+                                //         _embind_register_emval:_this.testing, 
+                                //         _embind_register_integer:_this.testing, 
+                                //         _embind_register_float:_this.testing, 
+                                //         _embind_register_memory_view:_this.testing, 
+                                //         _embind_register_bigint:_this.testing, 
+                                //         __indirect_function_table:_this.testing, 
+                                //         emscripten_memcpy_big:_this.testing,
+                                //         onConnectionDone:_this.onConnectionDone,
+                                //     }
+                                // }).then(results => {
+                                //   exportWASM = results.instance.exports;
+                                //     MEMORYBUFFER = results.instance.exports.memory;
+                                //     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                //     result2.fill(0);
+                                //     console.log(result2)
+                                //     // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
+                                //     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
 
-                                    console.log("first");
-                                    _this.unlock(replyAction, params.hdPath, messageId);
-                                });
+                                //     console.log("first");
+                                //     _this.unlock(replyAction, params.hdPath, messageId);
+                                // });
+                                _this.unlock(replyAction, params.hdPath, messageId);
+
                                 break;
                             case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
