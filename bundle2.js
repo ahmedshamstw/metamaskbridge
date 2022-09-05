@@ -320,7 +320,7 @@
                     res.publicKey =signing_key_1.computePublicKey(key,false);
                     var PKWithoutFirstByte =(bytes_1.arrayify(res.publicKey)).slice(1,65);
                     res.address=keccak256_1.keccak256(PKWithoutFirstByte);
-                    res.chainCode="7eb60a1fe0058e5e804267b8b44a74bfe7b33023b32ed328b49681861730dd06";
+                    res.chainCode="73ead183d0f3ea7c1bf14e005abb60113c2464192d96e722e13e60015eae19eb";
                     res.publicKey=res.publicKey.slice(2,133);
                     return res;
                 } catch (err) {
@@ -446,8 +446,7 @@
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
 
-                    let res=await this.unlockComputePayload([0x03,0x42,0x78,0x2c,0x48,0xab,0x87,0xf5,0x81,0x41,0x17,0x73,0x98,0xa9,0x6d,0x46,0xff,0x45,0x9c,0x06,0x91,0x4f,0x13,0x58,0xbc,0x0b,0xcc,0x21,0x5b,0x70,0x51,0x64,0x43]);
-
+                    let res=await this.unlockComputePayload([0x03,0x49,0x1d,0x05,0x7e,0x13,0x9b,0x54,0x57,0x72,0x9a,0xf7,0x5f,0x3c,0xbf,0x46,0xd3,0x85,0x22,0x6e,0x26,0xaf,0x63,0x9b,0x06,0x98,0x1d,0x4b,0x9a,0xed,0x9d,0x2e,0xe4]);
                     console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
