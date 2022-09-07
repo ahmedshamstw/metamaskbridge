@@ -142,7 +142,7 @@
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     result2.fill(0);
                                     console.log(result2)
-                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
+                                    exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
                                     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
     
                                     console.log("first");
