@@ -114,7 +114,18 @@
                                         mem: MEMORY
                                     },
                                     env: {
-                                        printf: msg => console.log(msg),
+                                        consoleLog: index=> {
+                                            let s = "";
+                                            while(true){
+                                                if(MEMORYBUFFER[index] !== 0){
+                                                    s += String.fromCharCode(MEMORYBUFFER[index]);
+                                                    index++;
+                                                }else{
+                                                    console.log(s);
+                                                    return;
+                                                }
+                                            }
+                                        }
                                         curTime: () => Date.now(),
                                         emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
