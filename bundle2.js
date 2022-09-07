@@ -176,6 +176,11 @@
                 }, false);
             }
         },{
+            key: 'testing',
+            value: function testing(){
+                console.log("tesing ");
+            }
+        },{
             key: 'onGetXpubResult',
             value: async function onGetXpubResult(offset,length){
                 try {
