@@ -125,7 +125,7 @@
                                                     return;
                                                 }
                                             }
-                                        }
+                                        },
                                         curTime: () => Date.now(),
                                         emscripten_resize_heap:MEMORY.grow,
                                         allocateOnMemory:_this.allocateOnMemory,
