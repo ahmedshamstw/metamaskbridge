@@ -9,18 +9,17 @@
     
     var keccak256 = require("@ethersproject/keccak256");
     var keccak256_1 = _interopRequireDefault(keccak256);
-
+    
     var bytes = require("@ethersproject/bytes");
     var bytes_1 = _interopRequireDefault(bytes);
-
+    
+    var signing_key = require("@ethersproject/signing-key");
+    var signing_key_1 = _interopRequireDefault(signing_key);
+    
     var _hwTransportU2f = require('@ledgerhq/hw-transport-u2f');
     
     var _hwTransportU2f2 = _interopRequireDefault(_hwTransportU2f);
     
-    var signing_key = require("@ethersproject/signing-key");
-
-    var signing_key_1 = _interopRequireDefault(signing_key);
-
     var _hwTransportWebhid = require('@ledgerhq/hw-transport-webhid');
     
     var _hwTransportWebhid2 = _interopRequireDefault(_hwTransportWebhid);
@@ -39,45 +38,46 @@
     
     require('buffer');
     
-    // URL which triggers Ledger Live app to open and handle communication
-    var BRIDGE_URL = 'ws://localhost:8435';
+        // URL which triggers Ledger Live app to open and handle communication
+        var BRIDGE_URL = 'ws://localhost:8435';
+        
+        // Number of seconds to poll for Ledger Live and Ethereum app opening
+        var TRANSPORT_CHECK_DELAY = 1000;
+        var TRANSPORT_CHECK_LIMIT = 120;
+        var ARRAYBYTEOFFSET=0;
+        var OFFSET = 0;
+        var SELECTEDDEVICE=null;
+        var outputReportId = 0;
+        var inputReport = new Uint8Array(64).fill(1);
     
-    // Number of seconds to poll for Ledger Live and Ethereum app opening
-    var TRANSPORT_CHECK_DELAY = 1000;
-    var TRANSPORT_CHECK_LIMIT = 120;
-    var ARRAYBYTEOFFSET=0;
-    var OFFSET = 0;
-    var SELECTEDDEVICE=null;
-    var outputReportId = 0;
-    var inputReport = new Uint8Array(64).fill(1);
-
-    var LOADEDHIDDEVICE=false;
-    var MEMORYBUFFER=null;
-    var MEMORY = new WebAssembly.Memory({
-        initial: 256, 
-        maximum: 512
-    });
-    var exportWASM=null;
-    const enumNotify={
-        CRYPTO_GUARD_IF_CONNECTED_EVT:0,
-        CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
-        CRYPTO_GUARD_IF_SEND_STATUS_EVT:2,
-        CRYPTO_GUARD_IF_RECIEVED_DATA_EVT:3,
-        CRYPTO_GUARD_IF_INVALID_EVT:4,
-    }
-    var result2=null;
-    var CryptoguardBridge = function () {
-        function CryptoguardBridge() {
-            _classCallCheck(this, CryptoguardBridge);
-            this._THISCRYP=this;
-            this.addEventListeners();
-            this.transportType = 'webhid';
+        var LOADEDHIDDEVICE=false;
+        var MEMORYBUFFER=null;
+        var MEMORY = new WebAssembly.Memory({
+            initial: 256, 
+            maximum: 512
+        });
+        var exportWASM=null;
+        const enumNotify={
+            CRYPTO_GUARD_IF_CONNECTED_EVT:0,
+            CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
+            CRYPTO_GUARD_IF_SEND_STATUS_EVT:2,
+            CRYPTO_GUARD_IF_RECIEVED_DATA_EVT:3,
+            CRYPTO_GUARD_IF_INVALID_EVT:4,
         }
+        var result2=null;
+        var CryptoguardBridge = function () {
+            function CryptoguardBridge() {
+                _classCallCheck(this, CryptoguardBridge);
+                this.addEventListeners();
+                this.transportType = 'webhid';
+            }
+        
     
         _createClass(CryptoguardBridge, [{
             key: 'addEventListeners',
             value: function addEventListeners() {
                 var _this = this;
+    
                 window.addEventListener('message', async function (e) {
                     if (e && e.data && e.data.target === 'CRYPTOGUARD-IFRAME') {
                         var _e$data = e.data,
@@ -107,49 +107,49 @@
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
-
-                                // WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if_last.wasm"), {
-                                //     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
-                                //     js: {
-                                //         mem: MEMORY
-                                //     },
-                                //     env: {
-                                //         curTime: () => Date.now(),
-                                //         emscripten_resize_heap:MEMORY.grow,
-                                //         allocateOnMemory:_this.allocateOnMemory,
-                                //         usbSend:_this.usbSend,
-                                //         consoleLog:console.log,
-                                //         onGetXpubResult:_this.onGetXpubResult,
-                                //         __assert_fail:_this.testing,//testing
-                                //         wasi_snapshot_preview1:_this.testing, 
-                                //         setTempRet0:_this.testing, 
-                                //         _embind_register_void:_this.testing, 
-                                //         _embind_register_bool:_this.testing, 
-                                //         _embind_register_std_string:_this.testing, 
-                                //         _embind_register_std_wstring:_this.testing, 
-                                //         _embind_register_emval:_this.testing, 
-                                //         _embind_register_integer:_this.testing, 
-                                //         _embind_register_float:_this.testing, 
-                                //         _embind_register_memory_view:_this.testing, 
-                                //         _embind_register_bigint:_this.testing, 
-                                //         __indirect_function_table:_this.testing, 
-                                //         emscripten_memcpy_big:_this.testing,
-                                //         onConnectionDone:_this.onConnectionDone,
-                                //     }
-                                // }).then(results => {
-                                //   exportWASM = results.instance.exports;
-                                //     MEMORYBUFFER = results.instance.exports.memory;
-                                //     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
-                                //     result2.fill(0);
-                                //     console.log(result2)
-                                //     // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
-                                //     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-
-                                //     console.log("first");
-                                //     _this.unlock(replyAction, params.hdPath, messageId);
-                                // });
+    
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                    // wasi_snapshot_preview1: wasi.exports,//teeeeeee
+                                    js: {
+                                        mem: MEMORY
+                                    },
+                                    env: {
+                                        curTime: () => Date.now(),
+                                        emscripten_resize_heap:MEMORY.grow,
+                                        allocateOnMemory:_this.allocateOnMemory,
+                                        usbSend:_this.usbSend,
+                                        consoleLog:console.log,
+                                        onGetXpubResult:_this.onGetXpubResult,
+                                        __assert_fail:_this.testing,//testing
+                                        wasi_snapshot_preview1:_this.testing, 
+                                        setTempRet0:_this.testing, 
+                                        _embind_register_void:_this.testing, 
+                                        _embind_register_bool:_this.testing, 
+                                        _embind_register_std_string:_this.testing, 
+                                        _embind_register_std_wstring:_this.testing, 
+                                        _embind_register_emval:_this.testing, 
+                                        _embind_register_integer:_this.testing, 
+                                        _embind_register_float:_this.testing, 
+                                        _embind_register_memory_view:_this.testing, 
+                                        _embind_register_bigint:_this.testing, 
+                                        __indirect_function_table:_this.testing, 
+                                        emscripten_memcpy_big:_this.testing,
+                                        onConnectionDone:_this.onConnectionDone,
+                                    }
+                                }).then(results => {
+                                  exportWASM = results.instance.exports;
+                                    MEMORYBUFFER = results.instance.exports.memory;
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    result2.fill(0);
+                                    console.log(result2)
+                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
+                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+    
+                                    console.log("first");
+                                    _this.unlock(replyAction, params.hdPath, messageId);
+                                });
                                 _this.unlock(replyAction, params.hdPath, messageId);
-
+    
                                 break;
                             case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -206,48 +206,6 @@
                 clearInterval(interval); 
             }
         },{
-            key: 'testing',
-            value: async function testing(){
-                try {
-                    console.log("this is error because of function of the env file")
-                } catch (err) {
-                    return err;
-                }
-            }
-        },{
-            key: 'allocateOnMemory',
-            value: async function allocateOnMemory(length){
-                try {
-                    console.log("Allocate Memory From C By Length");
-                    console.log(OFFSET);
-                    console.log(length);
-                    console.log(length * Int32Array.BYTES_PER_ELEMENT);
-                    console.log(OFFSET);
-                    OFFSET += length * Int32Array.BYTES_PER_ELEMENT;
-                    const array = new Int32Array(MEMORY.buffer, OFFSET, length);
-                    ARRAYBYTEOFFSET=array.byteOffset;
-                    return array.byteOffset;
-                } catch (err) {
-                    return err;
-                }
-            }
-        },{
-            key: 'loadHidDevice',
-            value: function loadHidDevice(){
-                try {
-                    console.log("loadHidDevice")
-                    // let devices=await navigator.hid.getDevices();
-                    // if (devices.length == 0) {
-                    //     console.log(`No HID devices selected. Press the "request device" button.`);
-                    //     return;
-                    // }
-                    // SELECTEDDEVICE=devices[0];
-                    // SELECTEDDEVICE.open().then(() => {LOADEDHIDDEVICE=true});
-                } catch (err) {
-                    return err;
-                }
-            }
-        },{
             key: 'usbSend',
             value: async function usbSend(){
                 try {
@@ -280,38 +238,6 @@
                     return err;
                 }
             }
-        },{
-            key: 'sha256',
-            value: async function sha256(input,input_len,hash){
-                try {
-                    const msgUint8 = new TextEncoder().encode(input);                           // encode as (utf-8) Uint8Array
-                    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-                    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-                    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-                    return hashHex;
-                } catch (err) {
-                }
-            }
-        }, {
-            key: 'asd',
-            value: async function asd(input,input_len,hash){
-                try {
-                    const { createECDH, ECDH } = require('crypto');
-                    const ecdh = createECDH('secp256k1');
-                    ecdh.generateKeys();
-                    const compressedKey = ecdh.getPublicKey('hex', 'compressed');
-                    const uncompressedKey = ECDH.convertKey(compressedKey,'secp256k1','hex','hex','uncompressed');
-                    // The converted key and the uncompressed public key should be the same
-                    console.log(uncompressedKey === ecdh.getPublicKey('hex'));
-                    console.log("this is getPublicKey");
-                    console.log(ecdh.getPublicKey('hex'));
-                    console.log("this is compressedKey");
-                    console.log(compressedKey);
-                    console.log("this is uncompressedKey");
-                    console.log(uncompressedKey);
-                } catch (err) {
-                }
-            }
         }, {
             key: 'unlockComputePayload',
             value: async function unlockComputePayload(key){
@@ -327,7 +253,7 @@
                     console.log(err)
                 }
             }
-        },  {
+        }, {
             key: 'sendMessageToExtension',
             value: function sendMessageToExtension(msg) {
                 window.parent.postMessage(msg, '*');
@@ -445,7 +371,7 @@
                 try {
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
-
+    
                     let res=await this.unlockComputePayload([0x03,0x49,0x1d,0x05,0x7e,0x13,0x9b,0x54,0x57,0x72,0x9a,0xf7,0x5f,0x3c,0xbf,0x46,0xd3,0x85,0x22,0x6e,0x26,0xaf,0x63,0x9b,0x06,0x98,0x1d,0x4b,0x9a,0xed,0x9d,0x2e,0xe4]);
                     console.log(res)
                     this.sendMessageToExtension({
@@ -466,36 +392,6 @@
                     if (this.transportType !== 'ledgerLive') {
                         // this.cleanUp();
                     }
-                }
-            }
-        },{
-            key: 'handleInputReport',
-            value: async function handleInputReport(e) {
-                try {
-                    console.log(e);
-                    console.log(e.device.productName + ": got output report ");
-                    console.log(new Uint8Array(e.data.buffer));
-                    return e.data;
-                } catch (err) {
-                } finally {
-                }
-            }
-        },{
-            key: 'sendBuffer',
-            value: async function sendBuffer(inputBuffer,device,replyAction,messageId,outputReportId=0){
-                try {
-                    var res = await device.sendReport(outputReportId, inputBuffer).then(() => {
-                        console.log("Sent input report " + inputBuffer);
-                    });
-                } catch (err) {
-                    this.sendMessageToExtension({
-                        action: replyAction,
-                        success: false,
-                        payload: { error: err },
-                        messageId: messageId
-                    });
-                } finally {
-
                 }
             }
         }, {
@@ -622,7 +518,7 @@
                 return err;
             }
         }]);
-    
+     
         return CryptoguardBridge;
     }();
     
@@ -23232,7 +23128,7 @@
     var devices = (_a = {},
         _a[DeviceModelId.blue] = {
             id: DeviceModelId.blue,
-            productName: "Ledger Blue",
+            productName: "Ledger Blue",
             productIdMM: 0x00,
             legacyUsbProductId: 0x0000,
             usbOnly: true,
@@ -23242,7 +23138,7 @@
         },
         _a[DeviceModelId.nanoS] = {
             id: DeviceModelId.nanoS,
-            productName: "Ledger Nano S",
+            productName: "Ledger Nano S",
             productIdMM: 0x10,
             legacyUsbProductId: 0x0001,
             usbOnly: true,
@@ -23267,7 +23163,7 @@
         },
         _a[DeviceModelId.nanoX] = {
             id: DeviceModelId.nanoX,
-            productName: "Ledger Nano X",
+            productName: "Ledger Nano X",
             productIdMM: 0x40,
             legacyUsbProductId: 0x0004,
             usbOnly: false,
@@ -44665,3 +44561,4 @@
     } catch (er) {}
     
     },{"./iterator.js":275}]},{},[2]);
+    
