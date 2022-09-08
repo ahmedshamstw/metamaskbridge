@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_COMPILER "emcc")	
 
 #fix "call to undeclared library function 'free'/'calloc'"	
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto=full")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto=full -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto=full -g")
 	
 #include paths	
 include_directories(
