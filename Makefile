@@ -123,302 +123,302 @@ crypto_guard_if/fast:
 	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/build
 .PHONY : crypto_guard_if/fast
 
-crypto_guard_if.o: crypto_guard_if.c.o
+debug_src/crc_16.o: debug_src/crc_16.c.o
 
-.PHONY : crypto_guard_if.o
-
-# target to build an object file
-crypto_guard_if.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/crypto_guard_if.c.o
-.PHONY : crypto_guard_if.c.o
-
-crypto_guard_if.i: crypto_guard_if.c.i
-
-.PHONY : crypto_guard_if.i
-
-# target to preprocess a source file
-crypto_guard_if.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/crypto_guard_if.c.i
-.PHONY : crypto_guard_if.c.i
-
-crypto_guard_if.s: crypto_guard_if.c.s
-
-.PHONY : crypto_guard_if.s
-
-# target to generate assembly for a file
-crypto_guard_if.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/crypto_guard_if.c.s
-.PHONY : crypto_guard_if.c.s
-
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.o
-
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.o
+.PHONY : debug_src/crc_16.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.o
+debug_src/crc_16.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crc_16.c.o
+.PHONY : debug_src/crc_16.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.i
+debug_src/crc_16.i: debug_src/crc_16.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.i
+.PHONY : debug_src/crc_16.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.i
+debug_src/crc_16.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crc_16.c.i
+.PHONY : debug_src/crc_16.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.s
+debug_src/crc_16.s: debug_src/crc_16.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.s
+.PHONY : debug_src/crc_16.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.c.s
+debug_src/crc_16.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crc_16.c.s
+.PHONY : debug_src/crc_16.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.o
+debug_src/crypto_guard_if.o: debug_src/crypto_guard_if.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.o
+.PHONY : debug_src/crypto_guard_if.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.o
+debug_src/crypto_guard_if.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crypto_guard_if.c.o
+.PHONY : debug_src/crypto_guard_if.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.i
+debug_src/crypto_guard_if.i: debug_src/crypto_guard_if.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.i
+.PHONY : debug_src/crypto_guard_if.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.i
+debug_src/crypto_guard_if.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crypto_guard_if.c.i
+.PHONY : debug_src/crypto_guard_if.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.s
+debug_src/crypto_guard_if.s: debug_src/crypto_guard_if.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.s
+.PHONY : debug_src/crypto_guard_if.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.c.s
+debug_src/crypto_guard_if.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/crypto_guard_if.c.s
+.PHONY : debug_src/crypto_guard_if.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.o
+debug_src/twi_apdu_parser_composer.o: debug_src/twi_apdu_parser_composer.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.o
+.PHONY : debug_src/twi_apdu_parser_composer.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.o
+debug_src/twi_apdu_parser_composer.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_apdu_parser_composer.c.o
+.PHONY : debug_src/twi_apdu_parser_composer.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.i
+debug_src/twi_apdu_parser_composer.i: debug_src/twi_apdu_parser_composer.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.i
+.PHONY : debug_src/twi_apdu_parser_composer.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.i
+debug_src/twi_apdu_parser_composer.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_apdu_parser_composer.c.i
+.PHONY : debug_src/twi_apdu_parser_composer.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.s
+debug_src/twi_apdu_parser_composer.s: debug_src/twi_apdu_parser_composer.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.s
+.PHONY : debug_src/twi_apdu_parser_composer.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.c.s
+debug_src/twi_apdu_parser_composer.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_apdu_parser_composer.c.s
+.PHONY : debug_src/twi_apdu_parser_composer.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.o
+debug_src/twi_common.o: debug_src/twi_common.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.o
+.PHONY : debug_src/twi_common.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.o
+debug_src/twi_common.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_common.c.o
+.PHONY : debug_src/twi_common.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.i
+debug_src/twi_common.i: debug_src/twi_common.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.i
+.PHONY : debug_src/twi_common.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.i
+debug_src/twi_common.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_common.c.i
+.PHONY : debug_src/twi_common.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.s
+debug_src/twi_common.s: debug_src/twi_common.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.s
+.PHONY : debug_src/twi_common.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.c.s
+debug_src/twi_common.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_common.c.s
+.PHONY : debug_src/twi_common.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.o
+debug_src/twi_debug.o: debug_src/twi_debug.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.o
+.PHONY : debug_src/twi_debug.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.o
+debug_src/twi_debug.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_debug.c.o
+.PHONY : debug_src/twi_debug.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.i
+debug_src/twi_debug.i: debug_src/twi_debug.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.i
+.PHONY : debug_src/twi_debug.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.i
+debug_src/twi_debug.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_debug.c.i
+.PHONY : debug_src/twi_debug.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.s
+debug_src/twi_debug.s: debug_src/twi_debug.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.s
+.PHONY : debug_src/twi_debug.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.c.s
+debug_src/twi_debug.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_debug.c.s
+.PHONY : debug_src/twi_debug.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.o
+debug_src/twi_link_layer.o: debug_src/twi_link_layer.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.o
+.PHONY : debug_src/twi_link_layer.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.o
+debug_src/twi_link_layer.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_link_layer.c.o
+.PHONY : debug_src/twi_link_layer.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.i
+debug_src/twi_link_layer.i: debug_src/twi_link_layer.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.i
+.PHONY : debug_src/twi_link_layer.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.i
+debug_src/twi_link_layer.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_link_layer.c.i
+.PHONY : debug_src/twi_link_layer.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.s
+debug_src/twi_link_layer.s: debug_src/twi_link_layer.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.s
+.PHONY : debug_src/twi_link_layer.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.c.s
+debug_src/twi_link_layer.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_link_layer.c.s
+.PHONY : debug_src/twi_link_layer.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.o
+debug_src/twi_network_layer.o: debug_src/twi_network_layer.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.o
+.PHONY : debug_src/twi_network_layer.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.o
+debug_src/twi_network_layer.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_network_layer.c.o
+.PHONY : debug_src/twi_network_layer.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.i
+debug_src/twi_network_layer.i: debug_src/twi_network_layer.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.i
+.PHONY : debug_src/twi_network_layer.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.i
+debug_src/twi_network_layer.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_network_layer.c.i
+.PHONY : debug_src/twi_network_layer.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.s
+debug_src/twi_network_layer.s: debug_src/twi_network_layer.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.s
+.PHONY : debug_src/twi_network_layer.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.c.s
+debug_src/twi_network_layer.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_network_layer.c.s
+.PHONY : debug_src/twi_network_layer.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.o
+debug_src/twi_no_security_layer.o: debug_src/twi_no_security_layer.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.o
+.PHONY : debug_src/twi_no_security_layer.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.o
+debug_src/twi_no_security_layer.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_no_security_layer.c.o
+.PHONY : debug_src/twi_no_security_layer.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.i
+debug_src/twi_no_security_layer.i: debug_src/twi_no_security_layer.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.i
+.PHONY : debug_src/twi_no_security_layer.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.i
+debug_src/twi_no_security_layer.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_no_security_layer.c.i
+.PHONY : debug_src/twi_no_security_layer.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.s
+debug_src/twi_no_security_layer.s: debug_src/twi_no_security_layer.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.s
+.PHONY : debug_src/twi_no_security_layer.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.c.s
+debug_src/twi_no_security_layer.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_no_security_layer.c.s
+.PHONY : debug_src/twi_no_security_layer.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.o
+debug_src/twi_stack.o: debug_src/twi_stack.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.o
+.PHONY : debug_src/twi_stack.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.o
+debug_src/twi_stack.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_stack.c.o
+.PHONY : debug_src/twi_stack.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.i
+debug_src/twi_stack.i: debug_src/twi_stack.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.i
+.PHONY : debug_src/twi_stack.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.i
+debug_src/twi_stack.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_stack.c.i
+.PHONY : debug_src/twi_stack.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.s
+debug_src/twi_stack.s: debug_src/twi_stack.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.s
+.PHONY : debug_src/twi_stack.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.c.s
+debug_src/twi_stack.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_stack.c.s
+.PHONY : debug_src/twi_stack.c.s
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.o: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.o
+debug_src/twi_usb_link_layer.o: debug_src/twi_usb_link_layer.c.o
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.o
+.PHONY : debug_src/twi_usb_link_layer.o
 
 # target to build an object file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.o:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.o
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.o
+debug_src/twi_usb_link_layer.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_link_layer.c.o
+.PHONY : debug_src/twi_usb_link_layer.c.o
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.i: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.i
+debug_src/twi_usb_link_layer.i: debug_src/twi_usb_link_layer.c.i
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.i
+.PHONY : debug_src/twi_usb_link_layer.i
 
 # target to preprocess a source file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.i:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.i
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.i
+debug_src/twi_usb_link_layer.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_link_layer.c.i
+.PHONY : debug_src/twi_usb_link_layer.c.i
 
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.s: mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.s
+debug_src/twi_usb_link_layer.s: debug_src/twi_usb_link_layer.c.s
 
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.s
+.PHONY : debug_src/twi_usb_link_layer.s
 
 # target to generate assembly for a file
-mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.s:
-	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.s
-.PHONY : mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.c.s
+debug_src/twi_usb_link_layer.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_link_layer.c.s
+.PHONY : debug_src/twi_usb_link_layer.c.s
+
+debug_src/twi_usb_wallet_if.o: debug_src/twi_usb_wallet_if.c.o
+
+.PHONY : debug_src/twi_usb_wallet_if.o
+
+# target to build an object file
+debug_src/twi_usb_wallet_if.c.o:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_wallet_if.c.o
+.PHONY : debug_src/twi_usb_wallet_if.c.o
+
+debug_src/twi_usb_wallet_if.i: debug_src/twi_usb_wallet_if.c.i
+
+.PHONY : debug_src/twi_usb_wallet_if.i
+
+# target to preprocess a source file
+debug_src/twi_usb_wallet_if.c.i:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_wallet_if.c.i
+.PHONY : debug_src/twi_usb_wallet_if.c.i
+
+debug_src/twi_usb_wallet_if.s: debug_src/twi_usb_wallet_if.c.s
+
+.PHONY : debug_src/twi_usb_wallet_if.s
+
+# target to generate assembly for a file
+debug_src/twi_usb_wallet_if.c.s:
+	$(MAKE) -f CMakeFiles/crypto_guard_if.dir/build.make CMakeFiles/crypto_guard_if.dir/debug_src/twi_usb_wallet_if.c.s
+.PHONY : debug_src/twi_usb_wallet_if.c.s
 
 # Help Target
 help:
@@ -429,39 +429,39 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... crypto_guard_if"
-	@echo "... crypto_guard_if.o"
-	@echo "... crypto_guard_if.i"
-	@echo "... crypto_guard_if.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/WalletCoreInterface/USBWallet/twi_usb_wallet_if.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/crc_16.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_common.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/helpers/source/twi_debug.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_link_layer.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_network_layer.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_no_security_layer.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_stack.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/protocols/twi_generic_stack_proto/src/twi_usb_link_layer.s"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.o"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.i"
-	@echo "... mnt/d/TWI_MetaMask_Integeration/TWIWalletCore/utils/twi_apdu_parser_composer/twi_apdu_parser_composer.s"
+	@echo "... debug_src/crc_16.o"
+	@echo "... debug_src/crc_16.i"
+	@echo "... debug_src/crc_16.s"
+	@echo "... debug_src/crypto_guard_if.o"
+	@echo "... debug_src/crypto_guard_if.i"
+	@echo "... debug_src/crypto_guard_if.s"
+	@echo "... debug_src/twi_apdu_parser_composer.o"
+	@echo "... debug_src/twi_apdu_parser_composer.i"
+	@echo "... debug_src/twi_apdu_parser_composer.s"
+	@echo "... debug_src/twi_common.o"
+	@echo "... debug_src/twi_common.i"
+	@echo "... debug_src/twi_common.s"
+	@echo "... debug_src/twi_debug.o"
+	@echo "... debug_src/twi_debug.i"
+	@echo "... debug_src/twi_debug.s"
+	@echo "... debug_src/twi_link_layer.o"
+	@echo "... debug_src/twi_link_layer.i"
+	@echo "... debug_src/twi_link_layer.s"
+	@echo "... debug_src/twi_network_layer.o"
+	@echo "... debug_src/twi_network_layer.i"
+	@echo "... debug_src/twi_network_layer.s"
+	@echo "... debug_src/twi_no_security_layer.o"
+	@echo "... debug_src/twi_no_security_layer.i"
+	@echo "... debug_src/twi_no_security_layer.s"
+	@echo "... debug_src/twi_stack.o"
+	@echo "... debug_src/twi_stack.i"
+	@echo "... debug_src/twi_stack.s"
+	@echo "... debug_src/twi_usb_link_layer.o"
+	@echo "... debug_src/twi_usb_link_layer.i"
+	@echo "... debug_src/twi_usb_link_layer.s"
+	@echo "... debug_src/twi_usb_wallet_if.o"
+	@echo "... debug_src/twi_usb_wallet_if.i"
+	@echo "... debug_src/twi_usb_wallet_if.s"
 .PHONY : help
 
 
