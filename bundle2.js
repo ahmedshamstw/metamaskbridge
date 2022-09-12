@@ -108,7 +108,7 @@
                                 break;
                             case 'crypto-unlock':
     
-                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
+                                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/exported.wasm"), {
                                     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
                                     js: {
                                         mem: MEMORY
@@ -153,9 +153,9 @@
                                     result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
                                     result2.fill(0);
                                     console.log(result2)
-                                    // console.log(exportWASM.itWorkshhh(3,4));
-                                    exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
-                                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+                                    console.log(exportWASM.itWorkshhh(3,4));
+                                    // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
+                                    // exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
     
                                     console.log("first");
                                     _this.unlock(replyAction, params.hdPath, messageId);
@@ -409,6 +409,15 @@
                     if (this.transportType !== 'ledgerLive') {
                         // this.cleanUp();
                     }
+                }
+            }
+        }, {
+            key: 'signTransactionCompute',
+            value: async function signTransactionCompute(path, rawTxHex) {
+                try {
+                
+                } catch (err) {
+                    console.log(err)
                 }
             }
         }, {
