@@ -14,7 +14,7 @@ int main() { return 0; }
 EMSCRIPTEN_KEEPALIVE
 int itWorkshhh(int x,int y)
 {
-    int* pstr_cntxt = malloc(1000000000);
+    int* pstr_cntxt = malloc(10000);
     consoleLog("testing");
 	if(NULL != pstr_cntxt)return 9;
     return x+y;
