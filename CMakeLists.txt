@@ -41,7 +41,7 @@ file(GLOB SOURCES "./debug_src/*.c")
 
 add_executable(crypto_guard_if ${SOURCES})
 #TODO: -lpthread -s USE_PTHREADS=1 -s ALLOW_MEMORY_GROWTH=1 
-set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-Os -o crypto_guard_if.js --bind -DNDEBUG --no-entry -s WASM=1 -g -gseparate-dwarf -gsource-map --source-map-base './' -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0") 
+set_target_properties(crypto_guard_if PROPERTIES LINK_FLAGS "-O0 -o crypto_guard_if.js --bind -DNDEBUG --no-entry -s WASM=1 -g -gseparate-dwarf -gsource-map --source-map-base './' -gdwarf-5 -gsplit-dwarf -gpubnames -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0") 
 # TARGET_LINK_LIBRARIES(crypto_guard_if
 # 	Setupapi
 # )
