@@ -651,6 +651,12 @@ var HEAP,
   HEAPU32,
 /** @type {!Float32Array} */
   HEAPF32,
+/* BigInt64Array type is not correctly defined in closure
+/** not-@type {!BigInt64Array} */
+  HEAP64,
+/* BigUInt64Array type is not correctly defined in closure
+/** not-t@type {!BigUint64Array} */
+  HEAPU64,
 /** @type {!Float64Array} */
   HEAPF64;
 
@@ -664,6 +670,8 @@ function updateGlobalBufferAndViews(buf) {
   Module['HEAPU32'] = HEAPU32 = new Uint32Array(buf);
   Module['HEAPF32'] = HEAPF32 = new Float32Array(buf);
   Module['HEAPF64'] = HEAPF64 = new Float64Array(buf);
+  Module['HEAP64'] = HEAP64 = new BigInt64Array(buf);
+  Module['HEAPU64'] = HEAPU64 = new BigUint64Array(buf);
 }
 
 var TOTAL_STACK = 5242880;
@@ -1225,7 +1233,7 @@ var ASM_CONSTS = {
         case 'i8': return HEAP8[((ptr)>>0)];
         case 'i16': return HEAP16[((ptr)>>1)];
         case 'i32': return HEAP32[((ptr)>>2)];
-        case 'i64': return HEAP32[((ptr)>>2)];
+        case 'i64': return HEAP64[((ptr)>>3)];
         case 'float': return HEAPF32[((ptr)>>2)];
         case 'double': return HEAPF64[((ptr)>>3)];
         case '*': return HEAPU32[((ptr)>>2)];
@@ -1276,7 +1284,7 @@ var ASM_CONSTS = {
         case 'i8': HEAP8[((ptr)>>0)] = value; break;
         case 'i16': HEAP16[((ptr)>>1)] = value; break;
         case 'i32': HEAP32[((ptr)>>2)] = value; break;
-        case 'i64': (tempI64 = [value>>>0,(tempDouble=value,(+(Math.abs(tempDouble))) >= 1.0 ? (tempDouble > 0.0 ? ((Math.min((+(Math.floor((tempDouble)/4294967296.0))), 4294967295.0))|0)>>>0 : (~~((+(Math.ceil((tempDouble - +(((~~(tempDouble)))>>>0))/4294967296.0)))))>>>0) : 0)],HEAP32[((ptr)>>2)] = tempI64[0],HEAP32[(((ptr)+(4))>>2)] = tempI64[1]); break;
+        case 'i64': HEAP64[((ptr)>>3)] = BigInt(value); break;
         case 'float': HEAPF32[((ptr)>>2)] = value; break;
         case 'double': HEAPF64[((ptr)>>3)] = value; break;
         case '*': HEAPU32[((ptr)>>2)] = value; break;
@@ -1304,16 +1312,15 @@ var ASM_CONSTS = {
       HEAP8.set(array, buffer);
     }
 
-  function __embind_register_bigint(primitiveType, name, size, minRange, maxRange) {}
-
-  function getShiftFromSize(size) {
-      switch (size) {
-          case 1: return 0;
-          case 2: return 1;
-          case 4: return 2;
-          case 8: return 3;
-          default:
-              throw new TypeError('Unknown type size: ' + size);
+  function embindRepr(v) {
+      if (v === null) {
+          return 'null';
+      }
+      var t = typeof v;
+      if (t === 'object' || t === 'array' || t === 'function') {
+          return v.toString();
+      } else {
+          return '' + v;
       }
     }
   
@@ -1463,6 +1470,69 @@ var ASM_CONSTS = {
         callbacks.forEach((cb) => cb());
       }
     }
+  
+  function integerReadValueFromPointer(name, shift, signed) {
+      // integers are quite common, so generate very specialized functions
+      switch (shift) {
+          case 0: return signed ?
+              function readS8FromPointer(pointer) { return HEAP8[pointer]; } :
+              function readU8FromPointer(pointer) { return HEAPU8[pointer]; };
+          case 1: return signed ?
+              function readS16FromPointer(pointer) { return HEAP16[pointer >> 1]; } :
+              function readU16FromPointer(pointer) { return HEAPU16[pointer >> 1]; };
+          case 2: return signed ?
+              function readS32FromPointer(pointer) { return HEAP32[pointer >> 2]; } :
+              function readU32FromPointer(pointer) { return HEAPU32[pointer >> 2]; };
+          case 3: return signed ?
+              function readS64FromPointer(pointer) { return HEAP64[pointer >> 3]; } :
+              function readU64FromPointer(pointer) { return HEAPU64[pointer >> 3]; };
+          default:
+              throw new TypeError("Unknown integer type: " + name);
+      }
+    }
+  function __embind_register_bigint(primitiveType, name, size, minRange, maxRange) {
+      name = readLatin1String(name);
+  
+      var shift = getShiftFromSize(size);
+  
+      var isUnsignedType = (name.indexOf('u') != -1);
+  
+      // maxRange comes through as -1 for uint64_t (see issue 13902). Work around that temporarily
+      if (isUnsignedType) {
+        // Use string because acorn does recognize bigint literals
+        maxRange = (1n << 64n) - 1n;
+      }
+  
+      registerType(primitiveType, {
+        name: name,
+        'fromWireType': function (value) {
+          return value;
+        },
+        'toWireType': function (destructors, value) {
+          if (typeof value != "bigint" && typeof value != "number") {
+            throw new TypeError('Cannot convert "' + embindRepr(value) + '" to ' + this.name);
+          }
+          if (value < minRange || value > maxRange) {
+            throw new TypeError('Passing a number "' + embindRepr(value) + '" from JS side to C/C++ side to an argument of type "' + name + '", which is outside the valid range [' + minRange + ', ' + maxRange + ']!');
+          }
+          return value;
+        },
+        'argPackAdvance': 8,
+        'readValueFromPointer': integerReadValueFromPointer(name, shift, !isUnsignedType),
+        destructorFunction: null, // This type does not need a destructor
+      });
+    }
+
+  function getShiftFromSize(size) {
+      switch (size) {
+          case 1: return 0;
+          case 2: return 1;
+          case 4: return 2;
+          case 8: return 3;
+          default:
+              throw new TypeError('Unknown type size: ' + size);
+      }
+    }
   function __embind_register_bool(rawType, name, size, trueValue, falseValue) {
       var shift = getShiftFromSize(size);
   
@@ -1574,18 +1644,6 @@ var ASM_CONSTS = {
       });
     }
 
-  function embindRepr(v) {
-      if (v === null) {
-          return 'null';
-      }
-      var t = typeof v;
-      if (t === 'object' || t === 'array' || t === 'function') {
-          return v.toString();
-      } else {
-          return '' + v;
-      }
-    }
-  
   function floatReadValueFromPointer(name, shift) {
       switch (shift) {
           case 2: return function(pointer) {
@@ -1620,22 +1678,6 @@ var ASM_CONSTS = {
       });
     }
 
-  function integerReadValueFromPointer(name, shift, signed) {
-      // integers are quite common, so generate very specialized functions
-      switch (shift) {
-          case 0: return signed ?
-              function readS8FromPointer(pointer) { return HEAP8[pointer]; } :
-              function readU8FromPointer(pointer) { return HEAPU8[pointer]; };
-          case 1: return signed ?
-              function readS16FromPointer(pointer) { return HEAP16[pointer >> 1]; } :
-              function readU16FromPointer(pointer) { return HEAPU16[pointer >> 1]; };
-          case 2: return signed ?
-              function readS32FromPointer(pointer) { return HEAP32[pointer >> 2]; } :
-              function readU32FromPointer(pointer) { return HEAPU32[pointer >> 2]; };
-          default:
-              throw new TypeError("Unknown integer type: " + name);
-      }
-    }
   function __embind_register_integer(primitiveType, name, size, minRange, maxRange) {
       name = readLatin1String(name);
       // LLVM doesn't have signed and unsigned 32-bit types, so u32 literals come
@@ -1696,6 +1738,8 @@ var ASM_CONSTS = {
         Uint32Array,
         Float32Array,
         Float64Array,
+        BigInt64Array,
+        BigUint64Array,
       ];
   
       var TA = typeMapping[dataTypeIndex];
@@ -2652,7 +2696,6 @@ var unexportedRuntimeSymbols = [
   'getExecutableName',
   'listenOnce',
   'autoResumeAudioContext',
-  'dynCallLegacy',
   'getDynCaller',
   'dynCall',
   'handleException',
@@ -2675,6 +2718,9 @@ var unexportedRuntimeSymbols = [
   'convertI32PairToI53',
   'convertI32PairToI53Checked',
   'convertU32PairToI53',
+  'MAX_INT53',
+  'MIN_INT53',
+  'bigintToI53Checked',
   'getCFunc',
   'ccall',
   'cwrap',
@@ -2939,7 +2985,6 @@ var missingLibrarySymbols = [
   'getExecutableName',
   'listenOnce',
   'autoResumeAudioContext',
-  'dynCallLegacy',
   'getDynCaller',
   'dynCall',
   'runtimeKeepalivePush',
@@ -2961,6 +3006,7 @@ var missingLibrarySymbols = [
   'convertI32PairToI53',
   'convertI32PairToI53Checked',
   'convertU32PairToI53',
+  'bigintToI53Checked',
   'reallyNegative',
   'unSign',
   'strLen',
