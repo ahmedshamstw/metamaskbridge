@@ -29,6 +29,7 @@ typedef enum
 tenum_crypto_guard_if_event;
 
 static tstr_usb_if_context* gp_curr_ctx = NULL;
+static twi_bool gb_is_init = TWI_FALSE;
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////////JS Helpers///////////////////////////////////
 extern char* consoleLog(char* data);
@@ -194,8 +195,12 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
 EMSCRIPTEN_KEEPALIVE
 void crypto_guard_if_mem_init(twi_u8* pu8_shared_mem)
 {
-    gp_curr_ctx = cyrpto_guard_if_init();
-    twi_usb_if_set_device_info(gp_curr_ctx, pu8_shared_mem);
+   if(TWI_FALSE == gb_is_init)
+   {
+      gb_is_init = TWI_TRUE;
+      gp_curr_ctx = cyrpto_guard_if_init();
+      twi_usb_if_set_device_info(gp_curr_ctx, pu8_shared_mem);
+   }
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -227,6 +232,7 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
       twi_usb_if_notify_disconnected(gp_curr_ctx, 0, error);
       twi_usb_if_free(gp_curr_ctx);
       gp_curr_ctx = NULL;
+      gb_is_init = TWI_FALSE;
       break;
     }
 
