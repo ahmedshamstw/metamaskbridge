@@ -987,9 +987,9 @@ void twi_nl_unlock_rcv_buf( tstr_nl_ctx *pstr_ctx , twi_u8* pu8_buffer_to_unlock
 {
 	if(pstr_ctx->str_global.str_twi_nl_defgmt_data.au8_pkt_buf == pu8_buffer_to_unlock)
 	{
-		PLATFORM_CRITICAL_SECTION_ENTER();
+		//PLATFORM_CRITICAL_SECTION_ENTER();
 		pstr_ctx->str_global.str_twi_nl_defgmt_data.b_is_locked = TWI_FALSE;
-		PLATFORM_CRITICAL_SECTION_EXIT();
+		//PLATFORM_CRITICAL_SECTION_EXIT();
 	}
 }
 

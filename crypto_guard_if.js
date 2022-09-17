@@ -2194,16 +2194,6 @@ var ___wasm_call_ctors = Module["___wasm_call_ctors"] = function() {
 };
 
 /** @type {function(...*):?} */
-var _malloc = Module["_malloc"] = function() {
-  return (_malloc = Module["_malloc"] = Module["asm"]["malloc"]).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
-var _free = Module["_free"] = function() {
-  return (_free = Module["_free"] = Module["asm"]["free"]).apply(null, arguments);
-};
-
-/** @type {function(...*):?} */
 var _crypto_guard_if_mem_init = Module["_crypto_guard_if_mem_init"] = function() {
   return (_crypto_guard_if_mem_init = Module["_crypto_guard_if_mem_init"] = Module["asm"]["crypto_guard_if_mem_init"]).apply(null, arguments);
 };
@@ -2224,6 +2214,11 @@ var _crypto_guard_if_dispatch = Module["_crypto_guard_if_dispatch"] = function()
 };
 
 /** @type {function(...*):?} */
+var _free = Module["_free"] = function() {
+  return (_free = Module["_free"] = Module["asm"]["free"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
 var ___getTypeName = Module["___getTypeName"] = function() {
   return (___getTypeName = Module["___getTypeName"] = Module["asm"]["__getTypeName"]).apply(null, arguments);
 };
@@ -2236,6 +2231,11 @@ var __embind_initialize_bindings = Module["__embind_initialize_bindings"] = func
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = function() {
   return (___errno_location = Module["___errno_location"] = Module["asm"]["__errno_location"]).apply(null, arguments);
+};
+
+/** @type {function(...*):?} */
+var _malloc = Module["_malloc"] = function() {
+  return (_malloc = Module["_malloc"] = Module["asm"]["malloc"]).apply(null, arguments);
 };
 
 /** @type {function(...*):?} */
