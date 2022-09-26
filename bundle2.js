@@ -199,7 +199,7 @@
                                 console.log(TXBuffer.byteOffset);
                                 console.log(TXBuffer.length);
 
-                                // await exportWASM.crypto_guard_if_sign_tx(hdPathG.byteOffset,hdPathG.length,params.tx,64);
+                                await exportWASM.crypto_guard_if_sign_tx(hdPathG.byteOffset,hdPathG.length,TXBuffer.byteOffset,TXBuffer.length);
                                 // _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
                                 break;
                             case 'crypto-sign-personal-message':
@@ -264,6 +264,12 @@
             value: async function onSignTxResult(v_offset,v_length,r_offset,r_length,s_offset,s_length,error_code){
                 try {
                     let res={};
+                    console.log(v_offset)
+                    console.log(v_length)
+                    console.log(r_offset)
+                    console.log(r_length)
+                    console.log(s_offset)
+                    console.log(s_length)
                     res.v =new Int32Array(MEMORYBUFFER.buffer, v_offset, v_length);
                     res.r =new Int32Array(MEMORYBUFFER.buffer, r_offset, r_length);
                     res.s =new Int32Array(MEMORYBUFFER.buffer, s_offset, s_length);
@@ -587,10 +593,14 @@
             }
         }, {
             key: 'signTransaction',
-            value: async function signTransaction(replyAction, hdPath, tx, messageId) {
+            value: async function signTransaction(replyAction, hdPath, tx, messageId,res) {
                 try {
-                    await this.makeApp();
-                    var res = await this.app.signTransaction(hdPath, tx);
+                    // await this.makeApp();
+                    // var res = await this.app.signTransaction(hdPath, tx);
+                    console.log(replyAction)
+                    console.log(hdPath)
+                    console.log(tx)
+                    console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
@@ -607,7 +617,7 @@
                     });
                 } finally {
                     if (this.transportType !== 'ledgerLive') {
-                        this.cleanUp();
+                        // this.cleanUp();
                     }
                 }
             }
