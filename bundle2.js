@@ -311,7 +311,7 @@
                         await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_RECIEVED_DATA_EVT,result2.byteOffset,64,0);
                         console.log("End Notify Receive" + result2);
                     }
-                    setTimeout(dispatchFromJS, 100);
+                    setTimeout(dispatchFromJS, 50);
                 // }//, 500);
             }
         },{
