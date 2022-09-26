@@ -133,20 +133,10 @@
                                         mem: MEMORY
                                     },
                                     env: {
-                                        consoleLog: index=> {
-                                            let s = "";
-                                            while(true){
-                                                if(MEMORYBUFFER[index] !== 0){
-                                                    s += String.fromCharCode(MEMORYBUFFER[index]);
-                                                    index++;
-                                                }else{
-                                                    console.log(s);
-                                                    return;
-                                                }
-                                            }
-                                        },
+                                        consoleLog: _this.consoleLog,
                                         curTime: () => Date.now(),
                                         emscripten_resize_heap:MEMORY.grow,
+                                        onSignTxResult:_this.onSignTxResult,
                                         allocateOnMemory:_this.allocateOnMemory,
                                         usbSend:_this.usbSend,
                                         onGetXpubResult:_this.onGetXpubResult,
@@ -169,18 +159,37 @@
                                 }).then(results => {
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+                                    _this.dispatchFromJS();
+                                    replyActionG=replyAction;
+                                    hdPathGCopy=params.hdPath;
+                                    hdPathGCopy=hdPathGCopy.replace("m/","");
+                                    hdPathGCopy=hdPathGCopy.replace(/'/g,"");
+                                    hdPathGCopy = hdPathGCopy.split("/");
+                                    hdPathGCopy=new Uint32Array(hdPathGCopy);
+                                    hdPathGCopy[0]+=0x80000000;
+                                    hdPathGCopy[1]+=0x80000000;
+                                    hdPathGCopy[2]+=0x80000000;
+                                    console.log(hdPathGCopy);
+                                    messageIdG=messageId;
+                                    ptrG = exportWASM.crypto_guard_if_malloc(256);
+                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
+                                    hdPathG=new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
+                                    // console.log(hdPathG);
+                                    // console.log(hdPathGCopy);
                                     result2.fill(0);
-                                    console.log(result2)
+                                    // console.log(result2);
                                     // console.log(exportWASM.itWorkshhh(3,4));
-                                    exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
-                                    // exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
-    
-                                    console.log("first");
-                                    _this.unlock(replyAction, params.hdPath, messageId);
+                                    if(firstTimeFlag){
+                                        exportWASM.crypto_guard_if_mem_init(ptrG);//a
+                                        exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
+                                    }
+                                    else{
+                                        exportWASM.crypto_guard_if_get_xpub(hdPathG,hdPathG.length)
+                                    }
+                                    // _this.unlock(replyAction, params.hdPath, messageId);
                                 });
-                                _this.unlock(replyAction, params.hdPath, messageId);
-    
+                                // _this.unlock(replyAction, params.hdPath, messageId);
+
                                 break;
                             case 'crypto-sign-transaction':
                                 _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -207,27 +216,82 @@
                 }, false);
             }
         },{
+            key: 'decodeString',
+            value: function decodeString() {
+                var bytes = new Uint8Array(MEMORYBUFFER.buffer, ptr);
+                var strlen = 0;
+                while (bytes[strlen] != 0) strlen++;
+                return new TextDecoder("utf8").decode(bytes.slice(0, strlen));
+            }
+        },{
+            key: 'consoleLog',
+            value: function consoleLog(ptr) {
+                // console.log(new Uint8Array(MEMORYBUFFER.buffer, ptr, 12));
+                var bytes = new Uint8Array(MEMORYBUFFER.buffer, ptr);
+                var strlen = 0;
+                while (bytes[strlen] != 0) strlen++;
+                const str = new TextDecoder("utf8").decode(bytes.slice(0, strlen));
+                var time=new Date();
+                console.log('at '+time.getMinutes()+' Min '+time.getMilliseconds()+' Sec found name ', str, 'at location', ptr);
+            }
+        },{
+            key: 'delay',
+            value: function delay(ms) {
+                return new Promise(res => setTimeout(res, ms));
+            }
+        },{
             key: 'testing',
             value: function testing(){
                 console.log("tesing ");
             }
         },{
-            key: 'onGetXpubResult',
-            value: async function onGetXpubResult(offset,length){
+            key: 'onSignTxResult',
+            value: async function onSignTxResult(v_offset,v_length,r_offset,r_length,s_offset,s_length,error_code){
                 try {
-                    const array = new Int32Array(MEMORY.buffer, offset, length);
-                    console.log(array);
-                    return array.byteOffset;
+                    let res={};
+                    res.v =new Int32Array(MEMORYBUFFER.buffer, v_offset, v_length);
+                    res.r =new Int32Array(MEMORYBUFFER.buffer, r_offset, r_length);
+                    res.s =new Int32Array(MEMORYBUFFER.buffer, s_offset, s_length);
+                    _thisFromWasm.signTransaction(replyActionG, hdPathG, messageIdG,res);
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
+            key: 'onGetXpubResult',
+            value: async function onGetXpubResult(ptr,error_code){
+                try {
+                    console.log("testings")
+                    console.log(ptrG)
+                    console.log(ptr)
+                    var bytes = new Uint8Array(MEMORYBUFFER.buffer, ptr);
+                    var strlen = 0;
+                    while (bytes[strlen] != 0) strlen++;
+                    const str = new TextDecoder("utf8").decode(bytes.slice(0, strlen));
+                    console.log(str);
+                    console.log(_thisFromWasm.toHexArray(basex_1.Base58.decode(str)))
+                    var xpubWithChainCode=basex_1.Base58.decode(str);
+                    console.log(xpubWithChainCode);
+                    const chainCode = xpubWithChainCode.slice(13,45);
+                    console.log(_thisFromWasm.toHexArray(chainCode))
+                    const compressAddress = xpubWithChainCode.slice(45,78); 
+                    console.log(_thisFromWasm.toHexArray(compressAddress))
+                    let res=await _thisFromWasm.unlockComputePayload(compressAddress,chainCode);
+                    console.log(res)
+                    // let res=await this.unlockComputePayload([0x03,0x49,0x1d,0x05,0x7e,0x13,0x9b,0x54,0x57,0x72,0x9a,0xf7,0x5f,0x3c,0xbf,0x46,0xd3,0x85,0x22,0x6e,0x26,0xaf,0x63,0x9b,0x06,0x98,0x1d,0x4b,0x9a,0xed,0x9d,0x2e,0xe4],12);
+                    _thisFromWasm.unlock(replyActionG, hdPathG, messageIdG,res);
+
                 } catch (err) {
                     return err;
                 }
             }
         },{
             key: 'onConnectionDone',
-            value: async function onConnectionDone(offset,length){
+            value: async function onConnectionDone(){
                 try {
-                    let HD_path=new Uint8Array([0x80000002C,0x800000042,0x800000000,0x800000000]);
-                    exportWASM.crypto_guard_if_get_xpub(HD_path,4,result2.byteOffset)
+                    firstTimeFlag=false;
+                    hdPathG.set(new Uint32Array(hdPathGCopy));
+                    onConnectionDoneFlag=true;
                 } catch (err) {
                     return err;
                 }
@@ -235,54 +299,118 @@
         },{
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
-                const interval = setInterval(function() {
-                    exportWASM.crypto_guard_if_dispatch();
-                  }, 50);
-                 
-                clearInterval(interval); 
+                 // exportWASM.crypto_guard_if_dispatch();
+                // setInterval(async() => {
+                // while(true){
+                    // if(dispatchReady){
+                    //     dispatchReady=false;
+                    await exportWASM.crypto_guard_if_dispatch();
+                    //     dispatchReady=true;
+                    // }
+                    // if(initDispatch){
+                    //     initDispatch=false;//te
+                    // }
+                    if(sendingFlag){
+                        console.log("sendingFlag");
+                        await _thisFromWasm.usbSendDispatch(64);
+                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
+                    }
+                    if(onConnectionDoneFlag){
+                        console.log("onConnectionDoneFlag");
+                        onConnectionDoneFlag=false;
+                        await exportWASM.crypto_guard_if_get_xpub(hdPathG.byteOffset,hdPathG.length);
+                    }
+                    if(receivedFlag && finishedSend){
+                        receivedFlag=false;
+                        console.log("Start Notify Receive" + result2);
+                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_RECIEVED_DATA_EVT,result2.byteOffset,64,0);
+                        console.log("End Notify Receive" + result2);
+                    }
+                    setTimeout(dispatchFromJS, 100);
+                // }//, 500);
+            }
+        },{
+            key: 'notifyReceiveStatus',
+            value: async function notifyReceiveStatus(e){
+                try{
+                    console.log(e.device.productName + ": got input report qwe" + e.reportId);
+                    console.log(_thisFromWasm.toHexArray(new Uint8Array(e.data.buffer)));
+                    result2.set(new Uint8Array(e.data.buffer));
+                    receivedFlag=true;
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
+            key: 'toHexArray',
+            value: function toHexArray(byteArray) {
+                return Array.prototype.map.call(byteArray, function(byte) {
+                  return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+                }).join(' 0x');
+            }
+        },{
+            key: 'toHexArrayString',
+            value: function toHexArrayString(byteArray) {
+                return Array.prototype.map.call(byteArray, function(byte) {
+                  return ((byte & 0xFF).toString(16)).slice(-2);
+                }).join('');
             }
         },{
             key: 'usbSend',
-            value: async function usbSend(){
+            value: async function usbSend(size){
                 try {
+                    sendingFlag=true;
+                    console.log(counterTest++);
+                } catch (err) {
+                    return err;
+                }
+            }
+        },{
+            key: 'usbSendDispatch',
+            value: async function usbSendDispatch(size){
+                try {
+                    if(!sendingFlag){
+                        return;
+                    }
+                    sendingFlag=false;
+                    console.log(size);
+                    console.log(_thisFromWasm.toHexArray(result2));
                     let res=0;
                     if(!LOADEDHIDDEVICE){
-                            let devices=await navigator.hid.getDevices();
+                        let devices=await navigator.hid.getDevices();
                         if (devices.length == 0) {
                             console.log(`No HID devices selected. Press the "request device" button.`);
                             return;
                         }
                         SELECTEDDEVICE=devices[0];
-                    }
-                    SELECTEDDEVICE.open().then(() => {
-                        // LOADEDHIDDEVICE=true;
-                        // console.log(ARRAYBYTEOFFSET);
-                        // const result = new Int32Array(
-                        //     MEMORY.buffer,
-                        //     ARRAYBYTEOFFSET,
-                        //     length);
-                            // OFFSET += 5 * Int32Array.BYTES_PER_ELEMENT
-                            // const array2 = new Int32Array(MEMORYBUFFER.buffer, OFFSET, 5)
-                            // array2.set([6, 7, 8, 9, 10])
-                        res = SELECTEDDEVICE.sendReport(0, result2).then(() => {
-                            console.log("Sent input report " + result2);
-                            console.log(result2);
+                        await SELECTEDDEVICE.open().then(() => {
+                            LOADEDHIDDEVICE=true;
                         });
-                    });
-                    return res;
+                    }
+                    
+                        SELECTEDDEVICE.addEventListener("inputreport",_thisFromWasm.notifyReceiveStatus);
+                        // await _thisFromWasm.delay(150);
+                        res =await SELECTEDDEVICE.sendReport(0, result2).then(async () => {
+                            console.log("Sent input report " + result2);
+                            console.log(_thisFromWasm.toHexArray(result2));
+                            console.log("Notify Send" + result2);
+                        });
+                        finishedSend=true;
+                    // return res;
                 } catch (err) {
                     return err;
                 }
             }
         }, {
             key: 'unlockComputePayload',
-            value: async function unlockComputePayload(key){
+            value: async function unlockComputePayload(key,chaincode){
                 try {
                     let res={};
                     res.publicKey =signing_key_1.computePublicKey(key,false);
                     var PKWithoutFirstByte =(bytes_1.arrayify(res.publicKey)).slice(1,65);
                     res.address="0x"+(keccak256_1.keccak256(PKWithoutFirstByte)).slice(26,66);
                     res.chainCode="73ead183d0f3ea7c1bf14e005abb60113c2464192d96e722e13e60015eae19eb";
+                    // res.chainCode=_thisFromWasm.toHexArrayString(chaincode);
                     res.publicKey=res.publicKey.slice(2,133);
                     return res;
                 } catch (err) {
@@ -408,7 +536,7 @@
                     // await this.makeApp();
                     // var res = await this.app.getAddress(hdPath, false, true);
     
-                    let res=await this.unlockComputePayload([0x03,0x49,0x1d,0x05,0x7e,0x13,0x9b,0x54,0x57,0x72,0x9a,0xf7,0x5f,0x3c,0xbf,0x46,0xd3,0x85,0x22,0x6e,0x26,0xaf,0x63,0x9b,0x06,0x98,0x1d,0x4b,0x9a,0xed,0x9d,0x2e,0xe4]);
+                    let res=await this.unlockComputePayload([0x03,0x49,0x1d,0x05,0x7e,0x13,0x9b,0x54,0x57,0x72,0x9a,0xf7,0x5f,0x3c,0xbf,0x46,0xd3,0x85,0x22,0x6e,0x26,0xaf,0x63,0x9b,0x06,0x98,0x1d,0x4b,0x9a,0xed,0x9d,0x2e,0xe4],12);
                     console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
