@@ -187,10 +187,10 @@
                                 hdPathGCopy[2]+=0x80000000;
                                 console.log(hdPathGCopy);
                                 messageIdG=messageId;
-                                hdPathG.set(new Uint32Array(hdPathGCopy));
                                 var arrayTX=_this.hexToBytes(params.tx);
-                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 64 + 5, arrayTX.length);
+                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 64 + 10, arrayTX.length);
                                 TXBuffer.set(new Uint8Array(arrayTX));
+                                hdPathG.set(new Uint32Array(hdPathGCopy));
                                 console.log(hdPathG);
                                 console.log(hdPathG.byteOffset);
                                 console.log(hdPathG.length);
