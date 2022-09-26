@@ -198,9 +198,9 @@ TWI_STATIC_FN void twi_ll_cb(tstr_twi_ll_evt* pstr_evt)
 				else
 				{
 					twi_nl_prepare_frgmt_next_pkt(pstr_ctx);
-					
+		
 					pstr_ctx->str_global.b_send_in_progress 					 = TWI_FALSE;
-
+					TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
 					pstr_ctx->str_global.str_twi_nl_fgmt_data.str_fragment_header.u8_packet_sequence_number = ~ (pstr_ctx->str_global.str_twi_nl_fgmt_data.str_fragment_header.u8_packet_sequence_number) ;
 
 					str_nl_evt.enu_event 										 = TWI_NL_SEND_STATUS_EVT;
@@ -340,6 +340,7 @@ static void twi_init_nl_global_variables(tstr_nl_ctx *pstr_ctx)
 	pstr_ctx->str_global.pf_nl_cb	 							= NULL;
 	pstr_ctx->str_global.b_need_send							= TWI_FALSE;
 	pstr_ctx->str_global.b_send_in_progress 					= TWI_FALSE;
+	TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
 	pstr_ctx->str_global.u8_resend_frgmt_cnt					= 0;
 	pstr_ctx->str_global.u8_resend_packet_cnt  					= 0;
 	pstr_ctx->str_global.str_twi_nl_fgmt_data.u8_frgmts_num = 0;
@@ -633,6 +634,7 @@ static void twi_nl_propagate_snd_fail(tstr_nl_ctx *pstr_ctx )
 
 	pstr_ctx->str_global.b_need_send 						= TWI_FALSE;
 	pstr_ctx->str_global.b_send_in_progress 				= TWI_FALSE;
+	TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
 	twi_nl_prepare_frgmt_next_pkt(pstr_ctx);
 
 	str_nl_evt.pv_args = pstr_ctx->str_global.pv_args;
@@ -755,6 +757,8 @@ void twi_nl_handle_ble_evt(tstr_nl_ctx *pstr_ctx, tstr_twi_ble_evt* pstr_ble_evt
 
 			pstr_ctx->str_global.b_need_send = TWI_FALSE;
 			pstr_ctx->str_global.b_send_in_progress = TWI_FALSE;
+			TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
+
 			pstr_ctx->str_global.u8_resend_frgmt_cnt = 0;
 			pstr_ctx->str_global.u8_resend_packet_cnt = 0;
 
@@ -799,6 +803,8 @@ void twi_nl_handle_usb_evt(tstr_nl_ctx *pstr_ctx, tstr_twi_usb_evt* pstr_usb_evt
 
 			pstr_ctx->str_global.b_need_send = TWI_FALSE;
 			pstr_ctx->str_global.b_send_in_progress = TWI_FALSE;
+			TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
+
 			pstr_ctx->str_global.u8_resend_frgmt_cnt = 0;
 			pstr_ctx->str_global.u8_resend_packet_cnt = 0;
 
@@ -831,6 +837,7 @@ void twi_nl_handle_usb_evt(tstr_nl_ctx *pstr_ctx, tstr_twi_usb_evt* pstr_usb_evt
 */
 twi_s32 twi_nl_send_data(tstr_nl_ctx *pstr_ctx , twi_u8* pu8_data, twi_u16 u16_data_len, void* pv_arg )
 {
+	FUN_IN;
 	twi_s32 s32_retval = TWI_SUCCESS;
 	if(TWI_TRUE == pstr_ctx->str_global.b_is_initialized)
 	{
@@ -843,7 +850,8 @@ twi_s32 twi_nl_send_data(tstr_nl_ctx *pstr_ctx , twi_u8* pu8_data, twi_u16 u16_d
 				pstr_ctx->str_global.u8_resend_packet_cnt 	= 0;
 				pstr_ctx->pf_twi_system_sleep_mode_forbiden(pstr_ctx->pv_stack_helpers, TWI_TRUE);
 				pstr_ctx->str_global.b_need_send 			= TWI_TRUE;
-				pstr_ctx->str_global.b_send_in_progress		= TWI_TRUE;			
+				pstr_ctx->str_global.b_send_in_progress		= TWI_TRUE;
+				TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);				
 
 			}
 			else
@@ -909,8 +917,8 @@ void twi_nl_dispatcher(tstr_nl_ctx *pstr_ctx)
 	{
 		pstr_ctx->pf_twi_system_sleep_mode_forbiden(pstr_ctx->pv_stack_helpers, TWI_FALSE);
 		pstr_ctx->str_global.b_need_send 		= TWI_FALSE;
-
 		pstr_ctx->str_global.b_send_in_progress = TWI_TRUE;
+		TWI_LOGGER_ERR("%s:%d:b_send_in_progress = %d\r\n", __FUNCTION__, __LINE__, pstr_ctx->str_global.b_send_in_progress);	
 
 		twi_s32 s32_retval = TWI_ERROR;
 

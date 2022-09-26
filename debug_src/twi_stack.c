@@ -253,7 +253,9 @@ void twi_stack_unlock_rcv_buf( tstr_stack_ctx * pstr_ctx , twi_u8* pu8_buffer_to
 
 void twi_stack_is_ready_to_send(tstr_stack_ctx* pstr_cntxt, twi_bool* pb_is_ready)
 {
+	FUN_IN;
 	twi_sl_is_ready_to_send(&pstr_cntxt->str_sl_ctx, pb_is_ready);
+	TWI_LOGGER("*pb_is_ready = %d\r\n", *pb_is_ready);
 }
 
 twi_bool twi_stack_is_idle(tstr_stack_ctx* pstr_cntxt)

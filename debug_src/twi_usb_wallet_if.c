@@ -114,7 +114,9 @@ typedef struct
 {
 	twi_u8* pu8_rx_buf;
 	twi_u16 u16_rx_buf_len;
-
+    twi_bool b_is_locked;
+	void* pv_user_data_1;
+	void* pv_user_data_2;
 }tstr_usb_rx_info;
 
 typedef struct 
@@ -224,6 +226,8 @@ static twi_s32 apdu_cmd_send(tstr_usb_if_context* pstr_cntxt, tenu_twi_usb_apdu_
 /*---------------------------------------------------------*/
 /*- LOCAL FUNCTIONS IMPLEMENTATION ------------------------*/
 /*---------------------------------------------------------*/
+static tstr_usb_rx_info gstr_rx_info;
+
 static void usb_stack_cb(tstr_twi_stack_evt* pstr_evt, void* pv)
 {
 	TWI_ASSERT((NULL != pstr_evt) && (NULL != pv));
@@ -246,12 +250,19 @@ static void usb_stack_cb(tstr_twi_stack_evt* pstr_evt, void* pv)
 		case TWI_STACK_RCV_DATA_EVT:
 		{
 			//TODO: check msg type 
-			tstr_usb_rx_info str_rx_info;
-			TWI_MEMSET(&str_rx_info, 0x0, sizeof(tstr_usb_rx_info));
-			str_rx_info.pu8_rx_buf = pstr_evt->uni_data.str_rcv_data_evt.pu8_data;
-			str_rx_info.u16_rx_buf_len = pstr_evt->uni_data.str_rcv_data_evt.u16_data_len;
-			twi_stack_unlock_rcv_buf(pstr_evt->uni_data.str_rcv_data_evt.pv_user_arg , pstr_evt->uni_data.str_rcv_data_evt.pu8_data);
-			op_state_update(pstr_cntxt, USB_WALLET_OP_STATE_DATA_RCVD_EVENT , &str_rx_info);
+			if(TWI_FALSE == gstr_rx_info.b_is_locked)
+			{
+				TWI_MEMSET(&gstr_rx_info, 0x0, sizeof(tstr_usb_rx_info));
+				gstr_rx_info.pu8_rx_buf = pstr_evt->uni_data.str_rcv_data_evt.pu8_data;
+				gstr_rx_info.u16_rx_buf_len = pstr_evt->uni_data.str_rcv_data_evt.u16_data_len;
+				gstr_rx_info.b_is_locked = TWI_TRUE;
+				gstr_rx_info.pv_user_data_1 = pstr_evt->uni_data.str_rcv_data_evt.pv_user_arg;
+				gstr_rx_info.pv_user_data_2 = pstr_evt->uni_data.str_rcv_data_evt.pu8_data;
+			}
+			else
+			{
+				TWI_ASSERT(TWI_FALSE);
+			}
 			break;
 		}
 
@@ -431,10 +442,10 @@ static void wait_to_connect_state_handle(tstr_usb_if_context* pstr_cntxt, tenu_u
 
 		case USB_WALLET_OP_STATE_CONNECTION_EVENT:
 		{
-			if(NULL != pstr_cntxt->str_in_param.__onConnectionDone)
-			{
-				pstr_cntxt->str_in_param.__onConnectionDone(pstr_cntxt->pv_device_info);
-			}
+			// if(NULL != pstr_cntxt->str_in_param.__onConnectionDone)
+			// {
+			// 	pstr_cntxt->str_in_param.__onConnectionDone(pstr_cntxt->pv_device_info);
+			// }
 
 			pstr_cntxt->str_cur_op.enu_cur_state = USB_WALLET_STATE_GET_ID;
 			
@@ -2040,6 +2051,11 @@ static void op_state_update(tstr_usb_if_context* pstr_cntxt, tenu_usb_op_state_e
 
 		default:
 		{
+			//workaround to allow connection before starting the operation (for metamask mode of operation)
+			if((pstr_cntxt->str_cur_op.enu_cur_state == USB_WALLET_STATE_WAITING_TO_CONNECT) && (enu_event == USB_WALLET_OP_STATE_CONNECTION_EVENT))
+			{
+				pstr_cntxt->str_cur_op.enu_cur_state = USB_WALLET_STATE_INVALID;
+			}
 			break;
 		}
 	}
@@ -2047,6 +2063,7 @@ static void op_state_update(tstr_usb_if_context* pstr_cntxt, tenu_usb_op_state_e
 
 static twi_s32 apdu_cmd_send(tstr_usb_if_context* pstr_cntxt, tenu_twi_usb_apdu_cmds enu_apdu_cmd)
 {
+	TWI_LOGGER("apdu_cmd_send: op = %d, state = %d, cmd = %d\r\n", pstr_cntxt->str_cur_op.enu_cur_op, pstr_cntxt->str_cur_op.enu_cur_state, enu_apdu_cmd);
 	twi_u8 au8_cmd_input[USB_WALLET_CMD_INPUT_MAX_SZ];
 	static twi_u8 au8_apdu_buf[USB_WALLET_APDU_BUFFER_MAX_SZ];
 	twi_u32 u32_apdu_sz = USB_WALLET_APDU_BUFFER_MAX_SZ;
@@ -2990,7 +3007,7 @@ tstr_usb_if_context* twi_usb_if_new(void)
 	TWI_ASSERT(NULL != pstr_cntxt);
 	TWI_MEMSET(pstr_cntxt, 0, sizeof(tstr_usb_if_context));
 	pstr_cntxt->str_cur_op.enu_cur_op = USB_WALLET_APP_IDLE_OP;							
-	pstr_cntxt->str_cur_op.enu_cur_state = USB_WALLET_STATE_INVALID;	
+	pstr_cntxt->str_cur_op.enu_cur_state = USB_WALLET_STATE_WAITING_TO_CONNECT;	
 	pstr_cntxt->str_cur_op.b_skip_disconnection = TWI_FALSE;
 	pstr_cntxt->u16_pid = 0;
 	pstr_cntxt->u16_vid = 0;
@@ -3498,12 +3515,7 @@ void twi_usb_if_notify_connected(tstr_usb_if_context* pstr_cntxt, twi_s32 s32_er
 {
 	TWI_ASSERT(NULL != pstr_cntxt);			
 	if(TWI_SUCCESS == s32_err_code)
-	{
-		//TODO: this is a workaround to open the port before sending the stack specs
-		static twi_u8 au8_open_port_buff[64] = {0};
-		au8_open_port_buff[0] = 0x40;
-		pstr_cntxt->str_in_param.__usb_send(pstr_cntxt->pv_device_info, au8_open_port_buff, sizeof(au8_open_port_buff));
-		
+	{		
 		tstr_twi_usb_evt str_usb_evt;
 		TWI_MEMSET(&str_usb_evt, 0x0, sizeof(tstr_twi_usb_evt));
 		str_usb_evt.enu_usbd_evt = TWI_USBD_PORT_OPEN;
@@ -3623,23 +3635,38 @@ void* twi_usb_if_dispatch(void* arg)
 {
 	tstr_usb_if_context* pstr_cntxt = (tstr_usb_if_context*)arg;
 #if !defined (FIRMWARE_TARGET) && !defined(WIN32)
-	while(TWI_FALSE == twi_stack_is_idle(&pstr_cntxt->str_stack_context))
+	if (TWI_FALSE == twi_stack_is_idle(&pstr_cntxt->str_stack_context))
 #endif	
 	{	
+		//TWI_LOGGER(">>> ENTER DISPATCH  ctx = 0x%x, state = %d\r\n", pstr_cntxt, pstr_cntxt->str_cur_op.enu_cur_state);
 		if(pstr_cntxt->str_cur_op.enu_cur_state == USB_WALLET_STATE_WAITING_TO_CONNECT)
 		{
 			twi_bool b_is_ready = TWI_FALSE;
 			twi_stack_is_ready_to_send(&pstr_cntxt->str_stack_context, &b_is_ready);
 			if(TWI_TRUE == b_is_ready)
 			{
+				TWI_LOGGER("Ready /r/n");
 				op_state_update(pstr_cntxt, USB_WALLET_OP_STATE_CONNECTION_EVENT , NULL);
+				if(NULL != pstr_cntxt->str_in_param.__onConnectionDone)
+				{
+				 	pstr_cntxt->str_in_param.__onConnectionDone(pstr_cntxt->pv_device_info);
+				}
 			}	
+		}
+
+		if(TWI_TRUE == gstr_rx_info.b_is_locked)
+		{
+			gstr_rx_info.b_is_locked = TWI_FALSE;
+			twi_stack_unlock_rcv_buf(gstr_rx_info.pv_user_data_1 , gstr_rx_info.pv_user_data_2);
+			op_state_update(pstr_cntxt, USB_WALLET_OP_STATE_DATA_RCVD_EVENT , &gstr_rx_info);
 		}
 
 		if(NULL != pstr_cntxt)
 		{	
 			twi_stack_dispatcher(&pstr_cntxt->str_stack_context);
 		}
+		//TWI_LOGGER("<<< EXIT DISPATCH \r\n");
+
 	}
 
 	return 0;

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="origin-trial"
+      content="ArU9sftBlUHpdjFo/b/fcWiJoT026zPFG/tYgX63JE1CmiSZ0g1k3tCiyFpZBpptPWnkbNeDAE5+mzXdTukzBA0AAABpeyJvcmlnaW4iOiJodHRwczovL3dlYmhpZC1hcHBsZS1rZXlib2FyZC1iYWNrbGlnaHQuZ2xpdGNoLm1lOjQ0MyIsImZlYXR1cmUiOiJXZWJISUQiLCJleHBpcnkiOjE2MTI5NDc4MTd9"
+    />
+    <!-- import the webpage's javascript file -->
+    <script src="exported.js" defer></script>
+  </head>
+  <body>
+    <hr />
+    <!-- <script>
+      var MEMORYBUFFER=null;
+      var MEMORY = new WebAssembly.Memory({
+          initial: 256, 
+          maximum: 512
+      });
+      var exportWASM=null;
+      WebAssembly.instantiateStreaming(fetch("a.out.wasm"), {
+        js: {
+            mem: MEMORY
+        },
+        env: {
+            // consoleLog: console.log,
+            // curTime: () => Date.now(),
+            // emscripten_resize_heap:MEMORY.grow,
+            // allocateOnMemory:_this.allocateOnMemory,
+            // usbSend:_this.usbSend,
+            // onGetXpubResult:_this.onGetXpubResult,
+            // __assert_fail:_this.testing,//testing
+            // wasi_snapshot_preview1:_this.testing, 
+            // setTempRet0:_this.testing, 
+            // _embind_register_void:_this.testing, 
+            // _embind_register_bool:_this.testing, 
+            // _embind_register_std_string:_this.testing, 
+            // _embind_register_std_wstring:_this.testing, 
+            // _embind_register_emval:_this.testing, 
+            // _embind_register_integer:_this.testing, 
+            // _embind_register_float:_this.testing, 
+            // _embind_register_memory_view:_this.testing, 
+            // _embind_register_bigint:_this.testing, 
+            // __indirect_function_table:_this.testing, 
+            // emscripten_memcpy_big:_this.testing,
+            // onConnectionDone:_this.onConnectionDone,
+        }
+    }).then(results => {
+        exportWASM = results.instance.exports;
+        MEMORYBUFFER = results.instance.exports.memory;
+        result2 = new Uint8Array(MEMORYBUFFER.buffer, OFFSET, 64);
+        result2.fill(0);
+        console.log(result2)
+        console.log(exportWASM.itWorkshhh(3,4));
+        // exportWASM.crypto_guard_if_mem_init(result2.byteOffset);//a
+        // exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0);
+
+        console.log("first");
+    });
+    </script> -->
+    <div id="log"></div>
+  </body>
+</html>

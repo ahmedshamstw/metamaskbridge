@@ -19,7 +19,7 @@
 #define	USB_LINK_LAYER_LOG_ENABLE
 
 #if defined (USB_LINK_LAYER_LOG_ENABLE)
-#define USB_LINK_LAYER_LOG_ERR_LEVEL
+#define USB_LINK_LAYER_LOG_DEBUG_LEVEL
 #endif
 
 /*---------------------------------------------------------*/
@@ -424,9 +424,10 @@ void twi_usb_ll_handle_usb_evt(tstr_usb_ll_ctx *pstr_ctx, twi_usbd_events_t enu_
 #if defined(TWI_USB_HOST)
 			if (pstr_ctx->str_global.b_is_stack_specs_received == TWI_FALSE)
 			{
+				USB_LINK_LAYER_LOG("Stack specs is sent 1\r\n");
 				pstr_ctx->str_global.b_is_sending_stack_specs 	= TWI_FALSE;
 				pstr_ctx->str_global.enu_link_layer_state 		= USB_LINK_LAYER_STATE_CONNECTED;
-
+				USB_LINK_LAYER_LOG("Waiting for stack specs response\r\n");
 				/*Start the STACK_SPECS Command Timer.*/
 				TWI_ASSERT(TWI_SUCCESS == pstr_ctx->pstr_stack_helpers->pf_start_timer(pstr_ctx->pv_stack_helpers, &(pstr_ctx->str_global.str_stack_event_timeout), (twi_s8*)"Stack Specs Exchange", TWI_TIMER_TYPE_ONE_SHOT, TWI_STACK_SPECS_COMMANDS_TIMEOUT_MS, twi_stack_specs_timer_timeout_cb, (void*) pstr_ctx));
 			}
@@ -435,6 +436,8 @@ void twi_usb_ll_handle_usb_evt(tstr_usb_ll_ctx *pstr_ctx, twi_usbd_events_t enu_
 			{
 				if(pstr_ctx->str_global.b_is_sending_stack_specs == TWI_FALSE)
 				{
+					USB_LINK_LAYER_LOG("Sending for stack specs response\r\n");
+
 					pstr_ctx->str_global.enu_link_layer_state					= USB_LINK_LAYER_STATE_READY;
 
 					str_notify_ll_evt.enu_event									= TWI_LL_SEND_STATUS_EVT;
@@ -444,6 +447,7 @@ void twi_usb_ll_handle_usb_evt(tstr_usb_ll_ctx *pstr_ctx, twi_usbd_events_t enu_
 				}
 				else
 				{
+					USB_LINK_LAYER_LOG("Stack specs is sent 2\r\n");
 					pstr_ctx->str_global.b_is_sending_stack_specs 	= TWI_FALSE;
 #if defined (TWI_USB_DEVICE)
 					pstr_ctx->str_global.enu_link_layer_state		= USB_LINK_LAYER_STATE_READY;
