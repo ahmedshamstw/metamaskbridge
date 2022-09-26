@@ -88,7 +88,7 @@
                 _classCallCheck(this, CryptoguardBridge);
                 this.addEventListeners();
                 this.transportType = 'webhid';
-                var _thisFromWasm=null;
+                _thisFromWasm=this;
             }
         
     
