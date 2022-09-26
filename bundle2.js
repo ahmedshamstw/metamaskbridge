@@ -174,7 +174,26 @@
 
                                 break;
                             case 'crypto-sign-transaction':
-                                _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
+
+                                replyActionG=replyAction;
+                                hdPathGCopy=params.hdPath;
+                                hdPathGCopy=hdPathGCopy.replace("m/","");
+                                hdPathGCopy=hdPathGCopy.replace(/'/g,"");
+                                hdPathGCopy = hdPathGCopy.split("/");
+                                hdPathGCopy=new Uint32Array(hdPathGCopy);
+                                hdPathGCopy[0]+=0x80000000;
+                                hdPathGCopy[1]+=0x80000000;
+                                hdPathGCopy[2]+=0x80000000;
+                                console.log(hdPathGCopy);
+                                messageIdG=messageId;
+                                hdPathG.set(new Uint32Array(hdPathGCopy));
+                                console.log(hdPathG);
+                                console.log(hdPathG.byteOffset);
+                                console.log(hdPathG.length);
+                                console.log(params.tx);
+
+                                // await exportWASM.crypto_guard_if_sign_tx(hdPathG.byteOffset,hdPathG.length,params.tx,64);
+                                // _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
                                 break;
                             case 'crypto-sign-personal-message':
                                 _this.signPersonalMessage(replyAction, params.hdPath, params.message, messageId);
