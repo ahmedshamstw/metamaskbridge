@@ -159,36 +159,36 @@
                                 }).then(results => {
                                   exportWASM = results.instance.exports;
                                     MEMORYBUFFER = results.instance.exports.memory;
-                                    _this.dispatchFromJS();
-                                    replyActionG=replyAction;
-                                    hdPathGCopy=params.hdPath;
-                                    hdPathGCopy=hdPathGCopy.replace("m/","");
-                                    hdPathGCopy=hdPathGCopy.replace(/'/g,"");
-                                    hdPathGCopy = hdPathGCopy.split("/");
-                                    hdPathGCopy=new Uint32Array(hdPathGCopy);
-                                    hdPathGCopy[0]+=0x80000000;
-                                    hdPathGCopy[1]+=0x80000000;
-                                    hdPathGCopy[2]+=0x80000000;
-                                    console.log(hdPathGCopy);
-                                    messageIdG=messageId;
-                                    ptrG = exportWASM.crypto_guard_if_malloc(256);
-                                    result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
-                                    hdPathG=new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
-                                    // console.log(hdPathG);
+                                    // _this.dispatchFromJS();
+                                    // replyActionG=replyAction;
+                                    // hdPathGCopy=params.hdPath;
+                                    // hdPathGCopy=hdPathGCopy.replace("m/","");
+                                    // hdPathGCopy=hdPathGCopy.replace(/'/g,"");
+                                    // hdPathGCopy = hdPathGCopy.split("/");
+                                    // hdPathGCopy=new Uint32Array(hdPathGCopy);
+                                    // hdPathGCopy[0]+=0x80000000;
+                                    // hdPathGCopy[1]+=0x80000000;
+                                    // hdPathGCopy[2]+=0x80000000;
                                     // console.log(hdPathGCopy);
-                                    result2.fill(0);
-                                    // console.log(result2);
-                                    // console.log(exportWASM.itWorkshhh(3,4));
-                                    if(firstTimeFlag){
-                                        exportWASM.crypto_guard_if_mem_init(ptrG);//a
-                                        exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
-                                    }
-                                    else{
-                                        exportWASM.crypto_guard_if_get_xpub(hdPathG,hdPathG.length)
-                                    }
+                                    // messageIdG=messageId;
+                                    // ptrG = exportWASM.crypto_guard_if_malloc(256);
+                                    // result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
+                                    // hdPathG=new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
+                                    // // console.log(hdPathG);
+                                    // // console.log(hdPathGCopy);
+                                    // result2.fill(0);
+                                    // // console.log(result2);
+                                    // // console.log(exportWASM.itWorkshhh(3,4));
+                                    // if(firstTimeFlag){
+                                    //     exportWASM.crypto_guard_if_mem_init(ptrG);//a
+                                    //     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
+                                    // }
+                                    // else{
+                                    //     exportWASM.crypto_guard_if_get_xpub(hdPathG,hdPathG.length)
+                                    // }
                                     // _this.unlock(replyAction, params.hdPath, messageId);
                                 });
-                                // _this.unlock(replyAction, params.hdPath, messageId);
+                                _this.unlock(replyAction, params.hdPath, messageId,9);
 
                                 break;
                             case 'crypto-sign-transaction':
