@@ -299,6 +299,9 @@
                     if(onConnectionDoneFlag){
                         console.log("onConnectionDoneFlag");
                         onConnectionDoneFlag=false;
+                        console.log(hdPathG)
+                        console.log(hdPathG.byteOffset)
+                        console.log(hdPathG.length)
                         await exportWASM.crypto_guard_if_get_xpub(hdPathG.byteOffset,hdPathG.length);
                     }
                     if(receivedFlag && finishedSend){
