@@ -159,8 +159,6 @@
                                     hdPathGCopy[0]+=0x80000000;
                                     hdPathGCopy[1]+=0x80000000;
                                     hdPathGCopy[2]+=0x80000000;
-                                    hdPathG.set(new Uint32Array(hdPathGCopy));
-                                    console.log(hdPathG);
                                     console.log(hdPathGCopy);
                                     messageIdG=messageId;
                                     
@@ -169,6 +167,7 @@
                                         exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
                                     }
                                     else{
+                                        hdPathG.set(new Uint32Array(hdPathGCopy));
                                         await exportWASM.crypto_guard_if_get_xpub(hdPathG.byteOffset,hdPathG.length);
                                     }
                                     // _this.unlock(replyAction, params.hdPath, messageId,9);
@@ -273,6 +272,7 @@
             value: async function onConnectionDone(){
                 try {
                     firstTimeFlag=false;
+                    hdPathG.set(new Uint32Array(hdPathGCopy));
                     onConnectionDoneFlag=true;
                 } catch (err) {
                     return err;
