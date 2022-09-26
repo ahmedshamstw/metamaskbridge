@@ -10,6 +10,9 @@
     var keccak256 = require("@ethersproject/keccak256");
     var keccak256_1 = _interopRequireDefault(keccak256);
     
+    var basex = require("@ethersproject/basex");
+    var basex_1 = _interopRequireDefault(basex);
+
     var bytes = require("@ethersproject/bytes");
     var bytes_1 = _interopRequireDefault(bytes);
     
@@ -53,10 +56,24 @@
         var LOADEDHIDDEVICE=false;
         var MEMORYBUFFER=null;
         var MEMORY = new WebAssembly.Memory({
-            initial: 256, 
-            maximum: 512
+            initial:  16777216 / 65536,
+            maximum: 2147483648 / 65536,
+            shared: true
         });
         var exportWASM=null;
+        var replyActionG=null;
+        var hdPathG=null;
+        var hdPathGCopy=null;
+        var messageIdG=null;
+        var firstTimeFlag=true;
+        var receivedFlag=false;
+        var sendingFlag=false;
+        var onConnectionDoneFlag=false;
+        var dispatchCounter=0;
+        var finishedSend=false;
+        var initDispatch=true;
+        var counterTest=0;
+        var ptrG=0;
         const enumNotify={
             CRYPTO_GUARD_IF_CONNECTED_EVT:0,
             CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
@@ -65,11 +82,13 @@
             CRYPTO_GUARD_IF_INVALID_EVT:4,
         }
         var result2=null;
+        var _thisFromWasm=null;
         var CryptoguardBridge = function () {
             function CryptoguardBridge() {
                 _classCallCheck(this, CryptoguardBridge);
                 this.addEventListeners();
                 this.transportType = 'webhid';
+                var _thisFromWasm=null;
             }
         
     
