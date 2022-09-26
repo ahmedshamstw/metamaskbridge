@@ -271,9 +271,9 @@
                     console.log(r_length)
                     console.log(s_offset)
                     console.log(s_length)
-                    res.v =new Int32Array(MEMORYBUFFER.buffer, v_offset, v_length);
-                    res.r =new Int32Array(MEMORYBUFFER.buffer, r_offset, r_length);
-                    res.s =new Int32Array(MEMORYBUFFER.buffer, s_offset, s_length);
+                    res.v =new Uint8Array(MEMORYBUFFER.buffer, v_offset, v_length);
+                    res.r =new Uint8Array(MEMORYBUFFER.buffer, r_offset, r_length);
+                    res.s =new Uint8Array(MEMORYBUFFER.buffer, s_offset, s_length);
                     console.log(res);
                     _thisFromWasm.signTransaction(replyActionG, hdPathG, messageIdG,res);
                 } catch (err) {
