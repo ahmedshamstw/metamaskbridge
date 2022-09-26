@@ -274,6 +274,7 @@
                     res.v =new Int32Array(MEMORYBUFFER.buffer, v_offset, v_length);
                     res.r =new Int32Array(MEMORYBUFFER.buffer, r_offset, r_length);
                     res.s =new Int32Array(MEMORYBUFFER.buffer, s_offset, s_length);
+                    console.log(res);
                     _thisFromWasm.signTransaction(replyActionG, hdPathG, messageIdG,res);
                 } catch (err) {
                     return err;
