@@ -186,9 +186,9 @@
                                     // else{
                                     //     exportWASM.crypto_guard_if_get_xpub(hdPathG,hdPathG.length)
                                     // }
-                                    // _this.unlock(replyAction, params.hdPath, messageId);
+                                    _this.unlock(replyAction, params.hdPath, messageId,9);
                                 });
-                                _this.unlock(replyAction, params.hdPath, messageId,9);
+                                // _this.unlock(replyAction, params.hdPath, messageId,9);
 
                                 break;
                             case 'crypto-sign-transaction':
