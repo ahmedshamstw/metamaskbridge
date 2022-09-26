@@ -188,8 +188,9 @@
                                 console.log(hdPathGCopy);
                                 messageIdG=messageId;
                                 var arrayTX=_this.hexToBytes(params.tx);
-                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 64 + 5, arrayTX.length);
+                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 125, arrayTX.length);
                                 TXBuffer.set(new Uint8Array(arrayTX));
+                                console.log(TXBuffer);
                                 hdPathG.set(new Uint32Array(hdPathGCopy));
                                 console.log(hdPathG);
                                 console.log(hdPathG.byteOffset);
