@@ -275,7 +275,7 @@
                     res.r =new Uint8Array(MEMORYBUFFER.buffer, ptrG+r_offset, r_length);
                     res.s =new Uint8Array(MEMORYBUFFER.buffer, ptrG+s_offset, s_length);
                     console.log(res);
-                    _thisFromWasm.signTransaction(replyActionG, hdPathG, messageIdG,res);
+                    _thisFromWasm.signTransaction(replyActionG, hdPathG, TXBuffer,messageIdG,res);
                 } catch (err) {
                     return err;
                 }
