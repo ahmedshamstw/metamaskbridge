@@ -160,6 +160,7 @@
                                     hdPathGCopy[1]+=0x80000000;
                                     hdPathGCopy[2]+=0x80000000;
                                     hdPathG.set(new Uint32Array(hdPathGCopy));
+                                    console.log(hdPathG);
                                     console.log(hdPathGCopy);
                                     messageIdG=messageId;
                                     
