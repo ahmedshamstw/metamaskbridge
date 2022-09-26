@@ -74,6 +74,7 @@
         var initDispatch=true;
         var counterTest=0;
         var ptrG=0;
+        var TXBuffer=null;
         const enumNotify={
             CRYPTO_GUARD_IF_CONNECTED_EVT:0,
             CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
@@ -124,8 +125,8 @@
                     MEMORYBUFFER = results.instance.exports.memory;
                     this.dispatchFromJS();
                     ptrG = exportWASM.crypto_guard_if_malloc(256);
-                    result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
-                    hdPathG = new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
+                    result2 = new Uint8Array(MEMORYBUFFER.buffer,  ptrG, 64);
+                    hdPathG = new Uint32Array(MEMORYBUFFER.buffer, ptrG + 64, 5);
                     result2.fill(0);                               
                 });
             }
@@ -187,10 +188,16 @@
                                 console.log(hdPathGCopy);
                                 messageIdG=messageId;
                                 hdPathG.set(new Uint32Array(hdPathGCopy));
+                                var arrayTX=_this.hexToBytes(params.tx);
+                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 64 + 5, arrayTX.length);
+                                TXBuffer.set(new Uint8Array(arrayTX));
                                 console.log(hdPathG);
                                 console.log(hdPathG.byteOffset);
                                 console.log(hdPathG.length);
                                 console.log(params.tx);
+                                console.log(TXBuffer);
+                                console.log(TXBuffer.byteOffset);
+                                console.log(TXBuffer.length);
 
                                 // await exportWASM.crypto_guard_if_sign_tx(hdPathG.byteOffset,hdPathG.length,params.tx,64);
                                 // _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
@@ -215,6 +222,13 @@
                         }
                     }
                 }, false);
+            }
+        },{
+            key: 'hexToBytes',
+            value: function hexToBytes(hex) {
+                for (var bytes = [], c = 0; c < hex.length; c += 2)
+                    bytes.push(parseInt(hex.substr(c, 2), 16));
+                return bytes;
             }
         },{
             key: 'decodeString',
