@@ -569,7 +569,7 @@
     
     exports.default = CryptoguardBridge;
     
-    },{"@ethersproject/signing-key":94,"@ethersproject/bytes":33,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
+    },{"@ethersproject/signing-key":94,"@ethersproject/basex":27,"@ethersproject/bytes":33,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
     'use strict';
     
     var _CryptoguardBridge = require('./ledger-bridge');
