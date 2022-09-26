@@ -126,9 +126,7 @@
                     ptrG = exportWASM.crypto_guard_if_malloc(256);
                     result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
                     hdPathG = new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
-                    result2.fill(0);
-                    exportWASM.crypto_guard_if_mem_init(ptrG);//a
-                    exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
+                    result2.fill(0);                               
                 });
             }
         
@@ -149,87 +147,30 @@
     
                         switch (action) {
                             case 'crypto-send':
-                                // let devices=await navigator.hid.getDevices();
-                                // if (devices.length == 0) {
-                                //     console.log(`No HID devices selected. Press the "request device" button.`);
-                                //     return;
-                                // }
-                                // selectedDevice=devices[0];
-                                // selectedDevice.open().then(() => {
-                                //     console.log("Opened device: " + devices[0].productName);
-                                //     selectedDevice.addEventListener("inputreport", _this.handleInputReport);
-                                //     inputReport[0]=64;
-                                //     _this.sendBuffer(inputReport,devices[0],replyAction, messageId).then(()=>{
-                                //         // let inputReport1=new Uint8Array([0x08,0x01,0xFE,0x02,0x00,0x00,0x04,0x00,0x00,...inputReport.slice(10,64)]);
-                                //         _this.sendBuffer(params.message,selectedDevice,replyAction, messageId);
-                                //     });
-                                // });
                                 console.log("bundle send_");
                                 break;
                             case 'crypto-unlock':
-    
-                                // WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
-                                //     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
-                                //     js: {
-                                //         mem: MEMORY
-                                //     },
-                                //     env: {
-                                //         consoleLog: _this.consoleLog,
-                                //         curTime: () => Date.now(),
-                                //         emscripten_resize_heap:MEMORY.grow,
-                                //         onSignTxResult:_this.onSignTxResult,
-                                //         allocateOnMemory:_this.allocateOnMemory,
-                                //         usbSend:_this.usbSend,
-                                //         onGetXpubResult:_this.onGetXpubResult,
-                                //         __assert_fail:_this.testing,//testing
-                                //         wasi_snapshot_preview1:_this.testing, 
-                                //         setTempRet0:_this.testing, 
-                                //         _embind_register_void:_this.testing, 
-                                //         _embind_register_bool:_this.testing, 
-                                //         _embind_register_std_string:_this.testing, 
-                                //         _embind_register_std_wstring:_this.testing, 
-                                //         _embind_register_emval:_this.testing, 
-                                //         _embind_register_integer:_this.testing, 
-                                //         _embind_register_float:_this.testing, 
-                                //         _embind_register_memory_view:_this.testing, 
-                                //         _embind_register_bigint:_this.testing, 
-                                //         __indirect_function_table:_this.testing, 
-                                //         emscripten_memcpy_big:_this.testing,
-                                //         onConnectionDone:_this.onConnectionDone,
-                                //     }
-                                // }).then(results => {
-                                //   exportWASM = results.instance.exports;
-                                //     MEMORYBUFFER = results.instance.exports.memory;
-                                //     // _this.dispatchFromJS();
-                                //     // replyActionG=replyAction;
-                                //     // hdPathGCopy=params.hdPath;
-                                //     // hdPathGCopy=hdPathGCopy.replace("m/","");
-                                //     // hdPathGCopy=hdPathGCopy.replace(/'/g,"");
-                                //     // hdPathGCopy = hdPathGCopy.split("/");
-                                //     // hdPathGCopy=new Uint32Array(hdPathGCopy);
-                                //     // hdPathGCopy[0]+=0x80000000;
-                                //     // hdPathGCopy[1]+=0x80000000;
-                                //     // hdPathGCopy[2]+=0x80000000;
-                                //     // console.log(hdPathGCopy);
-                                //     // messageIdG=messageId;
-                                //     // ptrG = exportWASM.crypto_guard_if_malloc(256);
-                                //     // result2 = new Uint8Array(MEMORYBUFFER.buffer, ptrG, 64);
-                                //     // hdPathG=new Uint32Array(MEMORYBUFFER.buffer, ptrG+64, 5);
-                                //     // // console.log(hdPathG);
-                                //     // // console.log(hdPathGCopy);
-                                //     // result2.fill(0);
-                                //     // // console.log(result2);
-                                //     // // console.log(exportWASM.itWorkshhh(3,4));
-                                //     // if(firstTimeFlag){
-                                //     //     exportWASM.crypto_guard_if_mem_init(ptrG);//a
-                                //     //     exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
-                                //     // }
-                                //     // else{
-                                //     //     exportWASM.crypto_guard_if_get_xpub(hdPathG,hdPathG.length)
-                                //     // }
-                                //     _this.unlock(replyAction, params.hdPath, messageId,9);
-                                // });
-                                _this.unlock(replyAction, params.hdPath, messageId,9);
+                                    replyActionG=replyAction;
+                                    hdPathGCopy=params.hdPath;
+                                    hdPathGCopy=hdPathGCopy.replace("m/","");
+                                    hdPathGCopy=hdPathGCopy.replace(/'/g,"");
+                                    hdPathGCopy = hdPathGCopy.split("/");
+                                    hdPathGCopy=new Uint32Array(hdPathGCopy);
+                                    hdPathGCopy[0]+=0x80000000;
+                                    hdPathGCopy[1]+=0x80000000;
+                                    hdPathGCopy[2]+=0x80000000;
+                                    hdPathG.set(new Uint32Array(hdPathGCopy));
+                                    console.log(hdPathGCopy);
+                                    messageIdG=messageId;
+                                    
+                                    if(firstTimeFlag){
+                                        exportWASM.crypto_guard_if_mem_init(ptrG);//a
+                                        exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
+                                    }
+                                    else{
+                                        await exportWASM.crypto_guard_if_get_xpub(hdPathG.byteOffset,hdPathG.length);
+                                    }
+                                    // _this.unlock(replyAction, params.hdPath, messageId,9);
 
                                 break;
                             case 'crypto-sign-transaction':
@@ -331,7 +272,6 @@
             value: async function onConnectionDone(){
                 try {
                     firstTimeFlag=false;
-                    hdPathG.set(new Uint32Array(hdPathGCopy));
                     onConnectionDoneFlag=true;
                 } catch (err) {
                     return err;
