@@ -2156,21 +2156,9 @@ var ASM_CONSTS = {
   }
 
   /** @type {function(...*):?} */
-  function _onSignMsgResult(
-  ) {
-  err('missing function: onSignMsgResult'); abort(-1);
-  }
-
-  /** @type {function(...*):?} */
   function _onSignTxResult(
   ) {
   err('missing function: onSignTxResult'); abort(-1);
-  }
-
-  /** @type {function(...*):?} */
-  function _usbConnect(
-  ) {
-  err('missing function: usbConnect'); abort(-1);
   }
 
   /** @type {function(...*):?} */
@@ -2575,9 +2563,7 @@ var asmLibraryArg = {
   "emscripten_resize_heap": _emscripten_resize_heap,
   "onConnectionDone": _onConnectionDone,
   "onGetXpubResult": _onGetXpubResult,
-  "onSignMsgResult": _onSignMsgResult,
   "onSignTxResult": _onSignTxResult,
-  "usbConnect": _usbConnect,
   "usbSend": _usbSend
 };
 var asm = createWasm();
@@ -2592,9 +2578,6 @@ var _crypto_guard_if_get_xpub = Module["_crypto_guard_if_get_xpub"] = createExpo
 
 /** @type {function(...*):?} */
 var _crypto_guard_if_sign_tx = Module["_crypto_guard_if_sign_tx"] = createExportWrapper("crypto_guard_if_sign_tx");
-
-/** @type {function(...*):?} */
-var _crypto_guard_if_sign_msg = Module["_crypto_guard_if_sign_msg"] = createExportWrapper("crypto_guard_if_sign_msg");
 
 /** @type {function(...*):?} */
 var _crypto_guard_if_notify = Module["_crypto_guard_if_notify"] = createExportWrapper("crypto_guard_if_notify");

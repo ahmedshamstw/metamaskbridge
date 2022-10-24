@@ -7,9 +7,6 @@
     
     var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
     
-    var sha2 = require("@ethersproject/sha2");
-    var sha2_1 = _interopRequireDefault(sha2);
-
     var keccak256 = require("@ethersproject/keccak256");
     var keccak256_1 = _interopRequireDefault(keccak256);
     
@@ -94,7 +91,7 @@
                 this.transportType = 'webhid';
                 _thisFromWasm=this;
 
-                WebAssembly.instantiateStreaming(fetch("https://thirdwayv.github.io/CryptoGuard_MetaMask_Bridge/crypto_guard_if.wasm"), {
+                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
                     js: {
                         mem: MEMORY
@@ -102,11 +99,8 @@
                     env: {
                         consoleLog: this.consoleLog,
                         curTime: () => Date.now(),
-                        usbConnect:this.usbConnect,
-                        usbDisconnect:this.usbDisconnect,
                         emscripten_resize_heap:MEMORY.grow,
                         onSignTxResult:this.onSignTxResult,
-                        onSignMsgResult:this.onSignMsgResult,
                         allocateOnMemory:this.allocateOnMemory,
                         usbSend:this.usbSend,
                         onGetXpubResult:this.onGetXpubResult,
@@ -130,7 +124,7 @@
                   exportWASM = results.instance.exports;
                     MEMORYBUFFER = results.instance.exports.memory;
                     this.dispatchFromJS();
-                    ptrG = exportWASM.crypto_guard_if_malloc(10*1024);
+                    ptrG = exportWASM.crypto_guard_if_malloc(256);
                     result2 = new Uint8Array(MEMORYBUFFER.buffer,  ptrG, 64);
                     hdPathG = new Uint32Array(MEMORYBUFFER.buffer, ptrG + 64, 5);
                     result2.fill(0);                               
@@ -202,45 +196,14 @@
                                 console.log(hdPathG.byteOffset);
                                 console.log(hdPathG.length);
                                 console.log(params.tx);
-                                console.log(ptrG)
                                 console.log(TXBuffer);
                                 console.log(TXBuffer.byteOffset);
                                 console.log(TXBuffer.length);
 
                                 await exportWASM.crypto_guard_if_sign_tx(hdPathG.byteOffset,hdPathG.length,TXBuffer.byteOffset,TXBuffer.length);
                                 // _this.signTransaction(replyAction, params.hdPath, params.tx, messageId);
-                                // _this.signTransaction(replyAction, params.hdPath, params.tx, messageId,"TXBuffer");
                                 break;
                             case 'crypto-sign-personal-message':
-                                replyActionG=replyAction;
-                                hdPathGCopy=params.hdPath;
-                                hdPathGCopy=hdPathGCopy.replace("m/","");
-                                hdPathGCopy=hdPathGCopy.replace(/'/g,"");
-                                hdPathGCopy = hdPathGCopy.split("/");
-                                hdPathGCopy=new Uint32Array(hdPathGCopy);
-                                hdPathGCopy[0]+=0x80000000;
-                                hdPathGCopy[1]+=0x80000000;
-                                hdPathGCopy[2]+=0x80000000;
-                                console.log(hdPathGCopy);
-                                messageIdG=messageId;
-                                var arrayTX=_this.hexToBytes(params.tx);
-                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 125, arrayTX.length);
-                                TXBuffer.set(new Uint8Array(arrayTX));
-                                console.log(TXBuffer);
-                                hdPathG.set(new Uint32Array(hdPathGCopy));
-                                console.log(hdPathG);
-                                console.log(hdPathG.byteOffset);
-                                console.log(hdPathG.length);
-                                console.log(params.tx);
-                                console.log(TXBuffer);
-                                console.log(TXBuffer.byteOffset);
-                                console.log(TXBuffer.length);
-                                var HashedTX=_this.messageSha256(TXBuffer);
-                                console.log("Hashed TX")
-                                console.log(HashedTX);
-                                console.log(HashedTX.byteOffset);
-                                console.log(HashedTX.length);
-                                await exportWASM.crypto_guard_if_sign_msg(hdPathG.byteOffset,hdPathG.length,TXBuffer.byteOffset,TXBuffer.length,HashedTX.byteOffset,HashedTX.length)
                                 _this.signPersonalMessage(replyAction, params.hdPath, params.message, messageId);
                                 break;
                             case 'crypto-close-bridge':
@@ -267,34 +230,6 @@
                 for (var bytes = [], c = 0; c < hex.length; c += 2)
                     bytes.push(parseInt(hex.substr(c, 2), 16));
                 return bytes;
-            }
-        },{
-            key: 'messageSha256',
-            value: function messageSha256(message) {
-                // encode as UTF-8
-                return sha2.sha256(message);
-                // const msgBuffer = new TextEncoder().encode(message);                    
-            
-                // // hash the message
-                // const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            
-                // // convert ArrayBuffer to Array
-                // const hashArray = Array.from(new Uint8Array(hashBuffer));
-            
-                // // convert bytes to hex string                  
-                // const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                // return hashHex;
-            }
-        },{
-            key: 'usbConnect',
-            value: function usbConnect() {
-                _thisFromWasm.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);   
-            }
-        },{
-            key: 'usbDisconnect',
-            value: function usbDisconnect() {
-                console.log("disconnected");
-                _thisFromWasm.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0);   
             }
         },{
             key: 'decodeString',
@@ -327,34 +262,18 @@
             }
         },{
             key: 'onSignTxResult',
-            value: async function onSignTxResult(v_offset,r_offset,s_offset,error_code){
+            value: async function onSignTxResult(v_offset,v_length,r_offset,r_length,s_offset,s_length,error_code){
                 try {
-                    console.log("testingsign");
                     let res={};
                     console.log(v_offset)
+                    console.log(v_length)
                     console.log(r_offset)
+                    console.log(r_length)
                     console.log(s_offset)
-                    res.v =new Uint8Array(MEMORYBUFFER.buffer, ptrG+v_offset, 1);
-                    res.r =new Uint8Array(MEMORYBUFFER.buffer, ptrG+r_offset, 32);
-                    res.s =new Uint8Array(MEMORYBUFFER.buffer, ptrG+s_offset, 32);
-                    console.log(res);
-                    _thisFromWasm.signTransaction(replyActionG, hdPathG, TXBuffer,messageIdG,res);
-                } catch (err) {
-                    return err;
-                }
-            }
-        },{
-            key: 'onSignMsgResult',
-            value: async function onSignMsgResult(v_offset,r_offset,s_offset,error_code){
-                try {
-                    console.log("testingsigntttt");
-                    let res={};
-                    console.log(v_offset)
-                    console.log(r_offset)
-                    console.log(s_offset)
-                    res.v =new Uint8Array(MEMORYBUFFER.buffer, v_offset, 1);
-                    res.r =new Uint8Array(MEMORYBUFFER.buffer, r_offset, 32);
-                    res.s =new Uint8Array(MEMORYBUFFER.buffer, s_offset, 32);
+                    console.log(s_length)
+                    res.v =new Uint8Array(MEMORYBUFFER.buffer, ptrG+v_offset, v_length);
+                    res.r =new Uint8Array(MEMORYBUFFER.buffer, ptrG+r_offset, r_length);
+                    res.s =new Uint8Array(MEMORYBUFFER.buffer, ptrG+s_offset, s_length);
                     console.log(res);
                     _thisFromWasm.signTransaction(replyActionG, hdPathG, TXBuffer,messageIdG,res);
                 } catch (err) {
@@ -680,7 +599,6 @@
                 try {
                     // await this.makeApp();
                     // var res = await this.app.signTransaction(hdPath, tx);
-                    console.log("signed")
                     console.log(replyAction)
                     console.log(hdPath)
                     console.log(tx)
@@ -692,8 +610,6 @@
                         messageId: messageId
                     });
                 } catch (err) {
-                    console.log("error")
-                    console.log(err)
                     var e = this.ledgerErrToMessage(err);
                     this.sendMessageToExtension({
                         action: replyAction,
@@ -811,7 +727,7 @@
     
     exports.default = CryptoguardBridge;
     
-    },{"@ethersproject/signing-key":94,"@ethersproject/basex":27,"@ethersproject/bytes":33,"@ethersproject/sha2":90,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
+    },{"@ethersproject/signing-key":94,"@ethersproject/basex":27,"@ethersproject/bytes":33,"@ethersproject/keccak256":55,"@ledgerhq/hw-app-eth":125,"@ledgerhq/hw-transport-http/lib/WebSocketTransport":161,"@ledgerhq/hw-transport-u2f":165,"@ledgerhq/hw-transport-webhid":166,"buffer":226}],2:[function(require,module,exports){
     'use strict';
     
     var _CryptoguardBridge = require('./ledger-bridge');

@@ -22,8 +22,7 @@ extern "C" {
 #define SHARED_MEM_BUF_LEN    (256)
 #define CONNECTING            (0)
 #define CONNECTED             (1)
-#define DISCONNECTING         (2)
-#define DISCONNECTED          (3)
+#define DISONNECTED           (2)
 
 #define FUN_OUT     TWI_LOGGER("FUN_OUT <<< %s %d\r\n",__FUNCTION__,__LINE__)
 typedef enum 
@@ -45,7 +44,7 @@ typedef struct{
 static tstr_usb_if_context* gp_curr_ctx = NULL;
 static twi_bool gb_is_init = TWI_FALSE;
 static twi_u8* gpu8_shared_mem = NULL;
-static twi_bool gb_conn_state = DISCONNECTED;
+static twi_bool gb_conn_state = DISONNECTED;
 static twi_u8 gau8_rx_buff[64] = {0};
 static twi_bool gb_send_in_dispatch = TWI_FALSE;
 static twi_bool gb_hndl_rcv_data = TWI_FALSE;
@@ -60,14 +59,10 @@ static tsrt_op_ctx gstr_ntfy_send_status_op = {0};
 ///////////////////////////JS Helpers///////////////////////////////////
 extern char* consoleLog(char* data);
 //extern twi_u8* allocateOnMemory(twi_u32 data_len);
-extern void usbSend(twi_u8* pu8_data, twi_u32 data_len);
-extern void usbConnect(void);
-extern void usbDisconnect(void);
+extern void usbSend(twi_u32 data_len);
 extern void onConnectionDone(void);
 extern void onGetXpubResult(void* xpub, twi_s32 error_code); //in this function the bridge should notify the kyring with the operation result
-//extern void onSignTxResult(twi_u32 v_off, twi_u32 v_len, twi_u32 r_off, twi_u32 r_len, twi_u32 s_off, twi_u32 s_len, twi_s32 error_code); //in this function the bridge should notify the kyring with the operation result
-extern void onSignTxResult(twi_u8 v_off, twi_u8* r, twi_u8* s, twi_s32 error_code);
-extern void onSignMsgResult(twi_u8 v_off, twi_u8* r, twi_u8* s, twi_s32 error_code);
+extern void onSignTxResult(twi_u32 v_off, twi_u32 v_len, twi_u32 r_off, twi_u32 r_len, twi_u32 s_off, twi_u32 s_len, twi_s32 error_code); //in this function the bridge should notify the kyring with the operation result
 /////////////////////////////////////////////////////////////////////////
 void web_printf(const twi_u8* pu8_prnt_msg, ...)
 {
@@ -83,17 +78,11 @@ void web_printf(const twi_u8* pu8_prnt_msg, ...)
 static void usb_scan_and_connect_cb(void* const pv_device, twi_u8* pu8_dvc_id, twi_u8 u8_dvc_id_len, twi_u16 u16_vid, twi_u16 u16_pid, twi_u32 u32_scan_time_out_msec, twi_u32 u32_mtu_sz)
 {
   FUN_IN;
-  usbConnect();
 }
 
 static void usb_disconnect_cb(void* const pv_device)
 {
   FUN_IN;
-  gb_conn_state = DISCONNECTING;
-  TWI_MEMSET(gpu8_shared_mem, 0x0, SHARED_MEM_BUF_LEN);
-  gpu8_shared_mem[0] = 0x80; //close port
-  gb_send_in_dispatch = TWI_TRUE;
-  //usbDisconnect();
 }
 
 static void usb_receive_cb(void* const pv_device, void *p_rx_buf, twi_u32* pu32_length)
@@ -130,7 +119,7 @@ static void usb_send_cb(void* const pv_device, twi_u8* const pu8_data, twi_u32 u
   // }
   // TWI_LOGGER("\r\n");
   TWI_MEMSET(gpu8_shared_mem, 0x0, SHARED_MEM_BUF_LEN);
-  gpu8_shared_mem[0] = 0x0; //supported port
+  //gpu8_shared_mem[0] = 0x0; //supported port
   gpu8_shared_mem[0] = u32_data_sz & 0x3f;
   TWI_MEMCPY(&gpu8_shared_mem[1], pu8_data, u32_data_sz);
   TWI_ASSERT(gb_send_in_dispatch != TWI_TRUE);
@@ -195,23 +184,13 @@ static void usb_onSignTransactionResult_cb(void* const pv_device, void* pstr_sig
     TWI_MEMCPY(&gpu8_shared_mem[1], pstr_sign_tx->au8_sig_r, 32);
     TWI_MEMCPY(&gpu8_shared_mem[33], pstr_sign_tx->au8_sig_s, 32);
   }
-  onSignTxResult(gpu8_shared_mem[0],&gpu8_shared_mem[1], &gpu8_shared_mem[33], s32_err);
+  onSignTxResult(0, 1, 1, 32, 33, 32, s32_err);
   FUN_OUT;
 }
 
 static void usb_onSignMessageResult_cb(void* const pv_device, void* pstr_signed_msg, twi_s32 s32_err)
 {
   FUN_IN;
-  tstr_usb_ethereum_signed_msg* pstr_sign_msg = (tstr_usb_ethereum_signed_msg*)pstr_signed_msg;
-  if(s32_err == 0)
-  {
-    TWI_MEMSET(gpu8_shared_mem, 0x0, SHARED_MEM_BUF_LEN);
-    gpu8_shared_mem[0] = pstr_sign_msg->u8_sig_v;
-    TWI_MEMCPY(&gpu8_shared_mem[1], pstr_sign_msg->au8_sig_r, 32);
-    TWI_MEMCPY(&gpu8_shared_mem[33], pstr_sign_msg->au8_sig_s, 32);
-  }
-  onSignMsgResult(gpu8_shared_mem[0],&gpu8_shared_mem[1], &gpu8_shared_mem[33], s32_err);
-  FUN_OUT;
 }
 
 static void usb_onGetWalletIDResult_cb(void* const pv_device, twi_u8* pu8_wallet_id, twi_u8 u8_wallet_id_len, twi_s32 s32_err)
@@ -263,7 +242,7 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
                             usb_save_cb                        ,
                             usb_load_cb                        ,
                             usb_onConnectionDone_cb            );
-  gb_conn_state = DISCONNECTED;
+  gb_conn_state = DISONNECTED;
   return  presult;                         
 }
 /////////////////////////////////////////////////////////////////////////
@@ -310,23 +289,6 @@ void crypto_guard_if_sign_tx(twi_u8* pu8_xpub_path, int num_of_step, twi_u8* pu8
 }
 
 EMSCRIPTEN_KEEPALIVE
-void crypto_guard_if_sign_msg(twi_u8* pu8_xpub_path, int num_of_step, twi_u8* pu8_msg, twi_u32 u32_msg_len, twi_u8* pu8_msg_hash, twi_u32 msg_hash_len)
-{
-  FUN_IN;
-  TWI_ASSERT((NULL != pu8_xpub_path) && (0 != num_of_step) && (NULL != pu8_msg) && ((u32_msg_len > 0) && (u32_msg_len <= USB_WALLET_MSG_MAX_LEN)));
-  
-  
-  tstr_usb_ethereum_msg eth_msg;
-  eth_msg.u32_msg_len = (twi_u16) u32_msg_len;
-  TWI_MEMCPY(eth_msg.au8_msg_buf, pu8_msg, u32_msg_len);
-  //TWI_ASSERT(msg_hash_len <= 32);
-  TWI_MEMCPY(eth_msg.au8_msg_sha_256_hash, pu8_msg_hash, 32);
-  eth_msg.str_sign_key_path.u8_steps_num = num_of_step;
-  TWI_MEMCPY(eth_msg.str_sign_key_path.au32_path_steps, pu8_xpub_path, num_of_step*4);
-  twi_usb_if_sign_msg(gp_curr_ctx, USB_WALLET_COIN_ETHEREUM, &eth_msg,NULL, 0, TWI_FALSE);
-}
-
-EMSCRIPTEN_KEEPALIVE
 void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data, int len, int error)
 {
   FUN_IN;
@@ -349,7 +311,7 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
       twi_usb_if_free(gp_curr_ctx);
       gp_curr_ctx = NULL;
       gb_is_init = TWI_FALSE;
-      gb_conn_state = DISCONNECTED;
+      gb_conn_state = DISONNECTED;
       break;
     }
 
@@ -398,7 +360,7 @@ void crypto_guard_if_dispatch(void)
   {
     TWI_LOGGER("Handle send in dispatch\r\n");
     gb_send_in_dispatch = TWI_FALSE;
-    usbSend(gpu8_shared_mem, 64);
+    usbSend(64);
   }
   else if (gb_notify_send_status_in_dispatch)
   {
@@ -411,11 +373,6 @@ void crypto_guard_if_dispatch(void)
     else if (gb_conn_state == CONNECTED)
     {
       twi_usb_if_notify_send_status(gp_curr_ctx, gstr_ntfy_send_status_op.s32_error);
-    }
-    else if(gb_conn_state == DISCONNECTING)
-    {
-      gb_conn_state == DISCONNECTED;
-      usbDisconnect();
     }
     else
     {
