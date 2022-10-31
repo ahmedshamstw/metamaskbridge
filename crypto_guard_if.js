@@ -2174,6 +2174,12 @@ var ASM_CONSTS = {
   }
 
   /** @type {function(...*):?} */
+  function _usbDisconnect(
+  ) {
+  err('missing function: usbDisconnect'); abort(-1);
+  }
+
+  /** @type {function(...*):?} */
   function _usbSend(
   ) {
   err('missing function: usbSend'); abort(-1);
@@ -2578,6 +2584,7 @@ var asmLibraryArg = {
   "onSignMsgResult": _onSignMsgResult,
   "onSignTxResult": _onSignTxResult,
   "usbConnect": _usbConnect,
+  "usbDisconnect": _usbDisconnect,
   "usbSend": _usbSend
 };
 var asm = createWasm();

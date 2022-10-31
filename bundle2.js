@@ -71,13 +71,14 @@
         var firstTimeFlag=true;
         var receivedFlag=false;
         var sendingFlag=false;
-        var onConnectionDoneFlag=false;
+        var onConnectionDoneFlag=0;
         var dispatchCounter=0;
         var finishedSend=false;
         var initDispatch=true;
         var counterTest=0;
         var ptrG=0;
         var TXBuffer=null;
+        var TXMessageBuffer=null;
         const enumNotify={
             CRYPTO_GUARD_IF_CONNECTED_EVT:0,
             CRYPTO_GUARD_IF_DISCONNECTED_EVT:1,
@@ -94,7 +95,7 @@
                 this.transportType = 'webhid';
                 _thisFromWasm=this;
 
-                WebAssembly.instantiateStreaming(fetch("https://thirdwayv.github.io/CryptoGuard_MetaMask_Bridge/crypto_guard_if.wasm"), {
+                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
                     js: {
                         mem: MEMORY
@@ -174,7 +175,10 @@
                                         exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);                                 
                                     }
                                     else{
+                                        console.log("xpub unlock")
                                         hdPathG.set(new Uint32Array(hdPathGCopy));
+                                        // exportWASM.crypto_guard_if_mem_init(ptrG);//a
+                                        // exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);   
                                         await exportWASM.crypto_guard_if_get_xpub(hdPathG.byteOffset,hdPathG.length);
                                     }
                                     // _this.unlock(replyAction, params.hdPath, messageId,9);
@@ -223,25 +227,33 @@
                                 hdPathGCopy[2]+=0x80000000;
                                 console.log(hdPathGCopy);
                                 messageIdG=messageId;
-                                var arrayTX=_this.hexToBytes(params.tx);
-                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 125, arrayTX.length);
+                                var arrayTX=_this.hexToBytes(params.message);
+                                TXBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 250, arrayTX.length);
                                 TXBuffer.set(new Uint8Array(arrayTX));
                                 console.log(TXBuffer);
                                 hdPathG.set(new Uint32Array(hdPathGCopy));
                                 console.log(hdPathG);
                                 console.log(hdPathG.byteOffset);
                                 console.log(hdPathG.length);
-                                console.log(params.tx);
+                                console.log(params.message);
                                 console.log(TXBuffer);
                                 console.log(TXBuffer.byteOffset);
                                 console.log(TXBuffer.length);
-                                var HashedTX=_this.messageSha256(TXBuffer);
+                                var HashedTX=_this.hexToBytes(_this.messageSha256(TXBuffer));
+                                TXMessageBuffer = new Uint8Array(MEMORYBUFFER.buffer, ptrG + 1500, HashedTX.length);
+                                TXMessageBuffer.set(new Uint8Array(HashedTX));
                                 console.log("Hashed TX")
+                                console.log(_this.messageSha256(TXBuffer));
+                                // console.log(_this.messageSha256(params.message));
                                 console.log(HashedTX);
                                 console.log(HashedTX.byteOffset);
                                 console.log(HashedTX.length);
-                                await exportWASM.crypto_guard_if_sign_msg(hdPathG.byteOffset,hdPathG.length,TXBuffer.byteOffset,TXBuffer.length,HashedTX.byteOffset,HashedTX.length)
-                                _this.signPersonalMessage(replyAction, params.hdPath, params.message, messageId);
+                                console.log("TXMessageBuffer TX")
+                                console.log(TXMessageBuffer);
+                                console.log(TXMessageBuffer.byteOffset);
+                                console.log(TXMessageBuffer.length);
+                                await exportWASM.crypto_guard_if_sign_msg(hdPathG.byteOffset,hdPathG.length,TXBuffer.byteOffset,TXBuffer.length,TXMessageBuffer.byteOffset,TXMessageBuffer.length)
+                                // _this.signPersonalMessage(replyAction, params.hdPath, params.message, messageId);
                                 break;
                             case 'crypto-close-bridge':
                                 _this.cleanUp(replyAction, messageId);
@@ -272,7 +284,8 @@
             key: 'messageSha256',
             value: function messageSha256(message) {
                 // encode as UTF-8
-                return sha2.sha256(message);
+                var HashedMessage=sha2.sha256(message);
+                return HashedMessage.slice(2,HashedMessage.length);
                 // const msgBuffer = new TextEncoder().encode(message);                    
             
                 // // hash the message
@@ -287,14 +300,21 @@
             }
         },{
             key: 'usbConnect',
-            value: function usbConnect() {
-                _thisFromWasm.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);   
+            value: async function usbConnect() {
+                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_CONNECTED_EVT,null,0,0);   
+            }
+        },{
+            key: 'buf2hex',
+            value: function buf2hex(buffer) {
+                return [...new Uint8Array(buffer)]
+                .map(x => x.toString(16).padStart(2, '0'))
+                .join('');
             }
         },{
             key: 'usbDisconnect',
-            value: function usbDisconnect() {
+            value: async function usbDisconnect() {
                 console.log("disconnected");
-                _thisFromWasm.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0);   
+                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0);   
             }
         },{
             key: 'decodeString',
@@ -327,17 +347,23 @@
             }
         },{
             key: 'onSignTxResult',
-            value: async function onSignTxResult(v_offset,r_offset,s_offset,error_code){
+            value: async function onSignTxResult(v,r_offset,s_offset,error_code){
                 try {
-                    console.log("testingsign");
+                    console.log("testingsigntttt");
                     let res={};
-                    console.log(v_offset)
+                    console.log(v)
                     console.log(r_offset)
                     console.log(s_offset)
-                    res.v =new Uint8Array(MEMORYBUFFER.buffer, ptrG+v_offset, 1);
-                    res.r =new Uint8Array(MEMORYBUFFER.buffer, ptrG+r_offset, 32);
-                    res.s =new Uint8Array(MEMORYBUFFER.buffer, ptrG+s_offset, 32);
-                    console.log(res);
+                    console.log(error_code);
+                    if(error_code){
+                        res.error="User Reject The Transaction";
+                    }
+                    else{
+                        res.v =new Uint8Array([v]);
+                        res.r =new Uint8Array(MEMORYBUFFER.buffer, r_offset, 32);
+                        res.s =new Uint8Array(MEMORYBUFFER.buffer, s_offset, 32);
+                        console.log(res);
+                    }
                     _thisFromWasm.signTransaction(replyActionG, hdPathG, TXBuffer,messageIdG,res);
                 } catch (err) {
                     return err;
@@ -345,18 +371,20 @@
             }
         },{
             key: 'onSignMsgResult',
-            value: async function onSignMsgResult(v_offset,r_offset,s_offset,error_code){
+            value: async function onSignMsgResult(v,r_offset,s_offset,error_code){
                 try {
-                    console.log("testingsigntttt");
+                    console.log("testingsigntttt message");
                     let res={};
-                    console.log(v_offset)
+                    console.log(v)
                     console.log(r_offset)
                     console.log(s_offset)
-                    res.v =new Uint8Array(MEMORYBUFFER.buffer, v_offset, 1);
-                    res.r =new Uint8Array(MEMORYBUFFER.buffer, r_offset, 32);
-                    res.s =new Uint8Array(MEMORYBUFFER.buffer, s_offset, 32);
+                    res.v =v;
+                    console.log(new Uint8Array(MEMORYBUFFER.buffer, r_offset, 32))
+                    console.log(new Uint8Array(MEMORYBUFFER.buffer, s_offset, 32))
+                    res.r =_thisFromWasm.buf2hex(new Uint8Array(MEMORYBUFFER.buffer, r_offset, 32));
+                    res.s =_thisFromWasm.buf2hex(new Uint8Array(MEMORYBUFFER.buffer, s_offset, 32));
                     console.log(res);
-                    _thisFromWasm.signTransaction(replyActionG, hdPathG, TXBuffer,messageIdG,res);
+                    _thisFromWasm.signPersonalMessage(replyActionG, hdPathG, TXBuffer,messageIdG,res);
                 } catch (err) {
                     return err;
                 }
@@ -395,7 +423,7 @@
                 try {
                     firstTimeFlag=false;
                     hdPathG.set(new Uint32Array(hdPathGCopy));
-                    onConnectionDoneFlag=true;
+                    onConnectionDoneFlag++;
                 } catch (err) {
                     return err;
                 }
@@ -419,9 +447,9 @@
                         await _thisFromWasm.usbSendDispatch(64);
                         await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
                     }
-                    if(onConnectionDoneFlag){
+                    if(onConnectionDoneFlag==1){
                         console.log("onConnectionDoneFlag");
-                        onConnectionDoneFlag=false;
+                        onConnectionDoneFlag++;
                         console.log(hdPathG)
                         console.log(hdPathG.byteOffset)
                         console.log(hdPathG.length)
@@ -694,7 +722,6 @@
                 } catch (err) {
                     console.log("error")
                     console.log(err)
-                    var e = this.ledgerErrToMessage(err);
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: false,
@@ -709,11 +736,13 @@
             }
         }, {
             key: 'signPersonalMessage',
-            value: async function signPersonalMessage(replyAction, hdPath, message, messageId) {
+            value: async function signPersonalMessage(replyAction, hdPath, message, messageId,res) {
                 try {
-                    await this.makeApp();
-    
-                    var res = await this.app.signPersonalMessage(hdPath, message);
+                    console.log("signed Message")
+                    console.log(replyAction)
+                    console.log(hdPath)
+                    console.log(message)
+                    console.log(res)
                     this.sendMessageToExtension({
                         action: replyAction,
                         success: true,
@@ -730,7 +759,7 @@
                     });
                 } finally {
                     if (this.transportType !== 'ledgerLive') {
-                        this.cleanUp();
+                        // this.cleanUp();
                     }
                 }
             }

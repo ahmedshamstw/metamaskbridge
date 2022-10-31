@@ -45,7 +45,7 @@ typedef struct{
 static tstr_usb_if_context* gp_curr_ctx = NULL;
 static twi_bool gb_is_init = TWI_FALSE;
 static twi_u8* gpu8_shared_mem = NULL;
-static twi_bool gb_conn_state = DISCONNECTED;
+static twi_u8 gu8_conn_state = DISCONNECTED;
 static twi_u8 gau8_rx_buff[64] = {0};
 static twi_bool gb_send_in_dispatch = TWI_FALSE;
 static twi_bool gb_hndl_rcv_data = TWI_FALSE;
@@ -89,7 +89,7 @@ static void usb_scan_and_connect_cb(void* const pv_device, twi_u8* pu8_dvc_id, t
 static void usb_disconnect_cb(void* const pv_device)
 {
   FUN_IN;
-  gb_conn_state = DISCONNECTING;
+  gu8_conn_state = DISCONNECTING;
   TWI_MEMSET(gpu8_shared_mem, 0x0, SHARED_MEM_BUF_LEN);
   gpu8_shared_mem[0] = 0x80; //close port
   gb_send_in_dispatch = TWI_TRUE;
@@ -263,7 +263,7 @@ static tstr_usb_if_context* cyrpto_guard_if_init(void)
                             usb_save_cb                        ,
                             usb_load_cb                        ,
                             usb_onConnectionDone_cb            );
-  gb_conn_state = DISCONNECTED;
+  gu8_conn_state = DISCONNECTED;
   return  presult;                         
 }
 /////////////////////////////////////////////////////////////////////////
@@ -336,7 +336,7 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     case CRYPTO_GUARD_IF_CONNECTED_EVT:
     {
       //TODO: this is a workaround to open the port before sending the stack specs
-		  gb_conn_state = CONNECTING;
+		  gu8_conn_state = CONNECTING;
       TWI_MEMSET(gpu8_shared_mem, 0x0, SHARED_MEM_BUF_LEN);
       gpu8_shared_mem[0] = 0x40; //open port
       gb_send_in_dispatch = TWI_TRUE;
@@ -346,20 +346,22 @@ void crypto_guard_if_notify(tenum_crypto_guard_if_event enum_event, twi_u8* data
     case CRYPTO_GUARD_IF_DISCONNECTED_EVT:
     {
       twi_usb_if_notify_disconnected(gp_curr_ctx, 0, error);
-      twi_usb_if_free(gp_curr_ctx);
-      gp_curr_ctx = NULL;
-      gb_is_init = TWI_FALSE;
-      gb_conn_state = DISCONNECTED;
+      // twi_usb_if_free(gp_curr_ctx);
+      // gp_curr_ctx = NULL;
+      // gb_is_init = TWI_FALSE;
+      gu8_conn_state = DISCONNECTED;
       break;
     }
 
     case CRYPTO_GUARD_IF_SEND_STATUS_EVT:
     {
+      TWI_LOGGER("CRYPTO_GUARD_IF_SEND_STATUS_EVT <<\r\n");
       TWI_ASSERT(TWI_TRUE != gb_notify_send_status_in_dispatch);
       gstr_ntfy_send_status_op.pv_data = data;
       gstr_ntfy_send_status_op.u32_data_len = len;
       gstr_ntfy_send_status_op.s32_error = error;
       gb_notify_send_status_in_dispatch = TWI_TRUE;
+      TWI_LOGGER("CRYPTO_GUARD_IF_SEND_STATUS_EVT >>\r\n");
       break;
     }
 
@@ -402,19 +404,21 @@ void crypto_guard_if_dispatch(void)
   }
   else if (gb_notify_send_status_in_dispatch)
   {
+    TWI_LOGGER("Handle notify send status in dispatch, gu8_conn_state = %d\r\n", gu8_conn_state);
     gb_notify_send_status_in_dispatch = TWI_FALSE;
-    if(gb_conn_state == CONNECTING)
+    if(gu8_conn_state == CONNECTING)
     {
-      gb_conn_state = CONNECTED;
+      gu8_conn_state = CONNECTED;
       twi_usb_if_notify_connected(gp_curr_ctx, gstr_ntfy_send_status_op.s32_error);
     }
-    else if (gb_conn_state == CONNECTED)
+    else if (gu8_conn_state == CONNECTED)
     {
       twi_usb_if_notify_send_status(gp_curr_ctx, gstr_ntfy_send_status_op.s32_error);
     }
-    else if(gb_conn_state == DISCONNECTING)
+    else if(gu8_conn_state == DISCONNECTING)
     {
-      gb_conn_state == DISCONNECTED;
+      TWI_LOGGER("LOCAL DISCONNECT\r\n");
+      gu8_conn_state = DISCONNECTED;
       usbDisconnect();
     }
     else
