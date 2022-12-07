@@ -91,7 +91,7 @@
                 _thisFromWasm=this;
 
                 WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
-                    // wasi_snapshot_preview1: wasi.exports,//teeeeeee
+                    // wasi_snapshot_preview1: wasi.exports,//
                     js: {
                         mem: MEMORY
                     },
