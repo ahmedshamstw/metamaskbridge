@@ -431,6 +431,7 @@
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
                 await exportWASM.crypto_guard_if_dispatch();
+                console.log("testing dispatch")
                 setTimeout(dispatchFromJS, 10);
             }
         },{
