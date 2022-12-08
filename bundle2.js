@@ -349,7 +349,7 @@
                 while (bytes[strlen] != 0) strlen++;
                 const str = new TextDecoder("utf8").decode(bytes.slice(0, strlen));
                 var time=new Date();
-                console.log('['+time.getFullYear()+'-'+time.getMonth()+'-'+time.getUTCDay()+' '+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds()+'.'+time.getMilliseconds()+'] ', str);
+                console.log(str);
             }
         },{
             key: 'delay',
@@ -432,7 +432,6 @@
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
                 await exportWASM.crypto_guard_if_dispatch();
-                console.log("testing dispatch")
                 setTimeout(dispatchFromJS, 10);
             }
         },{
