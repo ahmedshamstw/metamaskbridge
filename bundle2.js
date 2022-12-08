@@ -49,6 +49,7 @@
         var ARRAYBYTEOFFSET=0;
         var OFFSET = 0;
         var SELECTEDDEVICE=null;
+        var PREDDEVICE=null;
         var outputReportId = 0;
         var inputReport = new Uint8Array(64).fill(1);
     
@@ -492,6 +493,9 @@
                     return;
                 }
                 console.log("notify connected")
+                if(PREDDEVICE==SELECTEDDEVICE){
+                    console.log("______________________________");
+                }
                 SELECTEDDEVICE=devices[devices.length-1];
 				
                 try {
@@ -517,6 +521,7 @@
                             //await setTimeout(() => {console.log("Delay")}, 10);
                             /**********************************************/
                             await SELECTEDDEVICE.sendReport(0, result2);
+                            PREDDEVICE=SELECTEDDEVICE;
                             console.log("sent...............");
                             await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
                         }
