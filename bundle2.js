@@ -519,16 +519,17 @@
                             */
                             //await setTimeout(() => {console.log("Delay")}, 10);
                             /**********************************************/
-                            await SELECTEDDEVICE.sendReport(0, result2).then(()=>{
-                                console.log("DONEEEEEEEE");
+                            await SELECTEDDEVICE.sendReport(0, result2).then(async()=>{
+                                console.log("sent...............");
+                                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
 
-                            }).catch((error) => {
+                            }).catch(async (error) => {
                                 console.log("ERROR ---------------------")
                                 console.error(error);
+                                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
                               });
                             PREDDEVICE=SELECTEDDEVICE;
-                            console.log("sent...............");
-                            await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
+                            console.log("DONEEEEEEEE");
                         }
                         else{
                             console.log("There Was No Device To Send To");
