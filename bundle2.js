@@ -91,7 +91,7 @@
                 this.transportType = 'webhid';
                 _thisFromWasm=this;
 
-                WebAssembly.instantiateStreaming(fetch("https://thirdwayv.github.io/CryptoGuard_MetaMask_Bridge/crypto_guard_if.wasm"), {
+                WebAssembly.instantiateStreaming(fetch("https://ahmedshamstw.github.io/metamaskbridge/crypto_guard_if.wasm"), {
                     // wasi_snapshot_preview1: wasi.exports,//teeeeeee
                     js: {
                         mem: MEMORY
