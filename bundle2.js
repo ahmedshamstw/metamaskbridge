@@ -526,8 +526,9 @@
                             }).catch(async (error) => {
                                 console.log("ERROR ---------------------")
                                 console.error(error);
-                                await _thisFromWasm.usbSendDispatch(64);
-                                // await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                                // await _thisFromWasm.usbSendDispatch(64);
+                                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                                console.log("After Notify Error");
                               });
                             PREDDEVICE=SELECTEDDEVICE;
                             console.log("DONEEEEEEEE");
