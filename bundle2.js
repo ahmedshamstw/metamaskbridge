@@ -472,77 +472,83 @@
         },{
             key: 'usbSendDispatch',
             value: async function usbSendDispatch(size){
-				
-				let devices=await navigator.hid.getDevices();
-                devices = devices.filter(function (d) { return d.vendorId === 0x1915; })
-                if (devices.length == 0) {
-                    requestConnection=true;
-                    let res={};
-                    res.error="Device Connection Required";
-					console.log(res.error)
-					isUSBConencted = false;
-                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0); 
-					
-                    _thisFromWasm.sendMessageToExtension({
-                        action: replyActionG,
-                        success: false,
-                        payload: res,
-                        messageId: messageIdG
-                    });
-                    return;
-                }
-                console.log("notify connected")
-                if(PREDDEVICE==SELECTEDDEVICE){
-                    console.log("______________________________");
-                }
-                SELECTEDDEVICE=devices[devices.length-1];
-				
-                try {
-                        console.log(" usbSendDispatch ");
-                        console.log(SELECTEDDEVICE.opened);
-                        let res=0;
-                        if(SELECTEDDEVICE){
-                                if(!SELECTEDDEVICE.opened){
-                                    console.log("opening...............");
-                                    await SELECTEDDEVICE.open();
-                                    console.log("opened..............."+ SELECTEDDEVICE.opened);
-                                    SELECTEDDEVICE.addEventListener("inputreport",_thisFromWasm.notifyReceiveStatus);
-                                }
-                                
-                            console.log("Sending...............");
-                            console.log(_thisFromWasm.toHexArray(result2))
-                            /* Warning: this workaround issue 
-                            *  The issue is the SELECTEDDEVICE.sendReport() below is stucking in sending
-                            *  When we run setTimeout(dispatchFromJS, ,ms) with ms lower than 50 ms 
-                            *  And setTimeout(() => {console.log("Delay")}, 10) doesn't actually delay 10 ms
-                            *  but it solves the issue  
-                            */
-                            //await setTimeout(() => {console.log("Delay")}, 10);
-                            /**********************************************/
-                            await SELECTEDDEVICE.sendReport(0, result2).then(async()=>{
-                                console.log("sent...............");
-                                await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
-
-                            });
-                            // .catch(async (error) => {
-                            //     console.log("ERROR ---------------------")
-                            //     console.error(error);
-                            //     // await _thisFromWasm.usbSendDispatch(64);
-                            //     await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
-                            //     console.log("After Notify Error");
-                            //   });
-                            PREDDEVICE=SELECTEDDEVICE;
-                            console.log("DONEEEEEEEE");
-                        }
-                        else{
-                            console.log("There Was No Device To Send To");
-                        }
-                } catch (err) {
-					console.log(" usbSendDispatch Failed with error "+ err);
-					await SELECTEDDEVICE.close();
-					await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                try{
+                    console.log("First Dispatch")
+                    let devices=await navigator.hid.getDevices();
+                    devices = devices.filter(function (d) { return d.vendorId === 0x1915; })
+                    if (devices.length == 0) {
+                        requestConnection=true;
+                        let res={};
+                        res.error="Device Connection Required";
+                        console.log(res.error)
+                        isUSBConencted = false;
+                    await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0); 
+                        
+                        _thisFromWasm.sendMessageToExtension({
+                            action: replyActionG,
+                            success: false,
+                            payload: res,
+                            messageId: messageIdG
+                        });
+                        return;
+                    }
+                    console.log("notify connected")
+                    if(PREDDEVICE==SELECTEDDEVICE){
+                        console.log("______________________________");
+                    }
+                    SELECTEDDEVICE=devices[devices.length-1];
+                    
+                    try {
+                            console.log(" usbSendDispatch ");
+                            console.log(SELECTEDDEVICE.opened);
+                            let res=0;
+                            if(SELECTEDDEVICE){
+                                    if(!SELECTEDDEVICE.opened){
+                                        console.log("opening...............");
+                                        await SELECTEDDEVICE.open();
+                                        console.log("opened..............."+ SELECTEDDEVICE.opened);
+                                        SELECTEDDEVICE.addEventListener("inputreport",_thisFromWasm.notifyReceiveStatus);
+                                    }
+                                    
+                                console.log("Sending...............");
+                                console.log(_thisFromWasm.toHexArray(result2))
+                                /* Warning: this workaround issue 
+                                *  The issue is the SELECTEDDEVICE.sendReport() below is stucking in sending
+                                *  When we run setTimeout(dispatchFromJS, ,ms) with ms lower than 50 ms 
+                                *  And setTimeout(() => {console.log("Delay")}, 10) doesn't actually delay 10 ms
+                                *  but it solves the issue  
+                                */
+                                //await setTimeout(() => {console.log("Delay")}, 10);
+                                /**********************************************/
+                                await SELECTEDDEVICE.sendReport(0, result2).then(async()=>{
+                                    console.log("sent...............");
+                                    await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
+    
+                                });
+                                // .catch(async (error) => {
+                                //     console.log("ERROR ---------------------")
+                                //     console.error(error);
+                                //     // await _thisFromWasm.usbSendDispatch(64);
+                                //     await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                                //     console.log("After Notify Error");
+                                //   });
+                                PREDDEVICE=SELECTEDDEVICE;
+                                console.log("DONEEEEEEEE");
+                            }
+                            else{
+                                console.log("There Was No Device To Send To");
+                            }
+                    } catch (err) {
+                        console.log(" usbSendDispatch Failed with error "+ err);
+                        await SELECTEDDEVICE.close();
+                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                        return err;
+                    }
+                }catch (err) {
+                    console.log("Main Send Error  "+ err);
                     return err;
                 }
+				
             }
         }, {
             key: 'unlockComputePayload',
