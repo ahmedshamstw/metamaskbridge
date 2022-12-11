@@ -349,7 +349,7 @@
                 while (bytes[strlen] != 0) strlen++;
                 const str = new TextDecoder("utf8").decode(bytes.slice(0, strlen));
                 var time=new Date();
-                console.log(str);
+                console.log('['+time.getFullYear()+'-'+time.getMonth()+'-'+time.getUTCDay()+' '+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds()+'.'+time.getMilliseconds()+'] ', str);
             }
         },{
             key: 'delay',
@@ -519,7 +519,13 @@
                             */
                             //await setTimeout(() => {console.log("Delay")}, 10);
                             /**********************************************/
-                            await SELECTEDDEVICE.sendReport(0, result2);
+                            await SELECTEDDEVICE.sendReport(0, result2).then(()=>{
+                                console.log("DONEEEEEEEE");
+
+                            }).catch((error) => {
+                                console.log("ERROR ---------------------")
+                                console.error(error);
+                              });
                             PREDDEVICE=SELECTEDDEVICE;
                             console.log("sent...............");
                             await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
