@@ -529,9 +529,10 @@
                                     console.log("ERROR ---------------------")
                                     console.error(error);
                                     retryFailed++;
+                                    console.log("retryFailed Count ",retryFailed);
                                     if(retryFailed>=3){
-                                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
                                         console.log("Retry Failed More Than 3 Times");
+                                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
                                     }
                                     else{
                                         await _thisFromWasm.usbSendDispatch(64);
