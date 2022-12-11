@@ -329,7 +329,7 @@
             key: 'usbDisconnect',
             value: async function usbDisconnect() {
 				isUSBConencted = false;
-                SELECTEDDEVICE.close();
+                SELECTEDDEVICE?.close();
                 // SELECTEDDEVICE.removeEventListener("inputreport",_thisFromWasm.notifyReceiveStatus);
                 await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_DISCONNECTED_EVT,null,0,0);   
             }
