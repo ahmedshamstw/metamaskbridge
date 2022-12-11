@@ -432,7 +432,7 @@
             key: 'dispatchFromJS',
             value: async function dispatchFromJS(){
                 await exportWASM.crypto_guard_if_dispatch();
-                setTimeout(dispatchFromJS, 10);
+                setTimeout(dispatchFromJS, 50);
             }
         },{
             key: 'notifyReceiveStatus',
