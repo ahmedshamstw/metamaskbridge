@@ -69,6 +69,7 @@
         var onConnectionDoneFlag=0;
         var dispatchCounter=0;
         var initDispatch=true;
+        var retryFailed=0;
         var counterTest=0;
 		var isUSBConencted = false;
 		var requestConnection = false;
@@ -522,18 +523,21 @@
                                 /**********************************************/
                                 await SELECTEDDEVICE.sendReport(0, result2).then(async()=>{
                                     console.log("sent...............");
+                                    retryFailed=0;
                                     await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,0);
-    
-                                });
-                                // .catch(async (error) => {
-                                //     console.log("ERROR ---------------------")
-                                //     console.error(error);
-                                //     // await _thisFromWasm.usbSendDispatch(64);
-                                //     await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
-                                //     console.log("After Notify Error");
-                                //   });
-                                PREDDEVICE=SELECTEDDEVICE;
-                                console.log("DONEEEEEEEE");
+                                }).catch(async (error) => {
+                                    console.log("ERROR ---------------------")
+                                    console.error(error);
+                                    retryFailed++;
+                                    if(retryFailed>=3){
+                                        await exportWASM.crypto_guard_if_notify(enumNotify.CRYPTO_GUARD_IF_SEND_STATUS_EVT,null,0,-1);
+                                        console.log("Retry Failed More Than 3 Times");
+                                    }
+                                    else{
+                                        await _thisFromWasm.usbSendDispatch(64);
+                                    }
+
+                                  });
                             }
                             else{
                                 console.log("There Was No Device To Send To");
