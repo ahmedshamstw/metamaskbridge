@@ -295,6 +295,7 @@
                     requestConnection=true;
                     let res={};
                     res.error="Device Connection Required";
+                    await _thisFromWasm.usbDisconnect();
                     _thisFromWasm.sendMessageToExtension({
                         action: replyActionG,
                         success: false,
